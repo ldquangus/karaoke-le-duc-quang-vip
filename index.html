@@ -24,7 +24,7 @@
         #full-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 10001; display: none; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; }
         .content-area { flex: 1; overflow-y: auto; background: #0a0a0a; padding: 10px; -webkit-overflow-scrolling: touch; }
         .panel-header { font-size: 11px; font-weight: bold; color: var(--accent); margin: 15px 0 10px 0; text-transform: uppercase; border-left: 3px solid var(--primary); padding-left: 8px; }
-        .song-item { display: flex; gap: 10px; padding: 12px 10px; border-bottom: 1px solid #1a1a1a; align-items: center; }
+        .song-item { display: flex; gap: 10px; padding: 12px 10px; border-bottom: 1px solid #1a1a1a; align-items: center; cursor: pointer; }
         .song-info { flex: 1; font-size: 14px; color: #eee; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .song-item img { width: 80px; height: 45px; border-radius: 4px; object-fit: cover; }
         @media (orientation: landscape) { header, .filter-bar, .content-area, .vip-marquee-container { display: none !important; } #video-wrapper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; border: none; } }
@@ -73,12 +73,11 @@
     <div style="height: 50px;"></div>
 </div>
 
-<!-- LƯU Ý: ĐƯA TOÀN BỘ SCRIPT LÊN TRÊN YOUTUBE API -->
 <script>
     /**************************************************************
-     *  SỐ PHIÊN BẢN (VERSION): ĐỔI SỐ NÀY KHI CẬP NHẬT CODE      *
+     *  SỐ PHIÊN BẢN (VERSION): 003                               *
      **************************************************************/
-    const APP_VERSION = "002"; 
+    const APP_VERSION = "003"; 
 
     (function() {
         const savedVersion = localStorage.getItem('app_version');
@@ -95,36 +94,44 @@
         "AIzaSyDAJ7_JVXgEggQYZTBzne5W27Kt5QDaw8k"
     ];
     let currentKeyIndex = 0;
-    let player, songQueue = [], isPlayerReady = false;
+    let player, songQueue = [];
 
-    // Hàm khởi tạo trình phát
+    // TẢI API YOUTUBE CHUẨN
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
     function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
-            height: '100%', width: '100%', videoId: '',
+            height: '100%', width: '100%', videoId: 'dQw4w9WgXcQ', // Load tạm 1 clip để mồi trình phát
             playerVars: { 
-                'autoplay': 1, 
+                'autoplay': 0, 
                 'controls': 1, 
                 'playsinline': 1, 
                 'modestbranding': 1,
                 'rel': 0
             },
             events: { 
-                'onReady': () => { isPlayerReady = true; },
-                'onStateChange': (e) => { if (e.data === YT.PlayerState.ENDED) playNext(); } 
+                'onReady': onPlayerReady
             }
         });
     }
 
-    // Phát nhạc ngay lập tức
+    function onPlayerReady(event) {
+        console.log("Player ready!");
+    }
+
+    // HÀM PHÁT NHẠC (ĐÃ FIX TRIỆT ĐỂ)
     function playNow(id, title) {
-        if (!player || !isPlayerReady) {
-            alert("Hệ thống chưa sẵn sàng, vui lòng đợi 1 giây!");
-            return;
+        if (player && typeof player.loadVideoById === 'function') {
+            player.loadVideoById(id);
+            player.playVideo(); // Ép phát ngay
+            document.getElementById('playing-now').innerHTML = `<i class="fas fa-play-circle fa-spin"></i> Đang hát: ${title}`;
+            document.querySelector('.content-area').scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            alert("Trình phát đang khởi động, hãy thử lại sau 2 giây!");
         }
-        player.loadVideoById(id);
-        player.playVideo(); // Ép trình phát chạy
-        document.getElementById('playing-now').innerHTML = `<i class="fas fa-play-circle fa-spin"></i> Đang hát: ${title}`;
-        document.querySelector('.content-area').scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function requestFull() {
@@ -150,7 +157,9 @@
         resultsDiv.innerHTML = '<p style="padding:10px; color:var(--accent);">Đang tải...</p>';
 
         for (let i = 0; i < API_KEYS.length; i++) {
-            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${encodeURIComponent(query + ' karaoke')}&type=video&videoEmbeddable=true&key=${API_KEYS[currentKeyIndex]}`;
+            const activeKey = API_KEYS[currentKeyIndex];
+            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${encodeURIComponent(query + ' karaoke')}&type=video&videoEmbeddable=true&key=${activeKey}`;
+            
             try {
                 const res = await fetch(url);
                 const data = await res.json();
@@ -161,23 +170,20 @@
             } catch(e) {}
             currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
         }
-        resultsDiv.innerHTML = '<p style="color:red; padding:10px;">Lỗi tìm kiếm hoặc hết lượt!</p>';
+        resultsDiv.innerHTML = '<p style="color:red; padding:10px;">Hết lượt tìm kiếm hoặc lỗi mạng!</p>';
     }
 
     function renderResults(items) {
         const resultsDiv = document.getElementById('search-results');
         resultsDiv.innerHTML = items.map(item => {
-            // Xử lý tiêu đề sạch để không lỗi JavaScript
             const cleanTitle = item.snippet.title.replace(/['"]/g, "");
             const thumb = item.snippet.thumbnails.default.url;
             const id = item.id.videoId;
             return `
-            <div class="song-item">
-                <div style="flex:1; display:flex; align-items:center;" onclick="playNow('${id}', '${cleanTitle}')">
-                    <img src="${thumb}">
-                    <div class="song-info">${cleanTitle}</div>
-                </div>
-                <i class="fas fa-plus-circle" style="color:var(--primary); font-size:26px; padding:10px;" onclick="addToQueue('${id}', '${cleanTitle}', '${thumb}')"></i>
+            <div class="song-item" onclick="playNow('${id}', '${cleanTitle}')">
+                <img src="${thumb}">
+                <div class="song-info">${cleanTitle}</div>
+                <i class="fas fa-plus-circle" style="color:var(--primary); font-size:26px; padding:10px;" onclick="event.stopPropagation(); addToQueue('${id}', '${cleanTitle}', '${thumb}')"></i>
             </div>`;
         }).join('');
     }
@@ -208,9 +214,6 @@
     function searchWithTone(tone) { if(document.getElementById('txtSearch').value) searchMusic(tone); }
     document.getElementById('txtSearch').addEventListener('keypress', (e) => { if(e.key === 'Enter') searchMusic(); });
 </script>
-
-<!-- YOUTUBE API ĐỂ DƯỚI CÙNG -->
-<script src="https://www.youtube.com/iframe_api"></script>
 
 </body>
 </html>
