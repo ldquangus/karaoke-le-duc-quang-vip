@@ -9,54 +9,66 @@
     <title>KARAOKE VIP - LÊ ĐỨC QUANG</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --primary: #ff0000; --accent: #00f2ff; --gold: #ffd700; --bg: #000000; --gray: #222; }
+        :root { --primary: #ff0000; --accent: #00f2ff; --gold: #ffd700; --bg: #000000; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; margin: 0; height: 100vh; width: 100vw; overflow: hidden; display: flex; flex-direction: column; }
         
+        /* Màn hình khởi động & Fullscreen */
+        #start-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .start-btn { background: var(--primary); color: white; border: none; padding: 15px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px var(--primary); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+        /* Quảng cáo chạy động (Marquee) */
+        .promo-container { width: 100%; overflow: hidden; background: #111; padding: 10px 0; border-top: 1px solid #333; border-bottom: 1px solid #333; margin: 20px 0; }
+        .promo-text { white-space: nowrap; display: inline-block; animation: marquee 15s linear infinite; color: var(--gold); font-size: 18px; font-weight: bold; }
+        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
         /* Header & Search */
-        header { background: #111; padding: 10px 15px; display: flex; align-items: center; border-bottom: 2px solid var(--primary); flex-shrink: 0; z-index: 100; }
+        header { background: #111; padding: 10px 15px; display: flex; align-items: center; border-bottom: 2px solid var(--primary); flex-shrink: 0; }
         .logo { font-weight: bold; font-size: 14px; color: var(--primary); text-transform: uppercase; margin-right: 5px; }
         .search-box { flex: 1; display: flex; background: #222; border-radius: 20px; padding: 2px 10px; border: 1px solid #333; }
         .search-box input { flex: 1; background: none; border: none; color: #fff; padding: 8px; outline: none; font-size: 14px; }
         .search-box button { background: none; border: none; color: var(--primary); font-size: 18px; }
 
-        /* Màn hình chờ Quảng cáo */
-        #promo-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #111 0%, #000 100%); z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; border: 1px solid #333; }
-        .promo-title { color: var(--gold); font-size: 20px; font-weight: bold; letter-spacing: 2px; margin-bottom: 10px; }
-        .promo-sub { color: #fff; font-size: 14px; margin-bottom: 20px; }
-        .promo-ads { background: rgba(255, 0, 0, 0.1); border: 1px dashed var(--primary); padding: 15px; border-radius: 10px; width: 90%; }
-        .promo-ads p { margin: 5px 0; font-size: 13px; color: var(--accent); font-weight: bold; }
-
         /* Video Area */
         #video-wrapper { width: 100%; height: 40vh; background: #000; position: relative; flex-shrink: 0; border-bottom: 2px solid var(--primary); }
         #player { width: 100%; height: 100%; }
-        
+        #video-promo-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; z-index: 5; flex-direction: column; }
+
         /* Controls */
-        .custom-controls { display: flex; align-items: center; justify-content: space-around; background: #111; padding: 10px; border-bottom: 1px solid var(--gray); }
-        .control-btn { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
-        .volume-container { display: flex; align-items: center; gap: 10px; width: 40%; }
-        #volume-slider { flex: 1; accent-color: var(--primary); }
+        .custom-controls { display: flex; align-items: center; justify-content: space-around; background: #111; padding: 10px; border-bottom: 1px solid #222; }
+        .control-btn { background: none; border: none; color: white; font-size: 22px; cursor: pointer; }
+        #volume-slider { width: 30%; accent-color: var(--primary); }
 
         /* Content Area */
         .content-area { flex: 1; overflow-y: auto; background: #0a0a0a; padding: 10px; -webkit-overflow-scrolling: touch; }
         .panel-header { font-size: 11px; font-weight: bold; color: var(--accent); margin: 15px 0 10px 0; text-transform: uppercase; border-left: 3px solid var(--primary); padding-left: 8px; }
         
-        .song-item { display: flex; gap: 10px; padding: 10px; border-bottom: 1px solid #1a1a1a; align-items: center; }
-        .song-info { flex: 1; font-size: 13px; color: #eee; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .song-item img { width: 70px; height: 40px; border-radius: 4px; object-fit: cover; background: #222; }
-        .icon-btn { font-size: 20px; cursor: pointer; margin-left: 10px; }
+        .song-item { display: flex; gap: 10px; padding: 12px 10px; border-bottom: 1px solid #1a1a1a; align-items: center; }
+        .song-info { flex: 1; font-size: 14px; color: #eee; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .song-item img { width: 80px; height: 45px; border-radius: 4px; object-fit: cover; }
+        .icon-btn { font-size: 22px; cursor: pointer; margin-left: 10px; }
 
+        /* Landscape Mode */
         @media (orientation: landscape) { 
-            header, .filter-bar, .content-area, .custom-controls { display: none !important; } 
+            header, .custom-controls, .content-area, .filter-bar { display: none !important; } 
             #video-wrapper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; border: none; } 
         }
-
-        .vip-marquee-container { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.7); padding: 4px 0; pointer-events: none; }
-        .vip-marquee-text { display: inline-block; white-space: nowrap; animation: marquee-vip 20s linear infinite; color: var(--gold); font-size: 11px; }
-        @keyframes marquee-vip { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
     </style>
 </head>
 <body>
+
+<!-- Màn hình chạm để ẩn thanh địa chỉ & Quảng cáo -->
+<div id="start-overlay">
+    <div style="color: var(--gold); font-size: 24px; font-weight: bold; margin-bottom: 5px;">KARAOKE VIP LÊ ĐỨC QUANG</div>
+    <div style="color: #fff; font-size: 14px; margin-bottom: 30px;">HỆ THỐNG STUDIO CHUYÊN NGHIỆP</div>
+    
+    <button class="start-btn" onclick="initApp()">BẮT ĐẦU HÁT</button>
+
+    <div class="promo-container">
+        <div class="promo-text">NHẬN QUẢNG CÁO & HỢP TÁC KINH DOANH TRÊN ỨNG DỤNG - HOTLINE: 0909 374 508 - LÊ ĐỨC QUANG</div>
+    </div>
+</div>
 
 <header>
     <div class="logo">LÊ ĐỨC QUANG</div>
@@ -67,67 +79,52 @@
 </header>
 
 <div id="video-wrapper">
-    <!-- Màn hình chờ Quảng cáo -->
-    <div id="promo-overlay">
-        <div class="promo-title">KARAOKE VIP LÊ ĐỨC QUANG</div>
-        <div class="promo-sub">DÀN ÂM THANH STUDIO CỰC CHUẨN</div>
-        <div class="promo-ads">
-            <p><i class="fas fa-star"></i> NHẬN QUẢNG CÁO TRÊN ỨNG DỤNG <i class="fas fa-star"></i></p>
-            <p style="color: #fff; font-size: 11px;">Hợp tác kinh doanh - Liên hệ ngay</p>
-            <p style="font-size: 16px; margin-top: 5px;">Hotline: 0909 374 508</p>
+    <!-- Màn hình quảng cáo chạy khi chưa có video -->
+    <div id="video-promo-screen">
+        <div style="color: var(--gold); font-size: 16px; font-weight: bold; margin-bottom: 10px;">ĐANG CHỜ BÀI HÁT...</div>
+        <div class="promo-container" style="background: transparent; border: none;">
+            <div class="promo-text" style="font-size: 20px;">LÊ ĐỨC QUANG - 0909 374 508 - CHUYÊN ÂM THANH KARAOKE STUDIO CAO CẤP - NHẬN QUẢNG CÁO TRÊN APP</div>
         </div>
-        <button onclick="document.getElementById('txtSearch').focus()" style="margin-top: 20px; background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 20px; font-weight: bold;">BẮT ĐẦU HÁT NGAY</button>
     </div>
-
     <div id="player"></div>
-    
-    <div class="vip-marquee-container">
-        <div class="vip-marquee-text">KARAOKE VIP LÊ ĐỨC QUANG - ĐẲNG CẤP STUDIO - HOTLINE: 0909 374 508 - CHÚC BẠN CA HÁT VUI VẺ!</div>
-    </div>
 </div>
 
 <div class="custom-controls">
     <button class="control-btn" onclick="togglePlay()"><i id="play-icon" class="fas fa-play"></i></button>
     <button class="control-btn" onclick="playNextInQueue()"><i class="fas fa-step-forward"></i></button>
-    <div class="volume-container">
-        <input type="range" id="volume-slider" min="0" max="100" value="100" oninput="changeVolume(this.value)">
-    </div>
+    <input type="range" id="volume-slider" min="0" max="100" value="100" oninput="changeVolume(this.value)">
+    <i class="fas fa-volume-up" style="color: #555;"></i>
 </div>
 
 <div class="content-area">
-    <div id="playing-now" style="padding: 10px; background: #111; color: var(--gold); font-size: 13px; font-weight: bold; margin-bottom: 10px; border-left: 5px solid var(--gold); border-radius: 5px;">
+    <div id="playing-now" style="padding: 12px; background: #111; color: var(--gold); font-size: 14px; font-weight: bold; margin-bottom: 10px; border-left: 5px solid var(--gold); border-radius: 5px;">
         <i class="fas fa-microphone-alt"></i> Sẵn sàng phục vụ...
     </div>
 
     <div class="panel-header">KẾT QUẢ TÌM KIẾM (8 BÀI)</div>
-    <div id="search-results"><p style="color:#444; padding:10px;">Vui lòng nhập tên bài hát...</p></div>
+    <div id="search-results"><p style="color:#444; padding:10px;">Hãy nhập tên bài hát...</p></div>
 
-    <div class="panel-header" style="color: var(--gold); margin-top:20px;">BÀI HÁT GẦN ĐÂY</div>
+    <div class="panel-header" style="color: var(--gold); margin-top:20px;">BÀI HÁT GẦN ĐÂY (LƯU 8 BÀI)</div>
     <div id="history-list"></div>
-    
-    <!-- Quảng cáo dưới danh sách -->
-    <div style="margin-top: 20px; padding: 15px; background: #111; border-radius: 10px; text-align: center; border: 1px solid #222;">
-        <p style="color: var(--accent); font-size: 12px; font-weight: bold; margin: 0;">LIÊN HỆ QUẢNG CÁO TẠI ĐÂY</p>
-        <p style="color: #666; font-size: 10px; margin-top: 5px;">Hỗ trợ quảng bá thương hiệu Karaoke, Studio, Thiết bị âm thanh...</p>
-    </div>
     <div style="height: 50px;"></div>
 </div>
 
 <script>
-    const APP_VERSION = "006"; 
+    const APP_VERSION = "007"; 
     const API_KEYS = ["AIzaSyBywuEsM7gJE2dqPY5NNzIKteySXXv1Dx4", "AIzaSyAZzzzyIgZoum8RscTz-KUqrEEzzQCghKg", "AIzaSyDAJ7_JVXgEggQYZTBzne5W27Kt5QDaw8k"];
     let currentKeyIndex = 0;
     let player, internalQueue = [];
     let playbackHistory = JSON.parse(localStorage.getItem('karaoke_history')) || [];
 
-    // Tự động cập nhật bản mới
-    (function() {
-        if (localStorage.getItem('app_version') !== APP_VERSION) {
-            localStorage.clear();
-            localStorage.setItem('app_version', APP_VERSION);
-            window.location.reload(true);
-        }
-    })();
+    // Khởi động App & Fullscreen
+    function initApp() {
+        const doc = document.documentElement;
+        if (doc.requestFullscreen) doc.requestFullscreen();
+        else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen();
+        else if (doc.msRequestFullscreen) doc.msRequestFullscreen();
+        
+        document.getElementById('start-overlay').style.display = 'none';
+    }
 
     // Youtube API
     var tag = document.createElement('script');
@@ -143,22 +140,18 @@
                 'onReady': () => updateHistoryUI(),
                 'onStateChange': (e) => {
                     if (e.data === YT.PlayerState.ENDED) playNextInQueue();
-                    const icon = document.getElementById('play-icon');
-                    icon.className = (e.data === 1) ? "fas fa-pause" : "fas fa-play";
+                    document.getElementById('play-icon').className = (e.data === 1) ? "fas fa-pause" : "fas fa-play";
                 }
             }
         });
     }
 
     function playNow(id, title, thumb) {
-        // Ẩn màn hình quảng cáo khi bắt đầu phát
-        document.getElementById('promo-overlay').style.display = 'none';
-        
+        document.getElementById('video-promo-screen').style.display = 'none';
         if (player && player.loadVideoById) {
             player.loadVideoById(id);
             document.getElementById('playing-now').innerHTML = `<i class="fas fa-play-circle fa-spin"></i> Đang hát: ${title}`;
             
-            // Xử lý lịch sử 8 bài
             playbackHistory = playbackHistory.filter(item => item.id !== id);
             playbackHistory.unshift({ id, title, thumb });
             playbackHistory = playbackHistory.slice(0, 8);
@@ -169,15 +162,12 @@
 
     function updateHistoryUI() {
         const historyDiv = document.getElementById('history-list');
-        if (playbackHistory.length === 0) {
-            historyDiv.innerHTML = '<p style="color:#444; padding:10px;">Chưa có bài cũ...</p>';
-            return;
-        }
+        if (playbackHistory.length === 0) return;
         historyDiv.innerHTML = playbackHistory.map(s => `
             <div class="song-item">
                 <img src="${s.thumb}" loading="lazy">
                 <div class="song-info" onclick="playNow('${s.id}', '${s.title}', '${s.thumb}')">${s.title}</div>
-                <i class="fas fa-redo-alt icon-btn" style="color:#555;" onclick="playNow('${s.id}', '${s.title}', '${s.thumb}')"></i>
+                <i class="fas fa-redo-alt icon-btn" style="color:#444;" onclick="playNow('${s.id}', '${s.title}', '${s.thumb}')"></i>
             </div>
         `).join('');
     }
@@ -196,8 +186,7 @@
 
     function togglePlay() {
         if (!player) return;
-        const state = player.getPlayerState();
-        state === 1 ? player.pauseVideo() : player.playVideo();
+        player.getPlayerState() === 1 ? player.pauseVideo() : player.playVideo();
     }
 
     function changeVolume(val) { if (player) player.setVolume(val); }
@@ -235,7 +224,7 @@
             } catch(e) {}
             currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
         }
-        resultsDiv.innerHTML = '<p style="color:red; padding:10px;">Hết lượt tìm kiếm, vui lòng thử lại sau!</p>';
+        resultsDiv.innerHTML = '<p style="color:red; padding:10px;">Hết lượt tìm kiếm!</p>';
     }
 
     document.getElementById('txtSearch').addEventListener('keypress', (e) => { if(e.key === 'Enter') searchMusic(); });
