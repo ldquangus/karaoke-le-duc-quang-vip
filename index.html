@@ -10,89 +10,80 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; margin: 0; height: 100vh; width: 100vw; overflow: hidden; display: flex; flex-direction: column; }
         
-        header { background: #111; padding: 10px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--primary); z-index: 100; }
+        header { background: #111; padding: 10px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--primary); z-index: 100; flex-shrink: 0; }
         .logo { font-weight: bold; font-size: 14px; color: var(--primary); text-transform: uppercase; }
-        .logo span { color: var(--accent); font-size: 8px; display: block; }
         
         .search-box { flex: 1; margin: 0 10px; display: flex; background: #222; border-radius: 20px; padding: 2px 10px; border: 1px solid #333; }
         .search-box input { flex: 1; background: none; border: none; color: #fff; padding: 8px; outline: none; font-size: 14px; }
         .search-box button { background: none; border: none; color: var(--primary); font-size: 18px; cursor: pointer; }
 
-        #video-wrapper { width: 100%; aspect-ratio: 16/9; background: #000; position: relative; z-index: 10; border-bottom: 2px solid #222; }
+        /* VIDEO CHIẾM 1/2 MÀN HÌNH KHI ĐỨNG */
+        #video-wrapper { width: 100%; height: 50vh; background: #000; position: relative; z-index: 10; border-bottom: 2px solid #222; }
         #player { width: 100%; height: 100%; border: none; }
 
-        /* XỬ LÝ XOAY NGANG DỨT ĐIỂM */
+        /* Nút Tone Nam/Nữ */
+        .filter-bar { display: flex; gap: 5px; padding: 8px 10px; background: #111; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+        .filter-bar button { background: #222; color: #eee; border: 1px solid #444; padding: 6px 12px; border-radius: 15px; font-size: 11px; cursor: pointer; font-weight: bold; }
+        .filter-bar button:active { background: var(--primary); color: white; }
+
+        /* XOAY NGANG DỨT ĐIỂM THANH ĐỊA CHỈ */
         @media (orientation: landscape) {
-            header, .content-area, .vip-marquee-container { display: none !important; }
-            #video-wrapper { 
-                position: fixed; top: 0; left: 0; 
-                width: 100vw; height: 100vh; 
-                z-index: 9999; aspect-ratio: auto;
-            }
+            header, .content-area, .filter-bar, .vip-marquee-container { display: none !important; }
+            #video-wrapper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; border: none; }
             body { overflow: hidden; }
         }
 
-        /* Nút Fullscreen ẩn thanh địa chỉ */
-        .fs-toggle {
-            position: absolute; top: 10px; right: 10px;
-            z-index: 10000; background: rgba(0,0,0,0.5);
-            color: white; border: 1px solid #444;
-            padding: 8px; border-radius: 5px; font-size: 12px;
-            display: none;
-        }
+        .fs-toggle { position: absolute; top: 10px; right: 10px; z-index: 10000; background: rgba(255,0,0,0.6); color: white; border: none; padding: 8px 15px; border-radius: 5px; font-size: 12px; display: none; font-weight: bold; }
         @media (orientation: landscape) { .fs-toggle { display: block; } }
-
-        .vip-marquee-container { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0, 0, 0, 0.8); padding: 5px 0; overflow: hidden; z-index: 20; pointer-events: none; }
-        .vip-marquee-text { display: inline-block; white-space: nowrap; animation: marquee-vip 35s linear infinite; color: var(--gold); font-weight: bold; font-size: 14px; text-shadow: 0 0 5px #000; }
-        @keyframes marquee-vip { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
 
         .content-area { flex: 1; overflow-y: auto; background: #0a0a0a; padding: 10px; }
         .panel-header { font-size: 11px; font-weight: bold; color: var(--accent); margin: 15px 0 10px 0; text-transform: uppercase; border-left: 3px solid var(--primary); padding-left: 8px; display: flex; justify-content: space-between; align-items: center; }
         
         .song-item { display: flex; gap: 10px; padding: 10px; border-bottom: 1px solid #1a1a1a; align-items: center; cursor: pointer; border-radius: 8px; }
-        .song-item:active { background: #333; }
-        .song-item img { width: 75px; height: 42px; border-radius: 4px; object-fit: cover; }
         .song-info { flex: 1; font-size: 13px; color: #ddd; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .btn-add-q { color: var(--primary); font-size: 22px; padding: 5px; }
+        .song-item img { width: 75px; height: 42px; border-radius: 4px; object-fit: cover; }
 
-        .history-list { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px; scrollbar-width: none; }
-        .history-item { min-width: 130px; max-width: 130px; font-size: 11px; cursor: pointer; }
-        .history-item img { width: 100%; height: 70px; border-radius: 5px; border: 1px solid #333; }
-        .history-item p { margin: 5px 0; height: 2.4em; overflow: hidden; color: #bbb; line-height: 1.2; }
+        .vip-marquee-container { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0, 0, 0, 0.8); padding: 5px 0; z-index: 20; pointer-events: none; }
+        .vip-marquee-text { display: inline-block; white-space: nowrap; animation: marquee-vip 25s linear infinite; color: var(--gold); font-size: 13px; font-weight: bold; }
+        @keyframes marquee-vip { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo">LÊ ĐỨC QUANG <span>STUDIO VIP PRO</span></div>
+    <div class="logo">LÊ ĐỨC QUANG</div>
     <div class="search-box">
-        <input type="text" id="txtSearch" placeholder="Tìm bài hát...">
+        <input type="text" id="txtSearch" placeholder="Tên bài hát...">
         <button onclick="searchMusic()"><i class="fas fa-search"></i></button>
     </div>
 </header>
 
-<main>
+<div class="filter-bar">
+    <button onclick="searchWithTone('Tone Nam')">TONE NAM</button>
+    <button onclick="searchWithTone('Tone Nữ')">TONE NỮ</button>
+    <button onclick="searchWithTone('Remix')">REMIX</button>
+    <button onclick="searchWithTone('Bolero')">BOLERO</button>
+</div>
+
+<main id="main-content">
     <div id="video-wrapper">
-        <button class="fs-toggle" onclick="toggleFull()"><i class="fas fa-expand"></i> FULL</button>
+        <button class="fs-toggle" onclick="toggleFull()"><i class="fas fa-expand"></i> FULL VIDEO</button>
         <div id="player"></div>
         <div class="vip-marquee-container">
-            <div class="vip-marquee-text">Hệ thống Karaoke VIP Lê Đức Quang - Đẳng cấp Studio Pro - Hotline: 0909 374 508 - Chúc quý khách hát ca vui vẻ!</div>
+            <div class="vip-marquee-text">KARAOKE VIP LÊ ĐỨC QUANG - 0909 374 508 - CHÚC QUÝ KHÁCH HÁT CA VUI VẺ!</div>
         </div>
     </div>
     <div class="content-area">
-        <div id="status-bar" style="font-size: 10px; color: #555; margin-bottom: 8px;">Đang khởi động hệ thống...</div>
+        <div id="status-bar" style="font-size: 10px; color: #555; margin-bottom: 8px;">Hệ thống sẵn sàng...</div>
         
-        <div class="panel-header"><span><i class="fas fa-history"></i> VỪA HÁT XONG</span> <small onclick="clearHistory()" style="color:red; cursor:pointer;">XÓA</small></div>
-        <div id="history-list" class="history-list"></div>
-
-        <div id="playing-now" style="padding: 12px; background: #111; color: var(--gold); font-size: 14px; font-weight: bold; margin: 10px 0; border-radius: 8px; border-left: 5px solid var(--gold);">
-            <i class="fas fa-microphone-alt"></i> Sẵn sàng... Chọn bài hát ngay!
+        <div id="playing-now" style="padding: 12px; background: #111; color: var(--gold); font-size: 14px; font-weight: bold; margin-bottom: 10px; border-left: 5px solid var(--gold); border-radius: 5px;">
+            <i class="fas fa-microphone-alt"></i> Chọn bài hát ngay!
         </div>
 
         <div class="panel-header">KẾT QUẢ TÌM KIẾM</div>
         <div id="search-results"></div>
 
-        <div class="panel-header" style="margin-top:20px; color: var(--gold);">HÀNG ĐỢI (<span id="q-count">0</span>)</div>
+        <div class="panel-header" style="color: var(--gold);">HÀNG ĐỢI (<span id="q-count">0</span>)</div>
         <div id="queue-list"></div>
     </div>
 </main>
@@ -104,126 +95,80 @@
         "AIzaSyAZzzzyIgZoum8RscTz-KUqrEEzzQCghKg", 
         "AIzaSyDAJ7_JVXgEggQYZTBzne5W27Kt5QDaw8k"
     ];
-
     let currentKeyIndex = 0;
-    let player, songQueue = [], historyQueue = [];
-
-    // Tải lịch sử
-    try {
-        const saved = localStorage.getItem('kara_history');
-        historyQueue = saved ? JSON.parse(saved) : [];
-        if(!Array.isArray(historyQueue)) historyQueue = [];
-    } catch(e) { historyQueue = []; }
+    let player, songQueue = [];
 
     function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
             height: '100%', width: '100%', videoId: '',
-            playerVars: { 'autoplay': 1, 'controls': 1, 'rel': 0, 'modestbranding': 1, 'playsinline': 1 },
-            events: { 
-                'onReady': () => { updateStatus(); renderHistory(); },
-                'onStateChange': (e) => { if (e.data === YT.PlayerState.ENDED) playNext(); } 
-            }
+            playerVars: { 'autoplay': 1, 'controls': 1, 'playsinline': 1, 'modestbranding': 1 },
+            events: { 'onStateChange': (e) => { if (e.data === YT.PlayerState.ENDED) playNext(); } }
         });
     }
 
-    // Hàm dứt điểm thanh địa chỉ
+    // Xử lý dứt điểm Fullscreen trên mobile
     function toggleFull() {
         const elem = document.getElementById('video-wrapper');
-        if (elem.requestFullscreen) { elem.requestFullscreen(); }
-        else if (elem.webkitRequestFullscreen) { elem.webkitRequestFullscreen(); }
-        else if (elem.msRequestFullscreen) { elem.msRequestFullscreen(); }
+        if (elem.requestFullscreen) elem.requestFullscreen();
+        else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
     }
 
-    function updateStatus() {
-        document.getElementById('status-bar').innerText = `Hệ thống ổn định - Line: ${currentKeyIndex + 1}`;
+    function searchWithTone(tone) {
+        const input = document.getElementById('txtSearch');
+        if(!input.value) { alert("Vui lòng nhập tên bài trước!"); return; }
+        searchMusic(tone);
     }
 
-    function renderHistory() {
-        const histDiv = document.getElementById('history-list');
-        if(historyQueue.length === 0) {
-            histDiv.innerHTML = '<p style="font-size:11px; color:#444; padding:10px;">Chưa có lịch sử...</p>';
-            return;
-        }
-        histDiv.innerHTML = historyQueue.map(s => `
-            <div class="history-item" onclick="playNow('${s.id}', '${s.title.replace(/'/g,"")}', '${s.thumb}')">
-                <img src="${s.thumb}">
-                <p>${s.title}</p>
-            </div>
-        `).join('');
-    }
-
-    function clearHistory() {
-        if(confirm("Bạn muốn xóa danh sách vừa hát?")) {
-            historyQueue = [];
-            localStorage.setItem('kara_history', JSON.stringify([]));
-            renderHistory();
-        }
-    }
-
-    function playNow(id, title, thumb) {
-        if(!player) return;
-        player.loadVideoById(id);
-        document.getElementById('playing-now').innerHTML = `<i class="fas fa-play-circle fa-spin"></i> Đang hát: ${title}`;
-        
-        historyQueue = historyQueue.filter(item => item.id !== id);
-        historyQueue.unshift({ id, title, thumb });
-        if(historyQueue.length > 20) historyQueue.pop();
-        localStorage.setItem('kara_history', JSON.stringify(historyQueue));
-        renderHistory();
-    }
-
-    async function searchMusic() {
-        const q = document.getElementById('txtSearch').value;
-        if(!q) return;
+    async function searchMusic(suffix = "") {
+        const query = document.getElementById('txtSearch').value + " " + suffix;
         const resultsDiv = document.getElementById('search-results');
-        resultsDiv.innerHTML = '<p style="padding:10px; color:var(--accent);">Đang tìm bài hát...</p>';
+        resultsDiv.innerHTML = '<p style="padding:10px; color:var(--accent);">Đang tìm kiếm...</p>';
 
         let success = false;
         for (let i = 0; i < API_KEYS.length; i++) {
-            const activeKey = API_KEYS[currentKeyIndex];
-            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${encodeURIComponent(q + ' karaoke')}&type=video&videoEmbeddable=true&key=${activeKey}`;
+            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${encodeURIComponent(query + ' karaoke')}&type=video&videoEmbeddable=true&key=${API_KEYS[currentKeyIndex]}`;
             try {
                 const res = await fetch(url);
                 const data = await res.json();
                 if(data.items && data.items.length > 0) {
                     renderResults(data.items);
                     success = true;
-                    break; 
+                    break;
                 } else {
                     currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
-                    updateStatus();
                 }
             } catch(e) {
                 currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
             }
         }
-        if(!success) resultsDiv.innerHTML = '<p style="color:red; padding:10px;">Lỗi tìm kiếm hoặc hết lượt Key!</p>';
+        if(!success) resultsDiv.innerHTML = '<p style="color:red; padding:10px;">Lỗi! Vui lòng thử lại sau.</p>';
     }
 
     function renderResults(items) {
         const resultsDiv = document.getElementById('search-results');
         resultsDiv.innerHTML = items.map(item => {
-            const title = item.snippet.title.replace(/['"]/g, ""); 
+            const title = item.snippet.title.replace(/['"]/g, "");
             const thumb = item.snippet.thumbnails.default.url;
             const id = item.id.videoId;
             return `
             <div class="song-item">
-                <div style="display:flex; flex:1; align-items:center;" onclick="playNow('${id}', '${title}', '${thumb}')">
+                <div style="flex:1; display:flex; align-items:center;" onclick="playNow('${id}', '${title}')">
                     <img src="${thumb}">
                     <div class="song-info">${item.snippet.title}</div>
                 </div>
-                <i class="fas fa-plus-circle btn-add-q" onclick="addToQueue('${id}', '${title}', '${thumb}', this)"></i>
+                <i class="fas fa-plus-circle" style="color:red; font-size:24px; padding-left:10px;" onclick="addToQueue('${id}', '${title}', '${thumb}')"></i>
             </div>`;
         }).join('');
     }
 
-    function addToQueue(id, title, thumb, element) {
+    function playNow(id, title) {
+        player.loadVideoById(id);
+        document.getElementById('playing-now').innerHTML = `<i class="fas fa-play-circle fa-spin"></i> Đang hát: ${title}`;
+    }
+
+    function addToQueue(id, title, thumb) {
         songQueue.push({ id, title, thumb });
         updateUI();
-        if(element) {
-            element.style.color = "lime";
-            setTimeout(() => element.style.color = "red", 1000);
-        }
     }
 
     function updateUI() {
@@ -231,28 +176,22 @@
         document.getElementById('queue-list').innerHTML = songQueue.map((s, i) => `
             <div class="song-item" onclick="playFromQueue(${i})">
                 <b style="color:red; width:20px;">${i+1}</b>
-                <img src="${s.thumb}" style="width:55px; height:32px;">
                 <div class="song-info">${s.title}</div>
             </div>
         `).join('');
     }
 
     function playFromQueue(index) {
-        const selected = songQueue[index];
-        songQueue.splice(index, 1);
-        playNow(selected.id, selected.title, selected.thumb);
+        const s = songQueue.splice(index, 1)[0];
+        playNow(s.id, s.title);
         updateUI();
     }
 
     function playNext() {
-        if (songQueue.length > 0) {
-            const next = songQueue.shift();
-            playNow(next.id, next.title, next.thumb);
-            updateUI();
-        }
+        if (songQueue.length > 0) playFromQueue(0);
     }
-    
-    document.getElementById('txtSearch').addEventListener('keypress', (e) => { if(e.key === 'Enter') { searchMusic(); document.activeElement.blur(); } });
+
+    document.getElementById('txtSearch').addEventListener('keypress', (e) => { if(e.key === 'Enter') searchMusic(); });
 </script>
 </body>
 </html>
