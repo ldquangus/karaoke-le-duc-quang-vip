@@ -38,7 +38,8 @@
 <header>
     <div class="logo">LÊ ĐỨC QUANG</div>
     <div class="search-box">
-        <input type="text" id="txtSearch" placeholder="Tìm bài hát...">
+        <!-- Thêm autocomplete="off" để chặn mấy cái chìa khóa gợi ý -->
+        <input type="text" id="txtSearch" placeholder="Tìm bài hát..." autocomplete="off" spellcheck="false">
         <button onclick="searchMusic()"><i class="fas fa-search"></i></button>
     </div>
 </header>
@@ -75,9 +76,9 @@
 
 <script>
     /**************************************************************
-     *  SỐ PHIÊN BẢN (VERSION): 003                               *
+     *  SỐ PHIÊN BẢN (VERSION): 004                               *
      **************************************************************/
-    const APP_VERSION = "003"; 
+    const APP_VERSION = "004"; 
 
     (function() {
         const savedVersion = localStorage.getItem('app_version');
@@ -96,7 +97,7 @@
     let currentKeyIndex = 0;
     let player, songQueue = [];
 
-    // TẢI API YOUTUBE CHUẨN
+    // TẢI API YOUTUBE
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -104,33 +105,18 @@
 
     function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
-            height: '100%', width: '100%', videoId: 'dQw4w9WgXcQ', // Load tạm 1 clip để mồi trình phát
-            playerVars: { 
-                'autoplay': 0, 
-                'controls': 1, 
-                'playsinline': 1, 
-                'modestbranding': 1,
-                'rel': 0
-            },
-            events: { 
-                'onReady': onPlayerReady
-            }
+            height: '100%', width: '100%', videoId: 'dQw4w9WgXcQ',
+            playerVars: { 'autoplay': 0, 'controls': 1, 'playsinline': 1, 'modestbranding': 1, 'rel': 0 },
+            events: { 'onStateChange': (e) => { if (e.data === YT.PlayerState.ENDED) playNext(); } }
         });
     }
 
-    function onPlayerReady(event) {
-        console.log("Player ready!");
-    }
-
-    // HÀM PHÁT NHẠC (ĐÃ FIX TRIỆT ĐỂ)
     function playNow(id, title) {
         if (player && typeof player.loadVideoById === 'function') {
             player.loadVideoById(id);
-            player.playVideo(); // Ép phát ngay
+            player.playVideo();
             document.getElementById('playing-now').innerHTML = `<i class="fas fa-play-circle fa-spin"></i> Đang hát: ${title}`;
             document.querySelector('.content-area').scrollTo({ top: 0, behavior: 'smooth' });
-        } else {
-            alert("Trình phát đang khởi động, hãy thử lại sau 2 giây!");
         }
     }
 
@@ -151,7 +137,11 @@
     window.addEventListener('resize', checkDisplayMode);
     window.addEventListener('orientationchange', () => setTimeout(checkDisplayMode, 300));
 
+    // HÀM TÌM KIẾM ĐÃ SỬA LỖI BÀN PHÍM
     async function searchMusic(suffix = "") {
+        // LỆNH QUAN TRỌNG: Ẩn bàn phím ngay khi bấm tìm
+        document.activeElement.blur(); 
+        
         const query = document.getElementById('txtSearch').value + " " + suffix;
         const resultsDiv = document.getElementById('search-results');
         resultsDiv.innerHTML = '<p style="padding:10px; color:var(--accent);">Đang tải...</p>';
@@ -170,7 +160,7 @@
             } catch(e) {}
             currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
         }
-        resultsDiv.innerHTML = '<p style="color:red; padding:10px;">Hết lượt tìm kiếm hoặc lỗi mạng!</p>';
+        resultsDiv.innerHTML = '<p style="color:red; padding:10px;">Lỗi hoặc hết lượt!</p>';
     }
 
     function renderResults(items) {
@@ -212,7 +202,13 @@
 
     function playNext() { if (songQueue.length > 0) playFromQueue(0); }
     function searchWithTone(tone) { if(document.getElementById('txtSearch').value) searchMusic(tone); }
-    document.getElementById('txtSearch').addEventListener('keypress', (e) => { if(e.key === 'Enter') searchMusic(); });
+    
+    // Khi nhấn phím Enter trên bàn phím cũng phải ẩn bàn phím
+    document.getElementById('txtSearch').addEventListener('keypress', (e) => { 
+        if(e.key === 'Enter') { 
+            searchMusic(); 
+        } 
+    });
 </script>
 
 </body>
