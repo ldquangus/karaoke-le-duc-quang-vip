@@ -25,11 +25,9 @@
         .tone-btn.active[data-tone="Nữ"] { background: #e83e8c; border-color: #e83e8c; }
         .tone-btn.active[data-tone="Mặc định"] { background: var(--primary); border-color: var(--primary); }
 
-        /* Video chiếm 1/2 màn hình khi đứng */
         #video-wrapper { width: 100%; height: 50vh; background: #000; position: relative; z-index: 10; border-bottom: 2px solid #222; }
         #player { width: 100%; height: 100%; border: none; }
 
-        /* Xoay ngang: Ẩn header và video tràn màn hình */
         @media screen and (orientation: landscape) {
             header { display: none; }
             #video-wrapper { height: 100vh; border-bottom: none; }
@@ -89,7 +87,7 @@
             <i class="fas fa-microphone-alt"></i> Sẵn sàng... Chọn bài hát ngay!
         </div>
 
-        <div class="panel-header">KẾT QUẢ TÌM KIẾM (ƯU TIÊN ÂM THANH)</div>
+        <div class="panel-header">KẾT QUẢ TÌM KIẾM (4 BẢN STUDIO TỐT NHẤT)</div>
         <div id="search-results"></div>
 
         <div class="panel-header" style="margin-top:20px; color: var(--gold);">HÀNG ĐỢI (<span id="q-count">0</span>)</div>
@@ -105,7 +103,10 @@
         "AIzaSyDAJ7_JVXgEggQYZTBzne5W27Kt5QDaw8k"
     ];
 
-    let currentKeyIndex = 0;
+    // Lấy Key đã lưu từ trước, nếu không có thì bắt đầu từ 0
+    let currentKeyIndex = parseInt(localStorage.getItem('active_key_index')) || 0;
+    if(currentKeyIndex >= API_KEYS.length) currentKeyIndex = 0;
+
     let player, songQueue = [], historyQueue = [];
     let currentTone = 'Mặc định';
 
@@ -135,7 +136,7 @@
     }
 
     function updateStatus() {
-        document.getElementById('status-bar').innerText = `Hệ thống ổn định - Tone: ${currentTone}`;
+        document.getElementById('status-bar').innerText = `Hệ thống ổn định - Line: ${currentKeyIndex + 1} - Tone: ${currentTone}`;
     }
 
     function renderHistory() {
@@ -181,32 +182,35 @@
 
         let searchQuery = q + " karaoke";
         if(currentTone !== 'Mặc định') searchQuery += " tone " + currentTone;
-        searchQuery += " studio quality"; // Ưu tiên âm thanh phòng thu
+        searchQuery += " studio quality";
 
-        let success = false;
-        for (let i = 0; i < API_KEYS.length; i++) {
-            const activeKey = API_KEYS[currentKeyIndex];
-            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=4&q=${encodeURIComponent(searchQuery)}&type=video&videoEmbeddable=true&key=${activeKey}`;
+        const activeKey = API_KEYS[currentKeyIndex];
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=4&q=${encodeURIComponent(searchQuery)}&type=video&videoEmbeddable=true&key=${activeKey}`;
             
-            try {
-                const res = await fetch(url);
-                const data = await res.json();
-                
-                if(data.items && data.items.length > 0) {
-                    renderResults(data.items);
-                    success = true;
-                    break; 
-                } else if (data.error) {
-                    currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
-                    updateStatus();
+        try {
+            const res = await fetch(url);
+            const data = await res.json();
+            
+            if(data.error) {
+                // Nếu lỗi do hết hạn ngạch (quotaExceeded)
+                if(data.error.errors[0].reason === 'quotaExceeded') {
+                    console.log("Key hiện tại hết hạn, đang chuyển Key...");
+                    let nextIndex = (currentKeyIndex + 1) % API_KEYS.length;
+                    localStorage.setItem('active_key_index', nextIndex);
+                    // Tự động load lại trang để áp dụng Key mới
+                    location.reload(); 
+                    return;
                 }
-            } catch(e) {
-                currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
+                throw new Error(data.error.message);
             }
-        }
 
-        if(!success) {
-            resultsDiv.innerHTML = '<p style="color:red; padding:10px;">Không tìm thấy bài hát phù hợp!</p>';
+            if(data.items && data.items.length > 0) {
+                renderResults(data.items);
+            } else {
+                resultsDiv.innerHTML = '<p style="color:red; padding:10px;">Không tìm thấy bài hát phù hợp!</p>';
+            }
+        } catch(e) {
+            resultsDiv.innerHTML = `<p style="color:red; padding:10px;">Lỗi: ${e.message}. Đang kiểm tra lại đường truyền...</p>`;
         }
     }
 
