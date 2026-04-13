@@ -18,16 +18,29 @@
         .search-box input { flex: 1; background: none; border: none; color: #fff; padding: 8px; outline: none; font-size: 14px; }
         .search-box button { background: none; border: none; color: var(--primary); font-size: 18px; cursor: pointer; }
 
-        /* Video Area */
-        #video-wrapper { width: 100%; aspect-ratio: 16/9; background: #000; position: relative; z-index: 10; border-bottom: 2px solid #222; transition: all 0.3s ease; }
+        #video-wrapper { width: 100%; aspect-ratio: 16/9; background: #000; position: relative; z-index: 10; border-bottom: 2px solid #222; }
         #player { width: 100%; height: 100%; border: none; }
 
-        /* Chế độ xoay ngang: Full video, ẩn tất cả */
-        @media (orientation: landscape) and (max-width: 950px) {
-            header, .content-area, .vip-marquee-container, #playing-now { display: none !important; }
-            #video-wrapper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; border: none; }
+        /* XỬ LÝ XOAY NGANG DỨT ĐIỂM */
+        @media (orientation: landscape) {
+            header, .content-area, .vip-marquee-container { display: none !important; }
+            #video-wrapper { 
+                position: fixed; top: 0; left: 0; 
+                width: 100vw; height: 100vh; 
+                z-index: 9999; aspect-ratio: auto;
+            }
             body { overflow: hidden; }
         }
+
+        /* Nút Fullscreen ẩn thanh địa chỉ */
+        .fs-toggle {
+            position: absolute; top: 10px; right: 10px;
+            z-index: 10000; background: rgba(0,0,0,0.5);
+            color: white; border: 1px solid #444;
+            padding: 8px; border-radius: 5px; font-size: 12px;
+            display: none;
+        }
+        @media (orientation: landscape) { .fs-toggle { display: block; } }
 
         .vip-marquee-container { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0, 0, 0, 0.8); padding: 5px 0; overflow: hidden; z-index: 20; pointer-events: none; }
         .vip-marquee-text { display: inline-block; white-space: nowrap; animation: marquee-vip 35s linear infinite; color: var(--gold); font-weight: bold; font-size: 14px; text-shadow: 0 0 5px #000; }
@@ -36,18 +49,11 @@
         .content-area { flex: 1; overflow-y: auto; background: #0a0a0a; padding: 10px; }
         .panel-header { font-size: 11px; font-weight: bold; color: var(--accent); margin: 15px 0 10px 0; text-transform: uppercase; border-left: 3px solid var(--primary); padding-left: 8px; display: flex; justify-content: space-between; align-items: center; }
         
-        /* Song Item Style */
         .song-item { display: flex; gap: 10px; padding: 10px; border-bottom: 1px solid #1a1a1a; align-items: center; cursor: pointer; border-radius: 8px; }
         .song-item:active { background: #333; }
         .song-item img { width: 75px; height: 42px; border-radius: 4px; object-fit: cover; }
         .song-info { flex: 1; font-size: 13px; color: #ddd; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .btn-add-q { color: var(--primary); font-size: 22px; padding: 5px; }
-
-        /* Current Play & Controls */
-        #playing-now-container { display: flex; align-items: center; background: #111; margin: 10px 0; border-radius: 8px; border-left: 5px solid var(--gold); overflow: hidden; }
-        #playing-now { flex: 1; padding: 12px; color: var(--gold); font-size: 14px; font-weight: bold; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .btn-skip { background: var(--primary); color: white; border: none; padding: 12px 15px; cursor: pointer; font-weight: bold; font-size: 12px; }
-        .btn-skip:active { opacity: 0.8; }
 
         .history-list { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px; scrollbar-width: none; }
         .history-item { min-width: 130px; max-width: 130px; font-size: 11px; cursor: pointer; }
@@ -67,6 +73,7 @@
 
 <main>
     <div id="video-wrapper">
+        <button class="fs-toggle" onclick="toggleFull()"><i class="fas fa-expand"></i> FULL</button>
         <div id="player"></div>
         <div class="vip-marquee-container">
             <div class="vip-marquee-text">Hệ thống Karaoke VIP Lê Đức Quang - Đẳng cấp Studio Pro - Hotline: 0909 374 508 - Chúc quý khách hát ca vui vẻ!</div>
@@ -75,13 +82,12 @@
     <div class="content-area">
         <div id="status-bar" style="font-size: 10px; color: #555; margin-bottom: 8px;">Đang khởi động hệ thống...</div>
         
-        <div id="playing-now-container">
-            <div id="playing-now"><i class="fas fa-microphone-alt"></i> Sẵn sàng... Chọn bài ngay!</div>
-            <button class="btn-skip" onclick="playNext()"><i class="fas fa-forward"></i> SKIP</button>
-        </div>
-
         <div class="panel-header"><span><i class="fas fa-history"></i> VỪA HÁT XONG</span> <small onclick="clearHistory()" style="color:red; cursor:pointer;">XÓA</small></div>
         <div id="history-list" class="history-list"></div>
+
+        <div id="playing-now" style="padding: 12px; background: #111; color: var(--gold); font-size: 14px; font-weight: bold; margin: 10px 0; border-radius: 8px; border-left: 5px solid var(--gold);">
+            <i class="fas fa-microphone-alt"></i> Sẵn sàng... Chọn bài hát ngay!
+        </div>
 
         <div class="panel-header">KẾT QUẢ TÌM KIẾM</div>
         <div id="search-results"></div>
@@ -102,29 +108,30 @@
     let currentKeyIndex = 0;
     let player, songQueue = [], historyQueue = [];
 
-    // Tải dữ liệu từ LocalStorage
-    function loadStorage() {
-        try {
-            const hSaved = localStorage.getItem('kara_history');
-            historyQueue = hSaved ? JSON.parse(hSaved) : [];
-            const qSaved = localStorage.getItem('kara_queue');
-            songQueue = qSaved ? JSON.parse(qSaved) : [];
-        } catch(e) { 
-            historyQueue = []; 
-            songQueue = [];
-        }
-    }
+    // Tải lịch sử
+    try {
+        const saved = localStorage.getItem('kara_history');
+        historyQueue = saved ? JSON.parse(saved) : [];
+        if(!Array.isArray(historyQueue)) historyQueue = [];
+    } catch(e) { historyQueue = []; }
 
     function onYouTubeIframeAPIReady() {
-        loadStorage();
         player = new YT.Player('player', {
             height: '100%', width: '100%', videoId: '',
             playerVars: { 'autoplay': 1, 'controls': 1, 'rel': 0, 'modestbranding': 1, 'playsinline': 1 },
             events: { 
-                'onReady': () => { updateStatus(); renderHistory(); updateUI(); },
+                'onReady': () => { updateStatus(); renderHistory(); },
                 'onStateChange': (e) => { if (e.data === YT.PlayerState.ENDED) playNext(); } 
             }
         });
+    }
+
+    // Hàm dứt điểm thanh địa chỉ
+    function toggleFull() {
+        const elem = document.getElementById('video-wrapper');
+        if (elem.requestFullscreen) { elem.requestFullscreen(); }
+        else if (elem.webkitRequestFullscreen) { elem.webkitRequestFullscreen(); }
+        else if (elem.msRequestFullscreen) { elem.msRequestFullscreen(); }
     }
 
     function updateStatus() {
@@ -146,7 +153,7 @@
     }
 
     function clearHistory() {
-        if(confirm("Xóa lịch sử đã hát?")) {
+        if(confirm("Bạn muốn xóa danh sách vừa hát?")) {
             historyQueue = [];
             localStorage.setItem('kara_history', JSON.stringify([]));
             renderHistory();
@@ -158,7 +165,6 @@
         player.loadVideoById(id);
         document.getElementById('playing-now').innerHTML = `<i class="fas fa-play-circle fa-spin"></i> Đang hát: ${title}`;
         
-        // Lưu lịch sử
         historyQueue = historyQueue.filter(item => item.id !== id);
         historyQueue.unshift({ id, title, thumb });
         if(historyQueue.length > 20) historyQueue.pop();
@@ -169,7 +175,6 @@
     async function searchMusic() {
         const q = document.getElementById('txtSearch').value;
         if(!q) return;
-        
         const resultsDiv = document.getElementById('search-results');
         resultsDiv.innerHTML = '<p style="padding:10px; color:var(--accent);">Đang tìm bài hát...</p>';
 
@@ -177,11 +182,9 @@
         for (let i = 0; i < API_KEYS.length; i++) {
             const activeKey = API_KEYS[currentKeyIndex];
             const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${encodeURIComponent(q + ' karaoke')}&type=video&videoEmbeddable=true&key=${activeKey}`;
-            
             try {
                 const res = await fetch(url);
                 const data = await res.json();
-                
                 if(data.items && data.items.length > 0) {
                     renderResults(data.items);
                     success = true;
@@ -194,7 +197,7 @@
                 currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
             }
         }
-        if(!success) resultsDiv.innerHTML = '<p style="color:red; padding:10px;">Lỗi tìm kiếm hoặc hết lượt truy cập!</p>';
+        if(!success) resultsDiv.innerHTML = '<p style="color:red; padding:10px;">Lỗi tìm kiếm hoặc hết lượt Key!</p>';
     }
 
     function renderResults(items) {
@@ -216,28 +219,20 @@
 
     function addToQueue(id, title, thumb, element) {
         songQueue.push({ id, title, thumb });
-        localStorage.setItem('kara_queue', JSON.stringify(songQueue));
         updateUI();
         if(element) {
-            element.classList.replace('fa-plus-circle', 'fa-check-circle');
             element.style.color = "lime";
-            setTimeout(() => {
-                element.classList.replace('fa-check-circle', 'fa-plus-circle');
-                element.style.color = "var(--primary)";
-            }, 1000);
+            setTimeout(() => element.style.color = "red", 1000);
         }
     }
 
     function updateUI() {
         document.getElementById('q-count').innerText = songQueue.length;
         document.getElementById('queue-list').innerHTML = songQueue.map((s, i) => `
-            <div class="song-item">
+            <div class="song-item" onclick="playFromQueue(${i})">
                 <b style="color:red; width:20px;">${i+1}</b>
-                <div style="display:flex; flex:1; align-items:center;" onclick="playFromQueue(${i})">
-                    <img src="${s.thumb}" style="width:55px; height:32px;">
-                    <div class="song-info">${s.title}</div>
-                </div>
-                <i class="fas fa-trash-alt" style="color:#444; padding:5px;" onclick="removeFromQueue(${i})"></i>
+                <img src="${s.thumb}" style="width:55px; height:32px;">
+                <div class="song-info">${s.title}</div>
             </div>
         `).join('');
     }
@@ -245,25 +240,15 @@
     function playFromQueue(index) {
         const selected = songQueue[index];
         songQueue.splice(index, 1);
-        localStorage.setItem('kara_queue', JSON.stringify(songQueue));
         playNow(selected.id, selected.title, selected.thumb);
-        updateUI();
-    }
-
-    function removeFromQueue(index) {
-        songQueue.splice(index, 1);
-        localStorage.setItem('kara_queue', JSON.stringify(songQueue));
         updateUI();
     }
 
     function playNext() {
         if (songQueue.length > 0) {
             const next = songQueue.shift();
-            localStorage.setItem('kara_queue', JSON.stringify(songQueue));
             playNow(next.id, next.title, next.thumb);
             updateUI();
-        } else {
-            alert("Hàng đợi đã hết bài!");
         }
     }
     
