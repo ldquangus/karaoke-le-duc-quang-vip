@@ -20,14 +20,18 @@
         .search-box input { flex: 1; background: none; border: none; color: #fff; padding: 8px; outline: none; font-size: 14px; }
         .search-box button { background: none; border: none; color: var(--primary); font-size: 18px; }
 
-        /* Filter Bar */
-        .filter-bar { display: flex; gap: 8px; padding: 10px; background: #000; overflow-x: auto; flex-shrink: 0; scrollbar-width: none; border-bottom: 1px solid #222; }
-        .filter-bar button { background: #1a1a1a; color: #fff; border: 1px solid #444; padding: 7px 15px; border-radius: 20px; font-size: 11px; font-weight: bold; white-space: nowrap; }
+        /* Màn hình chờ Quảng cáo */
+        #promo-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #111 0%, #000 100%); z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; border: 1px solid #333; }
+        .promo-title { color: var(--gold); font-size: 20px; font-weight: bold; letter-spacing: 2px; margin-bottom: 10px; }
+        .promo-sub { color: #fff; font-size: 14px; margin-bottom: 20px; }
+        .promo-ads { background: rgba(255, 0, 0, 0.1); border: 1px dashed var(--primary); padding: 15px; border-radius: 10px; width: 90%; }
+        .promo-ads p { margin: 5px 0; font-size: 13px; color: var(--accent); font-weight: bold; }
 
-        /* Video & Controls */
+        /* Video Area */
         #video-wrapper { width: 100%; height: 40vh; background: #000; position: relative; flex-shrink: 0; border-bottom: 2px solid var(--primary); }
         #player { width: 100%; height: 100%; }
         
+        /* Controls */
         .custom-controls { display: flex; align-items: center; justify-content: space-around; background: #111; padding: 10px; border-bottom: 1px solid var(--gray); }
         .control-btn { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
         .volume-container { display: flex; align-items: center; gap: 10px; width: 40%; }
@@ -40,8 +44,7 @@
         .song-item { display: flex; gap: 10px; padding: 10px; border-bottom: 1px solid #1a1a1a; align-items: center; }
         .song-info { flex: 1; font-size: 13px; color: #eee; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .song-item img { width: 70px; height: 40px; border-radius: 4px; object-fit: cover; background: #222; }
-        .btn-group { display: flex; gap: 15px; }
-        .icon-btn { font-size: 20px; cursor: pointer; }
+        .icon-btn { font-size: 20px; cursor: pointer; margin-left: 10px; }
 
         @media (orientation: landscape) { 
             header, .filter-bar, .content-area, .custom-controls { display: none !important; } 
@@ -58,65 +61,69 @@
 <header>
     <div class="logo">LÊ ĐỨC QUANG</div>
     <div class="search-box">
-        <input type="text" id="txtSearch" placeholder="Tìm bài hát..." autocomplete="off" spellcheck="false">
+        <input type="text" id="txtSearch" placeholder="Tìm tên bài hát..." autocomplete="off">
         <button onclick="searchMusic()"><i class="fas fa-search"></i></button>
     </div>
 </header>
 
-<div class="filter-bar">
-    <button onclick="searchWithTone('Tone Nam')">TONE NAM</button>
-    <button onclick="searchWithTone('Tone Nữ')">TONE NỮ</button>
-    <button onclick="searchWithTone('Remix')">REMIX</button>
-    <button onclick="searchWithTone('Bolero')">BOLERO</button>
-</div>
-
 <div id="video-wrapper">
+    <!-- Màn hình chờ Quảng cáo -->
+    <div id="promo-overlay">
+        <div class="promo-title">KARAOKE VIP LÊ ĐỨC QUANG</div>
+        <div class="promo-sub">DÀN ÂM THANH STUDIO CỰC CHUẨN</div>
+        <div class="promo-ads">
+            <p><i class="fas fa-star"></i> NHẬN QUẢNG CÁO TRÊN ỨNG DỤNG <i class="fas fa-star"></i></p>
+            <p style="color: #fff; font-size: 11px;">Hợp tác kinh doanh - Liên hệ ngay</p>
+            <p style="font-size: 16px; margin-top: 5px;">Hotline: 0909 374 508</p>
+        </div>
+        <button onclick="document.getElementById('txtSearch').focus()" style="margin-top: 20px; background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 20px; font-weight: bold;">BẮT ĐẦU HÁT NGAY</button>
+    </div>
+
     <div id="player"></div>
+    
     <div class="vip-marquee-container">
-        <div class="vip-marquee-text">KARAOKE VIP LÊ ĐỨC QUANG - ĐẲNG CẤP STUDIO - HOTLINE: 0909 374 508</div>
+        <div class="vip-marquee-text">KARAOKE VIP LÊ ĐỨC QUANG - ĐẲNG CẤP STUDIO - HOTLINE: 0909 374 508 - CHÚC BẠN CA HÁT VUI VẺ!</div>
     </div>
 </div>
 
 <div class="custom-controls">
-    <button class="control-btn" onclick="togglePlay()"><i id="play-icon" class="fas fa-pause"></i></button>
+    <button class="control-btn" onclick="togglePlay()"><i id="play-icon" class="fas fa-play"></i></button>
     <button class="control-btn" onclick="playNextInQueue()"><i class="fas fa-step-forward"></i></button>
     <div class="volume-container">
-        <i class="fas fa-volume-down" style="font-size: 12px;"></i>
         <input type="range" id="volume-slider" min="0" max="100" value="100" oninput="changeVolume(this.value)">
-        <i class="fas fa-volume-up" style="font-size: 12px;"></i>
     </div>
 </div>
 
 <div class="content-area">
     <div id="playing-now" style="padding: 10px; background: #111; color: var(--gold); font-size: 13px; font-weight: bold; margin-bottom: 10px; border-left: 5px solid var(--gold); border-radius: 5px;">
-        <i class="fas fa-microphone-alt"></i> Sẵn sàng...
+        <i class="fas fa-microphone-alt"></i> Sẵn sàng phục vụ...
     </div>
 
-    <div class="panel-header">KẾT QUẢ TÌM KIẾM</div>
-    <div id="search-results"><p style="color:#444; padding:10px;">Nhập tên bài hát để tìm...</p></div>
+    <div class="panel-header">KẾT QUẢ TÌM KIẾM (8 BÀI)</div>
+    <div id="search-results"><p style="color:#444; padding:10px;">Vui lòng nhập tên bài hát...</p></div>
 
-    <div class="panel-header" style="color: var(--gold); margin-top:20px;">BÀI HÁT GẦN ĐÂY (8 BÀI)</div>
+    <div class="panel-header" style="color: var(--gold); margin-top:20px;">BÀI HÁT GẦN ĐÂY</div>
     <div id="history-list"></div>
+    
+    <!-- Quảng cáo dưới danh sách -->
+    <div style="margin-top: 20px; padding: 15px; background: #111; border-radius: 10px; text-align: center; border: 1px solid #222;">
+        <p style="color: var(--accent); font-size: 12px; font-weight: bold; margin: 0;">LIÊN HỆ QUẢNG CÁO TẠI ĐÂY</p>
+        <p style="color: #666; font-size: 10px; margin-top: 5px;">Hỗ trợ quảng bá thương hiệu Karaoke, Studio, Thiết bị âm thanh...</p>
+    </div>
     <div style="height: 50px;"></div>
 </div>
 
 <script>
-    const APP_VERSION = "005"; 
-    const API_KEYS = [
-        "AIzaSyBywuEsM7gJE2dqPY5NNzIKteySXXv1Dx4", 
-        "AIzaSyAZzzzyIgZoum8RscTz-KUqrEEzzQCghKg", 
-        "AIzaSyDAJ7_JVXgEggQYZTBzne5W27Kt5QDaw8k"
-    ];
+    const APP_VERSION = "006"; 
+    const API_KEYS = ["AIzaSyBywuEsM7gJE2dqPY5NNzIKteySXXv1Dx4", "AIzaSyAZzzzyIgZoum8RscTz-KUqrEEzzQCghKg", "AIzaSyDAJ7_JVXgEggQYZTBzne5W27Kt5QDaw8k"];
     let currentKeyIndex = 0;
-    let player;
-    let internalQueue = []; // Danh sách chờ cho tính năng Play Next
+    let player, internalQueue = [];
     let playbackHistory = JSON.parse(localStorage.getItem('karaoke_history')) || [];
 
-    // Khởi tạo Version
+    // Tự động cập nhật bản mới
     (function() {
-        const savedVersion = localStorage.getItem('app_version');
-        if (savedVersion !== APP_VERSION) {
-            localStorage.removeItem('app_version'); 
+        if (localStorage.getItem('app_version') !== APP_VERSION) {
+            localStorage.clear();
             localStorage.setItem('app_version', APP_VERSION);
             window.location.reload(true);
         }
@@ -130,85 +137,76 @@
 
     function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
-            height: '100%', width: '100%', videoId: 'dQw4w9WgXcQ',
+            height: '100%', width: '100%',
             playerVars: { 'autoplay': 1, 'controls': 1, 'playsinline': 1, 'modestbranding': 1, 'rel': 0 },
             events: { 
                 'onReady': () => updateHistoryUI(),
                 'onStateChange': (e) => {
                     if (e.data === YT.PlayerState.ENDED) playNextInQueue();
-                    updatePlayIcon(e.data);
+                    const icon = document.getElementById('play-icon');
+                    icon.className = (e.data === 1) ? "fas fa-pause" : "fas fa-play";
                 }
             }
         });
     }
 
-    // Xử lý Phát nhạc & Lịch sử
     function playNow(id, title, thumb) {
+        // Ẩn màn hình quảng cáo khi bắt đầu phát
+        document.getElementById('promo-overlay').style.display = 'none';
+        
         if (player && player.loadVideoById) {
             player.loadVideoById(id);
             document.getElementById('playing-now').innerHTML = `<i class="fas fa-play-circle fa-spin"></i> Đang hát: ${title}`;
-            addToHistory(id, title, thumb);
+            
+            // Xử lý lịch sử 8 bài
+            playbackHistory = playbackHistory.filter(item => item.id !== id);
+            playbackHistory.unshift({ id, title, thumb });
+            playbackHistory = playbackHistory.slice(0, 8);
+            localStorage.setItem('karaoke_history', JSON.stringify(playbackHistory));
+            updateHistoryUI();
         }
-    }
-
-    function addToHistory(id, title, thumb) {
-        playbackHistory = playbackHistory.filter(item => item.id !== id);
-        playbackHistory.unshift({ id, title, thumb });
-        playbackHistory = playbackHistory.slice(0, 8);
-        localStorage.setItem('karaoke_history', JSON.stringify(playbackHistory));
-        updateHistoryUI();
     }
 
     function updateHistoryUI() {
         const historyDiv = document.getElementById('history-list');
         if (playbackHistory.length === 0) {
-            historyDiv.innerHTML = '<p style="color:#444; padding:10px;">Chưa có bài hát nào...</p>';
+            historyDiv.innerHTML = '<p style="color:#444; padding:10px;">Chưa có bài cũ...</p>';
             return;
         }
         historyDiv.innerHTML = playbackHistory.map(s => `
             <div class="song-item">
                 <img src="${s.thumb}" loading="lazy">
                 <div class="song-info" onclick="playNow('${s.id}', '${s.title}', '${s.thumb}')">${s.title}</div>
-                <i class="fas fa-redo-alt" style="color:#555;" onclick="playNow('${s.id}', '${s.title}', '${s.thumb}')"></i>
+                <i class="fas fa-redo-alt icon-btn" style="color:#555;" onclick="playNow('${s.id}', '${s.title}', '${s.thumb}')"></i>
             </div>
         `).join('');
     }
 
-    // Tính năng Play Next (Ưu tiên)
     function addToNext(id, title, thumb) {
         internalQueue.unshift({ id, title, thumb });
-        alert("Đã ưu tiên: " + title);
+        alert("Đã ưu tiên phát tiếp: " + title);
     }
 
     function playNextInQueue() {
         if (internalQueue.length > 0) {
-            const nextSong = internalQueue.shift();
-            playNow(nextSong.id, nextSong.title, nextSong.thumb);
-        } else {
-            alert("Hết danh sách ưu tiên!");
+            const next = internalQueue.shift();
+            playNow(next.id, next.title, next.thumb);
         }
     }
 
-    // Bộ điều khiển
     function togglePlay() {
+        if (!player) return;
         const state = player.getPlayerState();
-        if (state === 1) player.pauseVideo();
-        else player.playVideo();
+        state === 1 ? player.pauseVideo() : player.playVideo();
     }
 
-    function updatePlayIcon(state) {
-        const icon = document.getElementById('play-icon');
-        icon.className = (state === 1) ? "fas fa-pause" : "fas fa-play";
-    }
+    function changeVolume(val) { if (player) player.setVolume(val); }
 
-    function changeVolume(val) {
-        if (player) player.setVolume(val);
-    }
-
-    // Tìm kiếm
-    async function searchMusic(suffix = "") {
+    async function searchMusic() {
         document.activeElement.blur(); 
-        const query = document.getElementById('txtSearch').value + " " + suffix;
+        const query = document.getElementById('txtSearch').value;
+        if(!query) return;
+
         const resultsDiv = document.getElementById('search-results');
         resultsDiv.innerHTML = '<p style="padding:10px; color:var(--accent);">Đang tìm 8 bài tốt nhất...</p>';
 
@@ -220,40 +218,27 @@
                 const res = await fetch(url);
                 const data = await res.json();
                 if(data.items && data.items.length > 0) {
-                    renderResults(data.items);
+                    resultsDiv.innerHTML = data.items.map(item => {
+                        const title = item.snippet.title.replace(/['"]/g, "");
+                        const thumb = item.snippet.thumbnails.default.url;
+                        const id = item.id.videoId;
+                        return `
+                        <div class="song-item">
+                            <img src="${thumb}" loading="lazy">
+                            <div class="song-info" onclick="playNow('${id}', '${title}', '${thumb}')">${title}</div>
+                            <i class="fas fa-bolt icon-btn" style="color:var(--accent);" onclick="addToNext('${id}', '${title}', '${thumb}')"></i>
+                            <i class="fas fa-play-circle icon-btn" style="color:var(--primary);" onclick="playNow('${id}', '${title}', '${thumb}')"></i>
+                        </div>`;
+                    }).join('');
                     return;
                 }
             } catch(e) {}
             currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
         }
-        resultsDiv.innerHTML = '<p style="color:red; padding:10px;">Lỗi API hoặc hết lượt!</p>';
+        resultsDiv.innerHTML = '<p style="color:red; padding:10px;">Hết lượt tìm kiếm, vui lòng thử lại sau!</p>';
     }
 
-    function renderResults(items) {
-        const resultsDiv = document.getElementById('search-results');
-        resultsDiv.innerHTML = items.map(item => {
-            const title = item.snippet.title.replace(/['"]/g, "");
-            const thumb = item.snippet.thumbnails.default.url;
-            const id = item.id.videoId;
-            return `
-            <div class="song-item">
-                <img src="${thumb}" loading="lazy">
-                <div class="song-info" onclick="playNow('${id}', '${title}', '${thumb}')">${title}</div>
-                <div class="btn-group">
-                    <i class="fas fa-bolt icon-btn" style="color:var(--accent);" title="Phát tiếp theo" onclick="addToNext('${id}', '${title}', '${thumb}')"></i>
-                    <i class="fas fa-play-circle icon-btn" style="color:var(--primary);" title="Phát ngay" onclick="playNow('${id}', '${title}', '${thumb}')"></i>
-                </div>
-            </div>`;
-        }).join('');
-    }
-
-    function searchWithTone(tone) { 
-        if(document.getElementById('txtSearch').value) searchMusic(tone); 
-    }
-
-    document.getElementById('txtSearch').addEventListener('keypress', (e) => { 
-        if(e.key === 'Enter') searchMusic(); 
-    });
+    document.getElementById('txtSearch').addEventListener('keypress', (e) => { if(e.key === 'Enter') searchMusic(); });
 </script>
 
 </body>
