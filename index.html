@@ -13,33 +13,32 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; margin: 0; height: 100vh; width: 100vw; overflow: hidden; display: flex; flex-direction: column; }
         
-        /* Màn hình khởi động */
         #start-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         .start-btn { background: var(--primary); color: white; border: none; padding: 15px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px var(--primary); animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        /* Quảng cáo chạy động */
-        .promo-container { width: 100%; overflow: hidden; background: #111; padding: 10px 0; border-top: 1px solid #333; border-bottom: 1px solid #333; margin: 20px 0; }
-        .promo-text { white-space: nowrap; display: inline-block; animation: marquee 15s linear infinite; color: var(--gold); font-size: 18px; font-weight: bold; }
+        .promo-container { width: 100%; overflow: hidden; background: #111; padding: 10px 0; border-top: 1px solid #333; border-bottom: 1px solid #333; margin: 10px 0; }
+        .promo-text { white-space: nowrap; display: inline-block; animation: marquee 15s linear infinite; color: var(--gold); font-size: 16px; font-weight: bold; }
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        /* Header & Search */
         header { background: #111; padding: 10px 15px; display: flex; align-items: center; border-bottom: 2px solid var(--primary); flex-shrink: 0; }
         .logo { font-weight: bold; font-size: 14px; color: var(--primary); text-transform: uppercase; margin-right: 5px; }
         .search-box { flex: 1; display: flex; background: #222; border-radius: 20px; padding: 2px 10px; border: 1px solid #333; }
-        .search-box input { flex: 1; background: none; border: none; color: #fff; padding: 8px; outline: none; font-size: 14px; }
+        
+        /* Input Tối Ưu */
+        .search-box input { 
+            flex: 1; background: none; border: none; color: #fff; padding: 8px; 
+            outline: none; font-size: 14px; width: 100%;
+        }
 
-        /* Video Area */
         #video-wrapper { width: 100%; height: 38vh; background: #000; position: relative; flex-shrink: 0; border-bottom: 2px solid var(--primary); }
         #player { width: 100%; height: 100%; }
         #video-promo-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; z-index: 5; flex-direction: column; }
 
-        /* Controls */
         .custom-controls { display: flex; align-items: center; justify-content: space-around; background: #111; padding: 8px; border-bottom: 1px solid #222; }
         .control-btn { background: none; border: none; color: white; font-size: 22px; cursor: pointer; }
         #volume-slider { width: 30%; accent-color: var(--primary); }
 
-        /* Content Area */
         .content-area { flex: 1; overflow-y: auto; background: #0a0a0a; padding: 10px; -webkit-overflow-scrolling: touch; }
         .panel-header { font-size: 11px; font-weight: bold; color: var(--accent); margin: 15px 0 10px 0; text-transform: uppercase; border-left: 3px solid var(--primary); padding-left: 8px; }
         .song-item { display: flex; gap: 10px; padding: 12px 10px; border-bottom: 1px solid #1a1a1a; align-items: center; }
@@ -55,40 +54,38 @@
 </head>
 <body>
 
-<!-- BẪY AUTOFILL: Trình duyệt sẽ điền dữ liệu vào đây thay vì ô search thật -->
-<div style="position: absolute; overflow: hidden; height: 0; width: 0; z-index: -1;">
-    <input type="text" name="fake_user">
-    <input type="password" name="fake_pass">
-    <input type="email" name="fake_email">
+<!-- Bẫy cao cấp ẩn -->
+<div style="opacity: 0; position: absolute; top: -100px;">
+    <input type="text" name="username">
+    <input type="password" name="password">
 </div>
 
 <div id="start-overlay">
-    <div style="color: var(--gold); font-size: 24px; font-weight: bold; margin-bottom: 5px;">KARAOKE VIP LÊ ĐỨC QUANG</div>
-    <div style="color: #fff; font-size: 14px; margin-bottom: 30px;">HỆ THỐNG STUDIO CHUYÊN NGHIỆP</div>
+    <div style="color: var(--gold); font-size: 22px; font-weight: bold; margin-bottom: 5px;">KARAOKE VIP LÊ ĐỨC QUANG</div>
     <button class="start-btn" onclick="initApp()">BẮT ĐẦU HÁT</button>
 </div>
 
 <header>
-    <div class="logo">LÊ ĐỨC QUANG</div>
+    <div class="logo">KARAOKE</div>
     <div class="search-box">
-        <!-- Áp dụng kỹ thuật Readonly & Random Name -->
-        <input type="text" 
-               id="v_search_input" 
-               name="q_kara_search_internal"
-               placeholder="Tìm tên bài hát..." 
-               readonly 
-               onfocus="this.removeAttribute('readonly');"
-               autocomplete="one-time-code"
-               autocorrect="off" 
-               spellcheck="false" 
-               inputmode="search">
+        <input type="search" 
+               id="k_query_field" 
+               name="k_field_rand_99"
+               placeholder="Nhập tên bài hát..." 
+               readonly
+               onfocus="setTimeout(() => { this.removeAttribute('readonly'); }, 60);"
+               onblur="this.setAttribute('readonly', 'readonly');"
+               autocomplete="new-password"
+               autocorrect="off"
+               spellcheck="false"
+               data-lpignore="true">
         <button onclick="searchMusic()"><i class="fas fa-search"></i></button>
     </div>
 </header>
 
 <div id="video-wrapper">
     <div id="video-promo-screen">
-        <div style="color: var(--gold); font-size: 16px; font-weight: bold; margin-bottom: 10px;">ĐANG CHỜ BÀI HÁT...</div>
+        <div style="color: var(--gold); font-size: 14px; font-weight: bold;">ĐANG CHỜ BÀI HÁT...</div>
     </div>
     <div id="player"></div>
 </div>
@@ -97,29 +94,33 @@
     <button class="control-btn" onclick="togglePlay()"><i id="play-icon" class="fas fa-play"></i></button>
     <button class="control-btn" onclick="playNextInQueue()"><i class="fas fa-step-forward"></i></button>
     <input type="range" id="volume-slider" min="0" max="100" value="100" oninput="changeVolume(this.value)">
-    <i class="fas fa-volume-up" style="color: #555;"></i>
 </div>
 
 <div class="content-area">
-    <div id="playing-now" style="padding: 12px; background: #111; color: var(--gold); font-size: 14px; font-weight: bold; margin-bottom: 10px; border-left: 5px solid var(--gold); border-radius: 5px;">
-        <i class="fas fa-microphone-alt"></i> Sẵn sàng phục vụ...
+    <div id="playing-now" style="padding: 10px; background: #111; color: var(--gold); font-size: 13px; font-weight: bold; border-left: 4px solid var(--gold); margin-bottom: 10px;">
+        Sẵn sàng...
     </div>
     <div class="panel-header">KẾT QUẢ TÌM KIẾM</div>
     <div id="search-results"></div>
-    <div class="panel-header" style="color: var(--gold); margin-top:20px;">BÀI HÁT GẦN ĐÂY</div>
+    <div class="panel-header" style="color: var(--gold);">LỊCH SỬ</div>
     <div id="history-list"></div>
     <div style="height: 50px;"></div>
 </div>
 
 <script>
-    const APP_VERSION = "009"; 
+    const APP_VERSION = "010"; 
     const API_KEYS = ["AIzaSyBywuEsM7gJE2dqPY5NNzIKteySXXv1Dx4", "AIzaSyAZzzzyIgZoum8RscTz-KUqrEEzzQCghKg", "AIzaSyDAJ7_JVXgEggQYZTBzne5W27Kt5QDaw8k"];
     let currentKeyIndex = 0;
     let player, internalQueue = [];
     let playbackHistory = JSON.parse(localStorage.getItem('karaoke_history')) || [];
 
-    // Tự động đổi tên input để trình duyệt không nhận diện được qua các lần truy cập
-    document.getElementById('v_search_input').name = "search_" + Math.random().toString(36).substring(7);
+    (function() {
+        if (localStorage.getItem('app_version') !== APP_VERSION) {
+            localStorage.clear();
+            localStorage.setItem('app_version', APP_VERSION);
+            window.location.reload(true);
+        }
+    })();
 
     function initApp() {
         const doc = document.documentElement;
@@ -150,10 +151,10 @@
         document.getElementById('video-promo-screen').style.display = 'none';
         if (player && player.loadVideoById) {
             player.loadVideoById(id);
-            document.getElementById('playing-now').innerHTML = `<i class="fas fa-play-circle fa-spin"></i> Đang hát: ${title}`;
+            document.getElementById('playing-now').innerHTML = `Đang hát: ${title}`;
             playbackHistory = playbackHistory.filter(item => item.id !== id);
             playbackHistory.unshift({ id, title, thumb });
-            playbackHistory = playbackHistory.slice(0, 8);
+            playbackHistory = playbackHistory.slice(0, 10);
             localStorage.setItem('karaoke_history', JSON.stringify(playbackHistory));
             updateHistoryUI();
         }
@@ -164,9 +165,8 @@
         if (playbackHistory.length === 0) return;
         historyDiv.innerHTML = playbackHistory.map(s => `
             <div class="song-item">
-                <img src="${s.thumb}" loading="lazy">
+                <img src="${s.thumb}">
                 <div class="song-info" onclick="playNow('${s.id}', '${s.title}', '${s.thumb}')">${s.title}</div>
-                <i class="fas fa-redo-alt icon-btn" style="color:#444;" onclick="playNow('${s.id}', '${s.title}', '${s.thumb}')"></i>
             </div>
         `).join('');
     }
@@ -191,16 +191,15 @@
     function changeVolume(val) { if (player) player.setVolume(val); }
 
     async function searchMusic() {
-        const input = document.getElementById('v_search_input');
+        const input = document.getElementById('k_query_field');
         const query = input.value;
         if(!query) return;
         
-        input.blur(); // Thu bàn phím
-        // Đặt lại readonly để chặn autofill cho lần sau
+        input.blur();
         input.setAttribute('readonly', 'readonly');
 
         const resultsDiv = document.getElementById('search-results');
-        resultsDiv.innerHTML = '<p style="padding:10px; color:var(--accent);">Đang tìm...</p>';
+        resultsDiv.innerHTML = '<p style="padding:10px; color:var(--accent);">Đang tìm bài...</p>';
 
         for (let i = 0; i < API_KEYS.length; i++) {
             const activeKey = API_KEYS[currentKeyIndex];
@@ -216,10 +215,9 @@
                         const id = item.id.videoId;
                         return `
                         <div class="song-item">
-                            <img src="${thumb}" loading="lazy">
+                            <img src="${thumb}">
                             <div class="song-info" onclick="playNow('${id}', '${title}', '${thumb}')">${title}</div>
                             <i class="fas fa-bolt icon-btn" style="color:var(--accent);" onclick="addToNext('${id}', '${title}', '${thumb}')"></i>
-                            <i class="fas fa-play-circle icon-btn" style="color:var(--primary);" onclick="playNow('${id}', '${title}', '${thumb}')"></i>
                         </div>`;
                     }).join('');
                     return;
@@ -227,11 +225,10 @@
             } catch(e) {}
             currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
         }
-        resultsDiv.innerHTML = '<p style="color:red; padding:10px;">Lỗi kết nối. Thử lại sau.</p>';
+        resultsDiv.innerHTML = '<p style="color:red; padding:10px;">Lỗi kết nối. Thử lại.</p>';
     }
 
-    document.getElementById('v_search_input').addEventListener('keypress', (e) => { if(e.key === 'Enter') searchMusic(); });
+    document.getElementById('k_query_field').addEventListener('keypress', (e) => { if(e.key === 'Enter') searchMusic(); });
 </script>
-
 </body>
 </html>
