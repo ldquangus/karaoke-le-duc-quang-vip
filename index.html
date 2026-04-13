@@ -21,27 +21,32 @@
         #video-wrapper { width: 100%; height: 50vh; background: #000; position: relative; z-index: 10; border-bottom: 2px solid #222; }
         #player { width: 100%; height: 100%; border: none; }
 
-        /* Nút Tone Nam/Nữ */
-        .filter-bar { display: flex; gap: 5px; padding: 8px 10px; background: #111; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
-        .filter-bar button { background: #222; color: #eee; border: 1px solid #444; padding: 6px 12px; border-radius: 15px; font-size: 11px; cursor: pointer; font-weight: bold; }
-        .filter-bar button:active { background: var(--primary); color: white; }
+        /* Nút Tone */
+        .filter-bar { display: flex; gap: 5px; padding: 8px 10px; background: #111; overflow-x: auto; scrollbar-width: none; flex-shrink: 0; }
+        .filter-bar button { background: #222; color: #eee; border: 1px solid #444; padding: 6px 12px; border-radius: 15px; font-size: 11px; cursor: pointer; font-weight: bold; white-space: nowrap; }
+        .filter-bar button:active { background: var(--primary); }
 
-        /* XOAY NGANG DỨT ĐIỂM THANH ĐỊA CHỈ */
+        /* XOAY NGANG: FULL MÀN HÌNH & ẨN THANH ĐỊA CHỈ */
         @media (orientation: landscape) {
             header, .content-area, .filter-bar, .vip-marquee-container { display: none !important; }
             #video-wrapper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; border: none; }
-            body { overflow: hidden; }
+            #full-overlay { display: flex !important; } /* Hiện lớp phủ chạm để full */
         }
 
-        .fs-toggle { position: absolute; top: 10px; right: 10px; z-index: 10000; background: rgba(255,0,0,0.6); color: white; border: none; padding: 8px 15px; border-radius: 5px; font-size: 12px; display: none; font-weight: bold; }
-        @media (orientation: landscape) { .fs-toggle { display: block; } }
+        /* Lớp phủ hỗ trợ Fullscreen cho Zalo/Chrome mobile */
+        #full-overlay { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.7); z-index: 10001; 
+            display: none; flex-direction: column; align-items: center; justify-content: center; 
+            color: white; text-align: center; cursor: pointer;
+        }
 
         .content-area { flex: 1; overflow-y: auto; background: #0a0a0a; padding: 10px; }
-        .panel-header { font-size: 11px; font-weight: bold; color: var(--accent); margin: 15px 0 10px 0; text-transform: uppercase; border-left: 3px solid var(--primary); padding-left: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .panel-header { font-size: 11px; font-weight: bold; color: var(--accent); margin: 15px 0 10px 0; text-transform: uppercase; border-left: 3px solid var(--primary); padding-left: 8px; }
         
-        .song-item { display: flex; gap: 10px; padding: 10px; border-bottom: 1px solid #1a1a1a; align-items: center; cursor: pointer; border-radius: 8px; }
+        .song-item { display: flex; gap: 10px; padding: 10px; border-bottom: 1px solid #1a1a1a; align-items: center; cursor: pointer; }
         .song-info { flex: 1; font-size: 13px; color: #ddd; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .song-item img { width: 75px; height: 42px; border-radius: 4px; object-fit: cover; }
+        .song-item img { width: 70px; height: 40px; border-radius: 4px; object-fit: cover; }
 
         .vip-marquee-container { position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0, 0, 0, 0.8); padding: 5px 0; z-index: 20; pointer-events: none; }
         .vip-marquee-text { display: inline-block; white-space: nowrap; animation: marquee-vip 25s linear infinite; color: var(--gold); font-size: 13px; font-weight: bold; }
@@ -65,25 +70,27 @@
     <button onclick="searchWithTone('Bolero')">BOLERO</button>
 </div>
 
-<main id="main-content">
+<main>
     <div id="video-wrapper">
-        <button class="fs-toggle" onclick="toggleFull()"><i class="fas fa-expand"></i> FULL VIDEO</button>
+        <div id="full-overlay" onclick="requestFull()">
+            <i class="fas fa-expand-arrows-alt" style="font-size: 40px; margin-bottom: 10px;"></i>
+            <p>BẤM VÀO ĐÂY ĐỂ PHÁT FULL MÀN HÌNH</p>
+        </div>
         <div id="player"></div>
         <div class="vip-marquee-container">
             <div class="vip-marquee-text">KARAOKE VIP LÊ ĐỨC QUANG - 0909 374 508 - CHÚC QUÝ KHÁCH HÁT CA VUI VẺ!</div>
         </div>
     </div>
+    
     <div class="content-area">
-        <div id="status-bar" style="font-size: 10px; color: #555; margin-bottom: 8px;">Hệ thống sẵn sàng...</div>
-        
         <div id="playing-now" style="padding: 12px; background: #111; color: var(--gold); font-size: 14px; font-weight: bold; margin-bottom: 10px; border-left: 5px solid var(--gold); border-radius: 5px;">
             <i class="fas fa-microphone-alt"></i> Chọn bài hát ngay!
         </div>
 
-        <div class="panel-header">KẾT QUẢ TÌM KIẾM</div>
+        <div class="panel-header">KẾT QUẢ TÌM KIẾM (5 BÀI)</div>
         <div id="search-results"></div>
 
-        <div class="panel-header" style="color: var(--gold);">HÀNG ĐỢI (<span id="q-count">0</span>)</div>
+        <div class="panel-header" style="color: var(--gold); margin-top:20px;">HÀNG ĐỢI (<span id="q-count">0</span>)</div>
         <div id="queue-list"></div>
     </div>
 </main>
@@ -106,27 +113,31 @@
         });
     }
 
-    // Xử lý dứt điểm Fullscreen trên mobile
-    function toggleFull() {
-        const elem = document.getElementById('video-wrapper');
+    // Hàm dứt điểm thanh địa chỉ bằng Fullscreen API
+    function requestFull() {
+        const elem = document.documentElement; // Full toàn bộ trang web
         if (elem.requestFullscreen) elem.requestFullscreen();
         else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+        else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+        
+        document.getElementById('full-overlay').style.display = 'none';
     }
 
     function searchWithTone(tone) {
         const input = document.getElementById('txtSearch');
-        if(!input.value) { alert("Vui lòng nhập tên bài trước!"); return; }
+        if(!input.value) { alert("Vui lòng nhập tên bài hát!"); return; }
         searchMusic(tone);
     }
 
     async function searchMusic(suffix = "") {
         const query = document.getElementById('txtSearch').value + " " + suffix;
         const resultsDiv = document.getElementById('search-results');
-        resultsDiv.innerHTML = '<p style="padding:10px; color:var(--accent);">Đang tìm kiếm...</p>';
+        resultsDiv.innerHTML = '<p style="padding:10px; color:var(--accent);">Đang tìm kiếm 5 bài...</p>';
 
         let success = false;
         for (let i = 0; i < API_KEYS.length; i++) {
-            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=15&q=${encodeURIComponent(query + ' karaoke')}&type=video&videoEmbeddable=true&key=${API_KEYS[currentKeyIndex]}`;
+            // maxResults=5 theo yêu cầu của bạn
+            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${encodeURIComponent(query + ' karaoke')}&type=video&videoEmbeddable=true&key=${API_KEYS[currentKeyIndex]}`;
             try {
                 const res = await fetch(url);
                 const data = await res.json();
@@ -141,7 +152,7 @@
                 currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
             }
         }
-        if(!success) resultsDiv.innerHTML = '<p style="color:red; padding:10px;">Lỗi! Vui lòng thử lại sau.</p>';
+        if(!success) resultsDiv.innerHTML = '<p style="color:red; padding:10px;">Hết lượt tìm kiếm, vui lòng thử lại sau!</p>';
     }
 
     function renderResults(items) {
@@ -156,7 +167,7 @@
                     <img src="${thumb}">
                     <div class="song-info">${item.snippet.title}</div>
                 </div>
-                <i class="fas fa-plus-circle" style="color:red; font-size:24px; padding-left:10px;" onclick="addToQueue('${id}', '${title}', '${thumb}')"></i>
+                <i class="fas fa-plus-circle" style="color:red; font-size:24px; padding: 10px;" onclick="addToQueue('${id}', '${title}', '${thumb}')"></i>
             </div>`;
         }).join('');
     }
@@ -192,6 +203,14 @@
     }
 
     document.getElementById('txtSearch').addEventListener('keypress', (e) => { if(e.key === 'Enter') searchMusic(); });
+
+    // Tự động thoát Full khi xoay dọc lại
+    window.addEventListener("orientationchange", function() {
+        if (window.orientation === 0 || window.orientation === 180) {
+            if (document.exitFullscreen) document.exitFullscreen();
+            else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+        }
+    });
 </script>
 </body>
 </html>
