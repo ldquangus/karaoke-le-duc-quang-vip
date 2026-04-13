@@ -13,33 +13,33 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; margin: 0; height: 100vh; width: 100vw; overflow: hidden; display: flex; flex-direction: column; }
         
-        /* Overlay khởi động */
         #start-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
         .start-btn { background: var(--primary); color: white; border: none; padding: 15px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px var(--primary); animation: pulse 1.5s infinite; margin: 20px 0; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        /* Quảng cáo chạy chữ */
         .promo-container { width: 100%; overflow: hidden; background: #111; padding: 10px 0; border-top: 1px solid #333; border-bottom: 1px solid #333; }
         .promo-text { white-space: nowrap; display: inline-block; animation: marquee 15s linear infinite; color: var(--gold); font-size: 18px; font-weight: bold; }
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        /* Header & Search */
-        header { background: #111; padding: 10px 15px; display: flex; align-items: center; border-bottom: 2px solid var(--primary); flex-shrink: 0; }
-        .logo { font-weight: bold; font-size: 14px; color: var(--primary); text-transform: uppercase; margin-right: 5px; }
+        header { background: #111; padding: 10px 15px 5px 15px; display: flex; align-items: center; border-bottom: 1px solid #222; flex-shrink: 0; }
+        .logo { font-weight: bold; font-size: 12px; color: var(--primary); text-transform: uppercase; margin-right: 8px; }
         .search-box { flex: 1; display: flex; background: #222; border-radius: 20px; padding: 2px 10px; border: 1px solid #333; }
         .search-box input { flex: 1; background: none; border: none; color: #fff; padding: 8px; outline: none; font-size: 14px; width: 100%; }
 
-        /* Video Area */
+        /* THANH NÚT LỌC NHANH */
+        .filter-bar { display: flex; gap: 8px; padding: 8px 15px; background: #111; border-bottom: 2px solid var(--primary); overflow-x: auto; flex-shrink: 0; scrollbar-width: none; }
+        .filter-bar::-webkit-scrollbar { display: none; }
+        .filter-btn { background: #333; color: #fff; border: none; padding: 6px 15px; border-radius: 15px; font-size: 12px; font-weight: bold; white-space: nowrap; cursor: pointer; }
+        .filter-btn.active { background: var(--primary); }
+
         #video-wrapper { width: 100%; height: 38vh; background: #000; position: relative; flex-shrink: 0; border-bottom: 2px solid var(--primary); }
         #player { width: 100%; height: 100%; }
         #video-promo-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; z-index: 5; flex-direction: column; text-align: center; }
 
-        /* Controls */
         .custom-controls { display: flex; align-items: center; justify-content: space-around; background: #111; padding: 8px; border-bottom: 1px solid #222; }
         .control-btn { background: none; border: none; color: white; font-size: 22px; cursor: pointer; }
         #volume-slider { width: 30%; accent-color: var(--primary); }
 
-        /* Content Area */
         .content-area { flex: 1; overflow-y: auto; background: #0a0a0a; padding: 10px; -webkit-overflow-scrolling: touch; }
         .panel-header { font-size: 11px; font-weight: bold; color: var(--accent); margin: 15px 0 10px 0; text-transform: uppercase; border-left: 3px solid var(--primary); padding-left: 8px; }
         .song-item { display: flex; gap: 10px; padding: 12px 10px; border-bottom: 1px solid #1a1a1a; align-items: center; }
@@ -48,51 +48,42 @@
         .icon-btn { font-size: 22px; cursor: pointer; margin-left: 10px; }
 
         @media (orientation: landscape) { 
-            header, .custom-controls, .content-area { display: none !important; } 
+            header, .filter-bar, .custom-controls, .content-area { display: none !important; } 
             #video-wrapper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; border: none; } 
         }
     </style>
 </head>
 <body>
 
-<!-- Bẫy Autofill ẩn -->
-<div style="opacity: 0; position: absolute; top: -100px; height: 0;">
-    <input type="text" name="fake_user"><input type="password" name="fake_pass">
-</div>
-
 <div id="start-overlay">
     <div style="color: var(--gold); font-size: 24px; font-weight: bold;">KARAOKE VIP LÊ ĐỨC QUANG</div>
-    <div style="color: #fff; font-size: 14px; margin-top: 5px;">HỆ THỐNG STUDIO CHUYÊN NGHIỆP</div>
     <button class="start-btn" onclick="initApp()">BẮT ĐẦU HÁT</button>
     <div class="promo-container">
-        <div class="promo-text">NHẬN QUẢNG CÁO & HỢP TÁC KINH DOANH TRÊN ỨNG DỤNG - HOTLINE: 0909 374 508 - LÊ ĐỨC QUANG</div>
+        <div class="promo-text">HOTLINE: 0909 374 508 - LÊ ĐỨC QUANG - NHẬN QUẢNG CÁO TRÊN APP</div>
     </div>
 </div>
 
 <header>
     <div class="logo">LÊ ĐỨC QUANG</div>
     <div class="search-box">
-        <input type="search" 
-               id="k_query_field" 
-               name="k_field_rand_011"
-               placeholder="Tìm tên bài hát..." 
-               readonly
-               onfocus="setTimeout(() => { this.removeAttribute('readonly'); }, 60);"
-               onblur="this.setAttribute('readonly', 'readonly');"
-               autocomplete="new-password"
-               autocorrect="off"
-               spellcheck="false"
-               data-lpignore="true">
+        <input type="search" id="k_query_field" placeholder="Tìm tên bài hát..." readonly onfocus="setTimeout(() => { this.removeAttribute('readonly'); }, 60);" onblur="this.setAttribute('readonly', 'readonly');" autocomplete="new-password" data-lpignore="true">
         <button onclick="searchMusic()"><i class="fas fa-search"></i></button>
     </div>
 </header>
 
+<!-- BỘ NÚT LỌC NHANH -->
+<div class="filter-bar">
+    <button class="filter-btn" onclick="quickSearch('tone nam')">TONE NAM</button>
+    <button class="filter-btn" onclick="quickSearch('tone nu')">TONE NỮ</button>
+    <button class="filter-btn" onclick="quickSearch('bolero')">BOLERO</button>
+    <button class="filter-btn" onclick="quickSearch('remix')">REMIX</button>
+</div>
+
 <div id="video-wrapper">
-    <!-- MÀN HÌNH QUẢNG CÁO KHI CHỜ BÀI -->
     <div id="video-promo-screen">
         <div style="color: var(--gold); font-size: 16px; font-weight: bold; margin-bottom: 15px;">ĐANG CHỜ BÀI HÁT...</div>
         <div class="promo-container" style="background: transparent; border: none;">
-            <div class="promo-text" style="font-size: 20px;">LÊ ĐỨC QUANG - 0909 374 508 - CHUYÊN ÂM THANH KARAOKE STUDIO CAO CẤP - NHẬN QUẢNG CÁO TRÊN APP</div>
+            <div class="promo-text" style="font-size: 20px;">LÊ ĐỨC QUANG - 0909 374 508 - CHUYÊN ÂM THANH KARAOKE STUDIO CAO CẤP</div>
         </div>
     </div>
     <div id="player"></div>
@@ -102,22 +93,20 @@
     <button class="control-btn" onclick="togglePlay()"><i id="play-icon" class="fas fa-play"></i></button>
     <button class="control-btn" onclick="playNextInQueue()"><i class="fas fa-step-forward"></i></button>
     <input type="range" id="volume-slider" min="0" max="100" value="100" oninput="changeVolume(this.value)">
-    <i class="fas fa-volume-up" style="color: #555;"></i>
 </div>
 
 <div class="content-area">
-    <div id="playing-now" style="padding: 12px; background: #111; color: var(--gold); font-size: 14px; font-weight: bold; margin-bottom: 10px; border-left: 5px solid var(--gold); border-radius: 5px;">
+    <div id="playing-now" style="padding: 12px; background: #111; color: var(--gold); font-size: 14px; font-weight: bold; margin-bottom: 10px; border-left: 5px solid var(--gold);">
         <i class="fas fa-microphone-alt"></i> Sẵn sàng phục vụ...
     </div>
-    <div class="panel-header">KẾT QUẢ TÌM KIẾM</div>
     <div id="search-results"></div>
-    <div class="panel-header" style="color: var(--gold); margin-top:20px;">BÀI HÁT GẦN ĐÂY</div>
+    <div class="panel-header" style="color: var(--gold);">BÀI HÁT GẦN ĐÂY</div>
     <div id="history-list"></div>
     <div style="height: 50px;"></div>
 </div>
 
 <script>
-    const APP_VERSION = "011"; 
+    const APP_VERSION = "012"; 
     const API_KEYS = ["AIzaSyBywuEsM7gJE2dqPY5NNzIKteySXXv1Dx4", "AIzaSyAZzzzyIgZoum8RscTz-KUqrEEzzQCghKg", "AIzaSyDAJ7_JVXgEggQYZTBzne5W27Kt5QDaw8k"];
     let currentKeyIndex = 0;
     let player, internalQueue = [];
@@ -156,11 +145,56 @@
         });
     }
 
+    function quickSearch(tag) {
+        const input = document.getElementById('k_query_field');
+        if (input.value.trim() !== "") {
+            input.value = input.value.trim() + " " + tag;
+        } else {
+            input.value = tag;
+        }
+        searchMusic();
+    }
+
+    async function searchMusic() {
+        const input = document.getElementById('k_query_field');
+        const query = input.value;
+        if(!query) return;
+        input.blur();
+
+        const resultsDiv = document.getElementById('search-results');
+        resultsDiv.innerHTML = '<p style="padding:10px; color:var(--accent);">Đang tìm bài...</p>';
+
+        for (let i = 0; i < API_KEYS.length; i++) {
+            const activeKey = API_KEYS[currentKeyIndex];
+            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=${encodeURIComponent(query + ' karaoke')}&type=video&videoEmbeddable=true&key=${activeKey}`;
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+                if(data.items && data.items.length > 0) {
+                    resultsDiv.innerHTML = data.items.map(item => {
+                        const title = item.snippet.title.replace(/['"]/g, "");
+                        const thumb = item.snippet.thumbnails.default.url;
+                        const id = item.id.videoId;
+                        return `
+                        <div class="song-item">
+                            <img src="${thumb}">
+                            <div class="song-info" onclick="playNow('${id}', '${title}', '${thumb}')">${title}</div>
+                            <i class="fas fa-bolt icon-btn" style="color:var(--accent);" onclick="addToNext('${id}', '${title}', '${thumb}')"></i>
+                        </div>`;
+                    }).join('');
+                    return;
+                }
+            } catch(e) {}
+            currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
+        }
+        resultsDiv.innerHTML = '<p style="color:red; padding:10px;">Lỗi. Thử lại.</p>';
+    }
+
     function playNow(id, title, thumb) {
         document.getElementById('video-promo-screen').style.display = 'none';
         if (player && player.loadVideoById) {
             player.loadVideoById(id);
-            document.getElementById('playing-now').innerHTML = `<i class="fas fa-play-circle fa-spin"></i> Đang hát: ${title}`;
+            document.getElementById('playing-now').innerHTML = `Đang hát: ${title}`;
             playbackHistory = playbackHistory.filter(item => item.id !== id);
             playbackHistory.unshift({ id, title, thumb });
             playbackHistory = playbackHistory.slice(0, 8);
@@ -199,47 +233,7 @@
 
     function changeVolume(val) { if (player) player.setVolume(val); }
 
-    async function searchMusic() {
-        const input = document.getElementById('k_query_field');
-        const query = input.value;
-        if(!query) return;
-        
-        input.blur();
-        input.setAttribute('readonly', 'readonly');
-
-        const resultsDiv = document.getElementById('search-results');
-        resultsDiv.innerHTML = '<p style="padding:10px; color:var(--accent);">Đang tìm...</p>';
-
-        for (let i = 0; i < API_KEYS.length; i++) {
-            const activeKey = API_KEYS[currentKeyIndex];
-            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=${encodeURIComponent(query + ' karaoke')}&type=video&videoEmbeddable=true&key=${activeKey}`;
-            
-            try {
-                const res = await fetch(url);
-                const data = await res.json();
-                if(data.items && data.items.length > 0) {
-                    resultsDiv.innerHTML = data.items.map(item => {
-                        const title = item.snippet.title.replace(/['"]/g, "");
-                        const thumb = item.snippet.thumbnails.default.url;
-                        const id = item.id.videoId;
-                        return `
-                        <div class="song-item">
-                            <img src="${thumb}">
-                            <div class="song-info" onclick="playNow('${id}', '${title}', '${thumb}')">${title}</div>
-                            <i class="fas fa-bolt icon-btn" style="color:var(--accent);" onclick="addToNext('${id}', '${title}', '${thumb}')"></i>
-                            <i class="fas fa-play-circle icon-btn" style="color:var(--primary);" onclick="playNow('${id}', '${title}', '${thumb}')"></i>
-                        </div>`;
-                    }).join('');
-                    return;
-                }
-            } catch(e) {}
-            currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
-        }
-        resultsDiv.innerHTML = '<p style="color:red; padding:10px;">Lỗi. Thử lại sau.</p>';
-    }
-
     document.getElementById('k_query_field').addEventListener('keypress', (e) => { if(e.key === 'Enter') searchMusic(); });
 </script>
-
 </body>
 </html>
