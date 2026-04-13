@@ -2,6 +2,11 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
+    <!-- CHỐNG CACHE: ÉP TRÌNH DUYỆT TẢI MỚI -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>KARAOKE VIP - LÊ ĐỨC QUANG</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -29,6 +34,14 @@
         #video-wrapper { width: 100%; height: 45vh; background: #000; position: relative; flex-shrink: 0; border-bottom: 2px solid var(--primary); }
         #player { width: 100%; height: 100%; }
 
+        /* LỚP PHỦ FULL MÀN HÌNH - XỬ LÝ THEO YÊU CẦU */
+        #full-overlay { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.9); z-index: 10001; 
+            display: none; flex-direction: column; align-items: center; justify-content: center; color: white;
+            text-align: center;
+        }
+
         .content-area { 
             flex: 1; 
             overflow-y: auto; 
@@ -42,16 +55,6 @@
         .song-item { display: flex; gap: 10px; padding: 12px 10px; border-bottom: 1px solid #1a1a1a; align-items: center; }
         .song-info { flex: 1; font-size: 14px; color: #eee; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .song-item img { width: 80px; height: 45px; border-radius: 4px; object-fit: cover; }
-
-        /* LỚP PHỦ FULL MÀN HÌNH */
-        #full-overlay { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.9); z-index: 10001; 
-            display: none; flex-direction: column; align-items: center; justify-content: center; color: white;
-            text-align: center;
-        }
-        /* Class này dùng để điều khiển hiện nút bằng JS */
-        #full-overlay.active { display: flex !important; }
 
         @media (orientation: landscape) {
             header, .filter-bar, .content-area, .vip-marquee-container { display: none !important; }
@@ -81,11 +84,10 @@
 </div>
 
 <div id="video-wrapper">
-    <!-- Nút này sẽ được điều khiển bằng class 'active' qua JS -->
     <div id="full-overlay" onclick="requestFull()">
         <i class="fas fa-expand-arrows-alt" style="font-size: 50px; margin-bottom: 15px; color: var(--accent);"></i>
         <p style="font-weight: bold; font-size: 16px;">CHẠM ĐỂ ẨN THANH ĐỊA CHỈ</p>
-        <p style="font-size: 12px; color: #ccc; margin-top: 5px;">(Xoay ngang màn hình để hát)</p>
+        <p style="font-size: 12px; color: #ccc; margin-top: 5px;">(Để màn hình rộng hơn)</p>
     </div>
     <div id="player"></div>
     <div class="vip-marquee-container">
@@ -111,6 +113,17 @@
 
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
+    // 1. CƠ CHẾ TỰ ĐỘNG CẬP NHẬT (CLEAR CACHE)
+    const APP_VERSION = "1.2"; // Đổi số này khi bạn update code để máy khách tự refresh
+    (function() {
+        const savedVersion = localStorage.getItem('app_version');
+        if (savedVersion !== APP_VERSION) {
+            localStorage.clear();
+            localStorage.setItem('app_version', APP_VERSION);
+            window.location.reload(true);
+        }
+    })();
+
     const API_KEYS = [
         "AIzaSyBywuEsM7gJE2dqPY5NNzIKteySXXv1Dx4", 
         "AIzaSyAZzzzyIgZoum8RscTz-KUqrEEzzQCghKg", 
@@ -127,44 +140,33 @@
         });
     }
 
-    // HÀM QUAN TRỌNG: Xử lý nhấn nút Fullscreen và ẩn ngay cái nút đó
+    // 2. XỬ LÝ NÚT FULLSCREEN VÀ ẨN NGAY LẬP TỨC
     function requestFull() {
         const overlay = document.getElementById('full-overlay');
+        overlay.style.display = 'none'; // Ẩn ngay khi nhấn
+
         const elem = document.documentElement;
-
-        // 1. Ẩn nút ngay lập tức
-        overlay.classList.remove('active');
-        overlay.style.display = 'none'; 
-
-        // 2. Kích hoạt toàn màn hình để ẩn thanh địa chỉ
         if (elem.requestFullscreen) elem.requestFullscreen();
         else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
-        else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
     }
 
-    // Tự động kiểm tra để hiện/ẩn nút khi xoay ngang
+    // Tự động kiểm tra hiển thị nút khi xoay ngang
     function checkDisplayMode() {
         const overlay = document.getElementById('full-overlay');
         const isLandscape = window.innerWidth > window.innerHeight;
         const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement;
 
-        // Nếu điện thoại đang ngang VÀ chưa vào Fullscreen thì mới hiện cái nút đó
         if (isLandscape && !isFullscreen) {
-            overlay.classList.add('active');
             overlay.style.display = 'flex';
         } else {
-            overlay.classList.remove('active');
             overlay.style.display = 'none';
         }
     }
 
-    // Lắng nghe sự thay đổi của màn hình
     window.addEventListener('resize', checkDisplayMode);
-    window.addEventListener('orientationchange', () => {
-        setTimeout(checkDisplayMode, 300);
-    });
+    window.addEventListener('orientationchange', () => setTimeout(checkDisplayMode, 300));
 
-    // Phần Search và Player (Giữ nguyên logic của bạn)
+    // CÁC HÀM TÌM KIẾM VÀ PLAYER GIỮ NGUYÊN
     function searchWithTone(tone) {
         const input = document.getElementById('txtSearch');
         if(!input.value) return;
@@ -237,7 +239,6 @@
     }
 
     function playNext() { if (songQueue.length > 0) playFromQueue(0); }
-
     document.getElementById('txtSearch').addEventListener('keypress', (e) => { if(e.key === 'Enter') searchMusic(); });
 </script>
 </body>
