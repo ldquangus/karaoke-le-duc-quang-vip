@@ -26,7 +26,6 @@
         .search-box { flex: 1; display: flex; background: #222; border-radius: 20px; padding: 2px 10px; border: 1px solid #333; }
         .search-box input { flex: 1; background: none; border: none; color: #fff; padding: 8px; outline: none; font-size: 14px; width: 100%; }
 
-        /* THANH NÚT LỌC NHANH */
         .filter-bar { display: flex; gap: 8px; padding: 8px 15px; background: #111; border-bottom: 2px solid var(--primary); overflow-x: auto; flex-shrink: 0; scrollbar-width: none; }
         .filter-bar::-webkit-scrollbar { display: none; }
         .filter-btn { background: #333; color: #fff; border: none; padding: 6px 15px; border-radius: 15px; font-size: 12px; font-weight: bold; white-space: nowrap; cursor: pointer; }
@@ -34,7 +33,23 @@
 
         #video-wrapper { width: 100%; height: 38vh; background: #000; position: relative; flex-shrink: 0; border-bottom: 2px solid var(--primary); }
         #player { width: 100%; height: 100%; }
-        #video-promo-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; z-index: 5; flex-direction: column; text-align: center; }
+        
+        /* CẬP NHẬT MÀN HÌNH CHỜ QUẢNG CÁO */
+        #video-promo-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; z-index: 5; flex-direction: column; text-align: center; padding: 20px; }
+        .ad-container { position: relative; width: 100%; height: 80px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .ad-message { position: absolute; width: 100%; opacity: 0; font-weight: bold; text-align: center; line-height: 1.4; animation: rotateAds 12s infinite; }
+        .ad-message:nth-child(1) { animation-delay: 0s; }
+        .ad-message:nth-child(2) { animation-delay: 4s; }
+        .ad-message:nth-child(3) { animation-delay: 8s; }
+        @keyframes rotateAds {
+            0% { opacity: 0; transform: translateY(15px); }
+            5% { opacity: 1; transform: translateY(0); }
+            30% { opacity: 1; transform: translateY(0); }
+            35% { opacity: 0; transform: translateY(-15px); }
+            100% { opacity: 0; }
+        }
+        .highlight { display: block; font-size: 20px; text-transform: uppercase; margin-bottom: 4px; color: var(--gold); }
+        .subtext { display: block; font-size: 14px; color: #eee; font-style: italic; }
 
         .custom-controls { display: flex; align-items: center; justify-content: space-around; background: #111; padding: 8px; border-bottom: 1px solid #222; }
         .control-btn { background: none; border: none; color: white; font-size: 22px; cursor: pointer; }
@@ -71,7 +86,6 @@
     </div>
 </header>
 
-<!-- BỘ NÚT LỌC NHANH -->
 <div class="filter-bar">
     <button class="filter-btn" onclick="quickSearch('tone nam')">TONE NAM</button>
     <button class="filter-btn" onclick="quickSearch('tone nu')">TONE NỮ</button>
@@ -81,9 +95,20 @@
 
 <div id="video-wrapper">
     <div id="video-promo-screen">
-        <div style="color: var(--gold); font-size: 16px; font-weight: bold; margin-bottom: 15px;">ĐANG CHỜ BÀI HÁT...</div>
-        <div class="promo-container" style="background: transparent; border: none;">
-            <div class="promo-text" style="font-size: 20px;">LÊ ĐỨC QUANG - 0909 374 508 - CHUYÊN ÂM THANH KARAOKE STUDIO CAO CẤP</div>
+        <div style="color: var(--primary); font-size: 12px; margin-bottom: 15px; letter-spacing: 2px;">ĐANG CHỜ BÀI HÁT...</div>
+        <div class="ad-container">
+            <div class="ad-message">
+                <span class="highlight">Hậu Kỳ Âm Thanh Chuyên Nghiệp</span>
+                <span class="subtext">Biến giọng mộc thành siêu phẩm chuẩn phòng thu</span>
+            </div>
+            <div class="ad-message">
+                <span class="highlight">Mix Nhạc Theo Yêu Cầu</span>
+                <span class="subtext">Chỉ 4 phút giọng mộc - Mix mượt mà theo bài bạn chọn</span>
+            </div>
+            <div class="ad-message">
+                <span class="highlight">Lê Đức Quang: 0909 374 508</span>
+                <span class="subtext">Chuyên Mix & Master - Âm thanh Karaoke Studio cao cấp</span>
+            </div>
         </div>
     </div>
     <div id="player"></div>
@@ -147,11 +172,7 @@
 
     function quickSearch(tag) {
         const input = document.getElementById('k_query_field');
-        if (input.value.trim() !== "") {
-            input.value = input.value.trim() + " " + tag;
-        } else {
-            input.value = tag;
-        }
+        input.value = tag;
         searchMusic();
     }
 
