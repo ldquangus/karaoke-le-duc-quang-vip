@@ -52,11 +52,21 @@
 
         .content-area { flex: 1; overflow-y: auto; background: #0a0a0a; padding: 10px; -webkit-overflow-scrolling: touch; }
 
-        #guide-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 200000; display: none; flex-direction: column; padding: 20px; overflow-y: auto; }
-        .guide-close { align-self: flex-end; font-size: 30px; color: var(--primary); margin-bottom: 10px; cursor: pointer; }
+        /* MODAL POPUP */
+        #guide-modal, #score-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 200000; display: none; flex-direction: column; padding: 20px; overflow-y: auto; align-items: center; justify-content: center; }
+        .guide-close, .score-close { align-self: flex-end; font-size: 30px; color: var(--primary); cursor: pointer; position: absolute; top: 20px; right: 20px; }
+        .guide-body { width: 100%; }
         .guide-body h3 { color: var(--gold); border-bottom: 2px solid var(--gold); padding-bottom: 5px; }
         .guide-body h4 { color: var(--accent); margin: 15px 0 5px 0; }
         .script-text { background: #111; padding: 15px; border-radius: 8px; border-left: 5px solid var(--gold); color: #ddd; line-height: 1.6; margin-top: 10px; font-size: 15px; }
+
+        /* SCORE UI */
+        .score-box { text-align: center; animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes zoomIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .score-number { font-size: 80px; font-weight: bold; margin: 10px 0; text-shadow: 0 0 20px var(--gold); }
+        .score-msg { font-size: 20px; font-weight: bold; margin-bottom: 20px; padding: 0 20px; line-height: 1.4; }
+        .score-gold { color: var(--gold); }
+        .score-bad { color: #ff4444; }
 
         .panel-header { font-size: 11px; font-weight: bold; color: var(--accent); margin: 15px 0 10px 0; text-transform: uppercase; border-left: 3px solid var(--primary); padding-left: 8px; }
         .song-item { display: flex; gap: 10px; padding: 12px 10px; border-bottom: 1px solid #1a1a1a; align-items: center; }
@@ -129,6 +139,7 @@
     <div style="height: 50px;"></div>
 </div>
 
+<!-- GUIDE MODAL -->
 <div id="guide-modal">
     <div class="guide-close" onclick="closeGuide()"><i class="fas fa-times-circle"></i></div>
     <div class="guide-body">
@@ -141,20 +152,46 @@
         <h4>3. Bài văn mẫu thu âm (Hãy đọc thong thả)</h4>
         <div class="script-text">
             <b>PHẦN 1: TÂM SỰ (Dữ liệu chính)</b><br>
-            "Chào bạn, tôi đang thực hiện bản thu âm giọng mộc này để gửi cho anh Lê Đức Quang thực hiện hậu kỳ âm thanh chuyên nghiệp. Âm nhạc đối với tôi là một thế giới riêng, nơi tôi có thể gửi gắm mọi tâm tư, tình cảm và giải tỏa áp lực sau giờ làm việc. Tôi hiểu rằng mỗi giọng hát đều có một linh hồn riêng biệt, và chính giọng mộc này là dữ liệu quý nhất để người làm nhạc hiểu được chất riêng của mình. Tôi hoàn toàn tin tưởng rằng, dưới bàn tay nhào nặn khéo léo của anh Quang, những nốt nhạc thô ráp ban đầu sẽ được gọt giũa tỉ mỉ. Sự can thiệp của kỹ thuật hậu kỳ sẽ giúp giọng hát của tôi trở nên mượt mà, bay bổng và có chiều sâu hơn bao giờ hết, nhưng vẫn giữ được cái chất riêng không thể lẫn lộn. Một bản Mix hoàn hảo không chỉ nằm ở công nghệ, mà còn nằm ở sự thấu hiểu tâm hồn người hát qua từng hơi thở. Tôi rất hào hứng mong đợi siêu phẩm cuối cùng khi giọng hát mình hòa quyện hoàn hảo vào giai điệu sống động."<br><br>
+            "Chào bạn, tôi đang thực hiện bản thu âm giọng mộc này để gửi cho anh Lê Đức Quang thực hiện hậu kỳ âm thanh chuyên nghiệp. Âm nhạc đối với tôi là một thế giới riêng, nơi tôi có thể gửi gắm mọi tâm tư, tình cảm và giải tỏa áp lực sau giờ làm việc. Tôi hiểu rằng mỗi giọng hát đều có một linh hồn riêng biệt, và chính giọng mộc này là dữ liệu quý nhất để người làm nhạc hiểu được chất riêng của mình. Tôi hoàn toàn tin tưởng rằng, dưới bàn tay nhào nặn khéo léo của anh Quang, những nốt nhạc thô ráp ban đầu sẽ được gọt giũa tỉ mỉ..."<br><br>
             <b>PHẦN 2: LUYỆN ÂM KHÓ (Dữ liệu kỹ thuật)</b><br>
-            "Quý khách hãy đọc thật rõ: Rộn ràng rừng rậm, ríu rít chim ca. Tre già măng mọc, trong trẻo trưa hè. Sáng sớm sương xuống, xôn xao xóm nhỏ. Lúa nếp là lúa nếp làng, lúa lên lớp lớp lòng nàng lâng lâng. Chắt chiu từng chút, gìn giữ gian nan. Hoa nở rực rỡ dưới ánh mặt trời. Con đò nhỏ trôi trên dòng sông rộng. Hương bưởi thơm nồng, vương vấn bước chân người đi đường."<br><br>
+            "Quý khách hãy đọc thật rõ: Rộn ràng rừng rậm, ríu rít chim ca. Tre già măng mọc, trong trẻo trưa hè. Sáng sớm sương xuống, xôn xao xóm nhỏ. Lúa nếp là lúa nếp làng, lúa lên lớp lớp lòng nàng lâng lâng..."<br><br>
             <b>PHẦN 3: ĐỌC THƠ & KẾT THÚC</b><br>
-            "Có một mùa hoa cải, nở vàng bên bến sông. Có một người con gái, đợi chờ trong hy vọng. Mỗi nốt nhạc vang lên là một lần trái tim được thổn thức. Hát không phải là ca sĩ, chúng ta hát để kể câu chuyện đời mình... Tôi là [Đọc tên bạn], gửi bài thu cho Lê Đức Quang 0909 374 508."
+            "Có một mùa hoa cải, nở vàng bên bến sông. Có một người con gái, đợi chờ trong hy vọng... Tôi là [Đọc tên bạn], gửi bài thu cho Lê Đức Quang 0909 374 508."
         </div>
     </div>
 </div>
 
+<!-- SCORE MODAL -->
+<div id="score-modal">
+    <div class="score-close" onclick="closeScore()"><i class="fas fa-times-circle"></i></div>
+    <div class="score-box" id="score-box">
+        <div style="font-size: 14px; letter-spacing: 3px; color: #aaa;">KẾT QUẢ GIỌNG HÁT</div>
+        <div id="score-num" class="score-number score-gold">0</div>
+        <div id="score-text" class="score-msg"></div>
+        <button class="start-btn" onclick="closeScore()" style="animation: none; padding: 10px 30px;">HÁT BÀI TIẾP THEO</button>
+    </div>
+</div>
+
 <script>
-    const APP_VERSION = "018"; 
+    const APP_VERSION = "019"; 
     const API_KEYS = ["AIzaSyBywuEsM7gJE2dqPY5NNzIKteySXXv1Dx4", "AIzaSyAZzzzyIgZoum8RscTz-KUqrEEzzQCghKg", "AIzaSyDAJ7_JVXgEggQYZTBzne5W27Kt5QDaw8k"];
     let currentKeyIndex = 0, player, internalQueue = [];
     let playbackHistory = JSON.parse(localStorage.getItem('karaoke_history')) || [];
+
+    const praiseMsgs = [
+        "Hát hay chấn động, nghe xong Quang muốn xỉu ngang!",
+        "Hay muốn rớt hàm! Giọng này không đi thi hơi bị phí tài năng!",
+        "Đỉnh của chóp! Giọng này qua tay Quang là lên Top 1 Trending ngay!",
+        "Quá đỉnh! Giọng mượt thế này khỏi cần Mix cũng hay (nhưng Mix thì hay hơn)!",
+        "Giọng hát vàng mười! Nghe xong cái loa cũng muốn nhảy theo luôn!"
+    ];
+    const roastMsgs = [
+        "Hát hay quá, lần sau đừng hát nữa nha... để người khác còn hát với!",
+        "Giọng hát lạ quá, nghe xong cái loa nhà Quang muốn xin nghỉ hưu luôn.",
+        "Hát thế này thì hàng xóm sang nhà chơi... nhưng mà cầm theo cây chổi!",
+        "Hơi sai tông một xíu, nhưng được cái nhiệt tình là chính. Cố lên!",
+        "Hát kiểu này thì chỉ có mang qua Quang 'đập đi xây lại' mới cứu nổi thôi!"
+    ];
 
     (function() {
         if (localStorage.getItem('app_version') !== APP_VERSION) {
@@ -176,6 +213,25 @@
 
     function openGuide() { document.getElementById('guide-modal').style.display = 'flex'; }
     function closeGuide() { document.getElementById('guide-modal').style.display = 'none'; }
+    function openScore() {
+        const isPraise = Math.random() > 0.5;
+        const score = isPraise ? Math.floor(Math.random() * 13) + 88 : Math.floor(Math.random() * 26) + 50;
+        const msg = isPraise ? praiseMsgs[Math.floor(Math.random()*5)] : roastMsgs[Math.floor(Math.random()*5)];
+        
+        const scoreEl = document.getElementById('score-num');
+        const textEl = document.getElementById('score-text');
+        
+        scoreEl.className = isPraise ? "score-number score-gold" : "score-number score-bad";
+        textEl.innerText = msg;
+        document.getElementById('score-modal').style.display = 'flex';
+        
+        let count = 0;
+        let timer = setInterval(() => {
+            if(count >= score) { clearInterval(timer); scoreEl.innerText = score; }
+            else { count++; scoreEl.innerText = count; }
+        }, 20);
+    }
+    function closeScore() { document.getElementById('score-modal').style.display = 'none'; }
 
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
@@ -189,7 +245,7 @@
             events: { 
                 'onReady': () => updateHistoryUI(),
                 'onStateChange': (e) => {
-                    if (e.data === YT.PlayerState.ENDED) playNextInQueue();
+                    if (e.data === YT.PlayerState.ENDED) { openScore(); playNextInQueue(); }
                     document.getElementById('play-icon').className = (e.data === 1) ? "fas fa-pause" : "fas fa-play";
                 }
             }
