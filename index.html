@@ -17,10 +17,6 @@
         .start-btn { background: var(--primary); color: white; border: none; padding: 15px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px var(--primary); animation: pulse 1.5s infinite; margin: 20px 0; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        .promo-container { width: 100%; overflow: hidden; background: #111; padding: 10px 0; border-top: 1px solid #333; border-bottom: 1px solid #333; }
-        .promo-text { white-space: nowrap; display: inline-block; animation: marquee 15s linear infinite; color: var(--gold); font-size: 18px; font-weight: bold; }
-        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-
         header { background: #111; padding: 10px 15px 5px 15px; display: flex; align-items: center; border-bottom: 1px solid #222; flex-shrink: 0; }
         .logo { font-weight: bold; font-size: 12px; color: var(--primary); text-transform: uppercase; margin-right: 8px; }
         .search-box { flex: 1; display: flex; background: #222; border-radius: 20px; padding: 2px 10px; border: 1px solid #333; }
@@ -34,6 +30,7 @@
         #video-wrapper { width: 100%; height: 38vh; background: #000; position: relative; flex-shrink: 0; border-bottom: 2px solid var(--primary); }
         #player { width: 100%; height: 100%; }
         
+        /* QUẢNG CÁO TRÊN MÀN HÌNH CHỜ VIDEO */
         #video-promo-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; z-index: 5; flex-direction: column; text-align: center; padding: 20px; }
         .ad-container { position: relative; width: 100%; height: 80px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .ad-message { position: absolute; width: 100%; opacity: 0; font-weight: bold; text-align: center; line-height: 1.4; animation: rotateAds 12s infinite; }
@@ -50,6 +47,11 @@
         .highlight { display: block; font-size: 20px; text-transform: uppercase; margin-bottom: 4px; color: var(--gold); }
         .subtext { display: block; font-size: 14px; color: #eee; font-style: italic; }
 
+        /* QUẢNG CÁO CHẠY DƯỚI PHẦN BÀI HÁT (LUÔN HIỆN) */
+        .persistent-ad-bar { background: linear-gradient(90deg, #111, #222, #111); padding: 8px 0; border-top: 1px solid #333; border-bottom: 1px solid var(--primary); overflow: hidden; white-space: nowrap; }
+        .persistent-ad-text { display: inline-block; animation: marquee-bottom 20s linear infinite; color: var(--accent); font-weight: bold; font-size: 14px; }
+        @keyframes marquee-bottom { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
         .custom-controls { display: flex; align-items: center; justify-content: space-around; background: #111; padding: 8px; border-bottom: 1px solid #222; }
         .control-btn { background: none; border: none; color: white; font-size: 22px; cursor: pointer; }
         #volume-slider { width: 30%; accent-color: var(--primary); }
@@ -62,7 +64,7 @@
         .icon-btn { font-size: 22px; cursor: pointer; margin-left: 10px; }
 
         @media (orientation: landscape) { 
-            header, .filter-bar, .custom-controls, .content-area { display: none !important; } 
+            header, .filter-bar, .custom-controls, .content-area, .persistent-ad-bar { display: none !important; } 
             #video-wrapper { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; border: none; } 
         }
     </style>
@@ -72,8 +74,8 @@
 <div id="start-overlay">
     <div style="color: var(--gold); font-size: 24px; font-weight: bold;">KARAOKE VIP LÊ ĐỨC QUANG</div>
     <button class="start-btn" onclick="initApp()">BẮT ĐẦU HÁT</button>
-    <div class="promo-container">
-        <div class="promo-text">HOTLINE: 0909 374 508 - LÊ ĐỨC QUANG - NHẬN QUẢNG CÁO TRÊN APP</div>
+    <div class="promo-container" style="width:100%; overflow:hidden; background:#111; padding:10px 0;">
+        <div style="white-space:nowrap; display:inline-block; animation:marquee-bottom 15s linear infinite; color:var(--gold); font-weight:bold;">HOTLINE: 0909 374 508 - LÊ ĐỨC QUANG - CHUYÊN HẬU KỲ ÂM THANH MIX NHẠC</div>
     </div>
 </div>
 
@@ -96,18 +98,9 @@
     <div id="video-promo-screen">
         <div style="color: var(--primary); font-size: 12px; margin-bottom: 15px; letter-spacing: 2px;">ĐANG CHỜ BÀI HÁT...</div>
         <div class="ad-container">
-            <div class="ad-message">
-                <span class="highlight">Hậu Kỳ Âm Thanh Chuyên Nghiệp</span>
-                <span class="subtext">Biến giọng mộc thành siêu phẩm chuẩn phòng thu</span>
-            </div>
-            <div class="ad-message">
-                <span class="highlight">Mix Nhạc Theo Yêu Cầu</span>
-                <span class="subtext">Chỉ 4 phút giọng mộc - Mix mượt mà theo bài bạn chọn</span>
-            </div>
-            <div class="ad-message">
-                <span class="highlight">Lê Đức Quang: 0909 374 508</span>
-                <span class="subtext">Chuyên Mix & Master - Âm thanh Karaoke Studio cao cấp</span>
-            </div>
+            <div class="ad-message"><span class="highlight">Hậu Kỳ Âm Thanh</span><span class="subtext">Biến giọng mộc thành siêu phẩm mượt mà</span></div>
+            <div class="ad-message"><span class="highlight">Chỉ 4 Phút Giọng Mộc</span><span class="subtext">Mix nhạc theo yêu cầu chuẩn phòng thu</span></div>
+            <div class="ad-message"><span class="highlight">0909 374 508</span><span class="subtext">Lê Đức Quang - Mix & Master Chuyên Nghiệp</span></div>
         </div>
     </div>
     <div id="player"></div>
@@ -117,6 +110,13 @@
     <button class="control-btn" onclick="togglePlay()"><i id="play-icon" class="fas fa-play"></i></button>
     <button class="control-btn" onclick="playNextInQueue()"><i class="fas fa-step-forward"></i></button>
     <input type="range" id="volume-slider" min="0" max="100" value="100" oninput="changeVolume(this.value)">
+</div>
+
+<!-- THANH QUẢNG CÁO LUÔN HIỆN DƯỚI PHẦN ĐANG HÁT -->
+<div class="persistent-ad-bar">
+    <div class="persistent-ad-text">
+        ★★★ DỊCH VỤ MIX NHẠC CHUYÊN NGHIỆP: CHỈ CẦN 4 PHÚT GIỌNG MỘC + TÊN BÀI HÁT = BẢN MIX SIÊU MƯỢT ★ HOTLINE/ZALO: 0909 374 508 (LÊ ĐỨC QUANG) ★★★
+    </div>
 </div>
 
 <div class="content-area">
@@ -130,7 +130,7 @@
 </div>
 
 <script>
-    const APP_VERSION = "013"; 
+    const APP_VERSION = "014"; 
     const API_KEYS = ["AIzaSyBywuEsM7gJE2dqPY5NNzIKteySXXv1Dx4", "AIzaSyAZzzzyIgZoum8RscTz-KUqrEEzzQCghKg", "AIzaSyDAJ7_JVXgEggQYZTBzne5W27Kt5QDaw8k"];
     let currentKeyIndex = 0;
     let player, internalQueue = [];
@@ -170,8 +170,7 @@
     }
 
     function quickSearch(tag) {
-        const input = document.getElementById('k_query_field');
-        input.value = tag;
+        document.getElementById('k_query_field').value = tag;
         searchMusic();
     }
 
@@ -214,7 +213,7 @@
         document.getElementById('video-promo-screen').style.display = 'none';
         if (player && player.loadVideoById) {
             player.loadVideoById(id);
-            document.getElementById('playing-now').innerHTML = `Đang hát: ${title}`;
+            document.getElementById('playing-now').innerHTML = `<i class="fas fa-microphone-alt"></i> Đang hát: ${title}`;
             playbackHistory = playbackHistory.filter(item => item.id !== id);
             playbackHistory.unshift({ id, title, thumb });
             playbackHistory = playbackHistory.slice(0, 8);
@@ -236,7 +235,7 @@
 
     function addToNext(id, title, thumb) {
         internalQueue.unshift({ id, title, thumb });
-        alert("Đã ưu tiên: " + title);
+        alert("Đã ưu tiên bài tiếp theo: " + title);
     }
 
     function playNextInQueue() {
