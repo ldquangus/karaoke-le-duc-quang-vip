@@ -52,7 +52,6 @@
 
         .content-area { flex: 1; overflow-y: auto; background: #0a0a0a; padding: 10px; -webkit-overflow-scrolling: touch; }
 
-        /* MODAL HƯỚNG DẪN - TĂNG Z-INDEX */
         #guide-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 200000; display: none; flex-direction: column; padding: 20px; overflow-y: auto; }
         .guide-close { align-self: flex-end; font-size: 30px; color: var(--primary); margin-bottom: 10px; cursor: pointer; }
         .guide-body h3 { color: var(--gold); border-bottom: 2px solid var(--gold); padding-bottom: 5px; }
@@ -139,20 +138,20 @@
         <p>• <b>Android:</b> Mở ứng dụng Ghi âm > Cài đặt > Chọn định dạng <b>WAV (44.1kHz)</b>. Tắt "Khử tiếng ồn".</p>
         <h4>2. Cách cầm máy thu</h4>
         <p>• Cầm điện thoại cách miệng từ <b>10cm - 15cm</b>. Hát hoặc đọc trực tiếp vào mic máy.</p>
-        <h4>3. Bài văn mẫu đọc 3 phút</h4>
+        <h4>3. Bài văn mẫu thu âm (Hãy đọc thong thả)</h4>
         <div class="script-text">
-            <b>PHẦN 1: TÂM SỰ (1.5 phút)</b><br>
-            "Chào bạn, tôi đang thực hiện bản thu âm giọng mộc này để gửi cho anh Lê Đức Quang thực hiện hậu kỳ âm thanh. Âm nhạc đối với tôi là nơi gửi gắm tâm tư sau những giờ làm việc mệt mỏi..."<br><br>
-            <b>PHẦN 2: ĐỌC THƠ (1 phút)</b><br>
-            "Có một mùa hoa cải, nở vàng bên bến sông. Có một người con gái, đợi chờ trong hy vọng. Mỗi nốt nhạc vang lên là một lần trái tim được thổn thức..."<br><br>
-            <b>PHẦN 3: KẾT THÚC (0.5 phút)</b><br>
-            "Hy vọng bản thu này sẽ giúp anh Quang tạo nên một siêu phẩm tuyệt vời. Tôi là [Đọc tên bạn], gửi bài thu cho Lê Đức Quang 0909 374 508."
+            <b>PHẦN 1: TÂM SỰ (Dữ liệu chính)</b><br>
+            "Chào bạn, tôi đang thực hiện bản thu âm giọng mộc này để gửi cho anh Lê Đức Quang thực hiện hậu kỳ âm thanh chuyên nghiệp. Âm nhạc đối với tôi là một thế giới riêng, nơi tôi có thể gửi gắm mọi tâm tư, tình cảm và giải tỏa áp lực sau giờ làm việc. Tôi hiểu rằng mỗi giọng hát đều có một linh hồn riêng biệt, và chính giọng mộc này là dữ liệu quý nhất để người làm nhạc hiểu được chất riêng của mình. Tôi hoàn toàn tin tưởng rằng, dưới bàn tay nhào nặn khéo léo của anh Quang, những nốt nhạc thô ráp ban đầu sẽ được gọt giũa tỉ mỉ. Sự can thiệp của kỹ thuật hậu kỳ sẽ giúp giọng hát của tôi trở nên mượt mà, bay bổng và có chiều sâu hơn bao giờ hết, nhưng vẫn giữ được cái chất riêng không thể lẫn lộn. Một bản Mix hoàn hảo không chỉ nằm ở công nghệ, mà còn nằm ở sự thấu hiểu tâm hồn người hát qua từng hơi thở. Tôi rất hào hứng mong đợi siêu phẩm cuối cùng khi giọng hát mình hòa quyện hoàn hảo vào giai điệu sống động."<br><br>
+            <b>PHẦN 2: LUYỆN ÂM KHÓ (Dữ liệu kỹ thuật)</b><br>
+            "Quý khách hãy đọc thật rõ: Rộn ràng rừng rậm, ríu rít chim ca. Tre già măng mọc, trong trẻo trưa hè. Sáng sớm sương xuống, xôn xao xóm nhỏ. Lúa nếp là lúa nếp làng, lúa lên lớp lớp lòng nàng lâng lâng. Chắt chiu từng chút, gìn giữ gian nan. Hoa nở rực rỡ dưới ánh mặt trời. Con đò nhỏ trôi trên dòng sông rộng. Hương bưởi thơm nồng, vương vấn bước chân người đi đường."<br><br>
+            <b>PHẦN 3: ĐỌC THƠ & KẾT THÚC</b><br>
+            "Có một mùa hoa cải, nở vàng bên bến sông. Có một người con gái, đợi chờ trong hy vọng. Mỗi nốt nhạc vang lên là một lần trái tim được thổn thức. Hát không phải là ca sĩ, chúng ta hát để kể câu chuyện đời mình... Tôi là [Đọc tên bạn], gửi bài thu cho Lê Đức Quang 0909 374 508."
         </div>
     </div>
 </div>
 
 <script>
-    const APP_VERSION = "017"; 
+    const APP_VERSION = "018"; 
     const API_KEYS = ["AIzaSyBywuEsM7gJE2dqPY5NNzIKteySXXv1Dx4", "AIzaSyAZzzzyIgZoum8RscTz-KUqrEEzzQCghKg", "AIzaSyDAJ7_JVXgEggQYZTBzne5W27Kt5QDaw8k"];
     let currentKeyIndex = 0, player, internalQueue = [];
     let playbackHistory = JSON.parse(localStorage.getItem('karaoke_history')) || [];
@@ -166,10 +165,7 @@
     })();
 
     function initApp() {
-        // LUÔN ẨN MÀN HÌNH CHỜ TRƯỚC ĐỂ VÀO APP NGAY
         document.getElementById('start-overlay').style.display = 'none';
-        
-        // SAU ĐÓ MỚI GỌI FULLSCREEN (NẾU CÓ LỖI CŨNG KHÔNG TREO APP)
         const doc = document.documentElement;
         if (doc.requestFullscreen) {
             doc.requestFullscreen().then(() => {
