@@ -52,8 +52,8 @@
 
         .content-area { flex: 1; overflow-y: auto; background: #0a0a0a; padding: 10px; -webkit-overflow-scrolling: touch; }
 
-        /* MODAL HƯỚNG DẪN */
-        #guide-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 100000; display: none; flex-direction: column; padding: 20px; overflow-y: auto; }
+        /* MODAL HƯỚNG DẪN - TĂNG Z-INDEX */
+        #guide-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 200000; display: none; flex-direction: column; padding: 20px; overflow-y: auto; }
         .guide-close { align-self: flex-end; font-size: 30px; color: var(--primary); margin-bottom: 10px; cursor: pointer; }
         .guide-body h3 { color: var(--gold); border-bottom: 2px solid var(--gold); padding-bottom: 5px; }
         .guide-body h4 { color: var(--accent); margin: 15px 0 5px 0; }
@@ -73,7 +73,6 @@
 </head>
 <body>
 
-<!-- MÀN HÌNH KHỞI ĐẦU -->
 <div id="start-overlay">
     <div style="color: var(--gold); font-size: 22px; font-weight: bold; margin-bottom: 10px;">KARAOKE VIP LÊ ĐỨC QUANG</div>
     <button class="start-btn" onclick="initApp()">BẮT ĐẦU HÁT</button>
@@ -83,12 +82,182 @@
     </div>
 </div>
 
-<!-- CỬA SỔ HƯỚNG DẪN (POPUP) -->
+<header>
+    <div class="logo">LÊ ĐỨC QUANG</div>
+    <div class="search-box">
+        <input type="search" id="k_query_field" placeholder="Tìm tên bài hát..." readonly onfocus="setTimeout(() => { this.removeAttribute('readonly'); }, 60);" onblur="this.setAttribute('readonly', 'readonly');">
+        <button onclick="searchMusic()"><i class="fas fa-search"></i></button>
+    </div>
+</header>
+
+<div class="filter-bar">
+    <button class="filter-btn" onclick="quickSearch('tone nam')">TONE NAM</button>
+    <button class="filter-btn" onclick="quickSearch('tone nu')">TONE NỮ</button>
+    <button class="filter-btn" onclick="quickSearch('bolero')">BOLERO</button>
+    <button class="filter-btn" onclick="quickSearch('remix')">REMIX</button>
+</div>
+
+<div id="video-wrapper">
+    <div id="video-promo-screen">
+        <div style="color: var(--primary); font-size: 11px; margin-bottom: 10px;">ĐANG CHỜ BÀI HÁT...</div>
+        <div class="ad-container">
+            <div class="ad-message"><span class="highlight">Hậu Kỳ Âm Thanh</span><span class="subtext">Biến giọng mộc thành siêu phẩm mượt mà</span></div>
+            <div class="ad-message"><span class="highlight">Chỉ 4 Phút Giọng Mộc</span><span class="subtext">Mix nhạc theo yêu cầu chuẩn phòng thu</span></div>
+            <div class="ad-message"><span class="highlight">0909 374 508</span><span class="subtext">Lê Đức Quang - Mix & Master Chuyên Nghiệp</span></div>
+        </div>
+        <button class="guide-trigger-btn" style="transform: scale(0.8);" onclick="openGuide()">XEM HƯỚNG DẪN THU ÂM</button>
+    </div>
+    <div id="player"></div>
+</div>
+
+<div class="custom-controls">
+    <button class="control-btn" onclick="togglePlay()"><i id="play-icon" class="fas fa-play"></i></button>
+    <button class="control-btn" onclick="playNextInQueue()"><i class="fas fa-step-forward"></i></button>
+    <input type="range" id="volume-slider" min="0" max="100" value="100" oninput="changeVolume(this.value)">
+</div>
+
+<div class="persistent-ad-bar">
+    <div class="persistent-ad-text">★★★ DỊCH VỤ MIX NHẠC CHUYÊN NGHIỆP: CHỈ CẦN 4 PHÚT GIỌNG MỘC + TÊN BÀI HÁT = BẢN MIX SIÊU MƯỢT ★ HOTLINE: 0909 374 508 ★★★</div>
+</div>
+
+<div class="content-area">
+    <div id="playing-now" style="padding: 12px; background: #111; color: var(--gold); font-size: 14px; font-weight: bold; margin-bottom: 10px; border-left: 5px solid var(--gold);">
+        <i class="fas fa-microphone-alt"></i> Sẵn sàng phục vụ...
+    </div>
+    <div id="search-results"></div>
+    <div class="panel-header">BÀI HÁT GẦN ĐÂY</div>
+    <div id="history-list"></div>
+    <div style="height: 50px;"></div>
+</div>
+
 <div id="guide-modal">
     <div class="guide-close" onclick="closeGuide()"><i class="fas fa-times-circle"></i></div>
     <div class="guide-body">
         <h3>CẨM NANG THU GIỌNG MỘC</h3>
-        
-        <h4>1. Cài đặt điện thoại (Quan trọng nhất)</h4>
+        <h4>1. Cài đặt điện thoại</h4>
         <p>• <b>iPhone:</b> Cài đặt > Ghi âm > Chất lượng > Chọn "Nguyên bản (Lossless)".</p>
-        <p>• <b>Android:</b> Mở ứng dụng Ghi âm > Cài đặt > C
+        <p>• <b>Android:</b> Mở ứng dụng Ghi âm > Cài đặt > Chọn định dạng <b>WAV (44.1kHz)</b>. Tắt "Khử tiếng ồn".</p>
+        <h4>2. Cách cầm máy thu</h4>
+        <p>• Cầm điện thoại cách miệng từ <b>10cm - 15cm</b>. Hát hoặc đọc trực tiếp vào mic máy.</p>
+        <h4>3. Bài văn mẫu đọc 3 phút</h4>
+        <div class="script-text">
+            <b>PHẦN 1: TÂM SỰ (1.5 phút)</b><br>
+            "Chào bạn, tôi đang thực hiện bản thu âm giọng mộc này để gửi cho anh Lê Đức Quang thực hiện hậu kỳ âm thanh. Âm nhạc đối với tôi là nơi gửi gắm tâm tư sau những giờ làm việc mệt mỏi..."<br><br>
+            <b>PHẦN 2: ĐỌC THƠ (1 phút)</b><br>
+            "Có một mùa hoa cải, nở vàng bên bến sông. Có một người con gái, đợi chờ trong hy vọng. Mỗi nốt nhạc vang lên là một lần trái tim được thổn thức..."<br><br>
+            <b>PHẦN 3: KẾT THÚC (0.5 phút)</b><br>
+            "Hy vọng bản thu này sẽ giúp anh Quang tạo nên một siêu phẩm tuyệt vời. Tôi là [Đọc tên bạn], gửi bài thu cho Lê Đức Quang 0909 374 508."
+        </div>
+    </div>
+</div>
+
+<script>
+    const APP_VERSION = "017"; 
+    const API_KEYS = ["AIzaSyBywuEsM7gJE2dqPY5NNzIKteySXXv1Dx4", "AIzaSyAZzzzyIgZoum8RscTz-KUqrEEzzQCghKg", "AIzaSyDAJ7_JVXgEggQYZTBzne5W27Kt5QDaw8k"];
+    let currentKeyIndex = 0, player, internalQueue = [];
+    let playbackHistory = JSON.parse(localStorage.getItem('karaoke_history')) || [];
+
+    (function() {
+        if (localStorage.getItem('app_version') !== APP_VERSION) {
+            localStorage.clear();
+            localStorage.setItem('app_version', APP_VERSION);
+            window.location.reload(true);
+        }
+    })();
+
+    function initApp() {
+        // LUÔN ẨN MÀN HÌNH CHỜ TRƯỚC ĐỂ VÀO APP NGAY
+        document.getElementById('start-overlay').style.display = 'none';
+        
+        // SAU ĐÓ MỚI GỌI FULLSCREEN (NẾU CÓ LỖI CŨNG KHÔNG TREO APP)
+        const doc = document.documentElement;
+        if (doc.requestFullscreen) {
+            doc.requestFullscreen().then(() => {
+                if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
+            }).catch(e => console.log("Fullscreen blocked"));
+        }
+    }
+
+    function openGuide() { document.getElementById('guide-modal').style.display = 'flex'; }
+    function closeGuide() { document.getElementById('guide-modal').style.display = 'none'; }
+
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+            height: '100%', width: '100%',
+            playerVars: { 'autoplay': 1, 'controls': 1, 'playsinline': 1, 'modestbranding': 1, 'rel': 0 },
+            events: { 
+                'onReady': () => updateHistoryUI(),
+                'onStateChange': (e) => {
+                    if (e.data === YT.PlayerState.ENDED) playNextInQueue();
+                    document.getElementById('play-icon').className = (e.data === 1) ? "fas fa-pause" : "fas fa-play";
+                }
+            }
+        });
+    }
+
+    function quickSearch(tag) { document.getElementById('k_query_field').value = tag; searchMusic(); }
+
+    async function searchMusic() {
+        const query = document.getElementById('k_query_field').value;
+        if(!query) return;
+        document.getElementById('k_query_field').blur();
+        const resultsDiv = document.getElementById('search-results');
+        resultsDiv.innerHTML = '<p style="padding:10px; color:var(--accent);">Đang tìm bài...</p>';
+
+        for (let i = 0; i < API_KEYS.length; i++) {
+            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=${encodeURIComponent(query + ' karaoke')}&type=video&videoEmbeddable=true&key=${API_KEYS[currentKeyIndex]}`;
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+                if(data.items) {
+                    resultsDiv.innerHTML = data.items.map(item => {
+                        const title = item.snippet.title.replace(/['"]/g, "");
+                        const id = item.id.videoId;
+                        const thumb = item.snippet.thumbnails.default.url;
+                        return `<div class="song-item">
+                            <img src="${thumb}">
+                            <div class="song-info" onclick="playNow('${id}', '${title}', '${thumb}')">${title}</div>
+                            <i class="fas fa-bolt icon-btn" style="color:var(--accent);" onclick="addToNext('${id}', '${title}', '${thumb}')"></i>
+                        </div>`;
+                    }).join('');
+                    return;
+                }
+            } catch(e) {}
+            currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
+        }
+    }
+
+    function playNow(id, title, thumb) {
+        document.getElementById('video-promo-screen').style.display = 'none';
+        if (player && player.loadVideoById) {
+            player.loadVideoById(id);
+            document.getElementById('playing-now').innerHTML = `<i class="fas fa-microphone-alt"></i> Đang hát: ${title}`;
+            playbackHistory = playbackHistory.filter(item => item.id !== id);
+            playbackHistory.unshift({ id, title, thumb });
+            playbackHistory = playbackHistory.slice(0, 8);
+            localStorage.setItem('karaoke_history', JSON.stringify(playbackHistory));
+            updateHistoryUI();
+        }
+    }
+
+    function updateHistoryUI() {
+        document.getElementById('history-list').innerHTML = playbackHistory.map(s => `
+            <div class="song-item">
+                <img src="${s.thumb}">
+                <div class="song-info" onclick="playNow('${s.id}', '${s.title}', '${s.thumb}')">${s.title}</div>
+            </div>`).join('');
+    }
+
+    function addToNext(id, title, thumb) { internalQueue.unshift({ id, title, thumb }); alert("Đã ưu tiên: " + title); }
+    function playNextInQueue() { if (internalQueue.length > 0) { const next = internalQueue.shift(); playNow(next.id, next.title, next.thumb); } }
+    function togglePlay() { if (player) player.getPlayerState() === 1 ? player.pauseVideo() : player.playVideo(); }
+    function changeVolume(val) { if (player) player.setVolume(val); }
+    document.getElementById('k_query_field').addEventListener('keypress', (e) => { if(e.key === 'Enter') searchMusic(); });
+</script>
+</body>
+</html>
