@@ -30,33 +30,35 @@
         #video-wrapper { width: 100%; height: 38vh; background: #000; position: relative; flex-shrink: 0; border-bottom: 2px solid var(--primary); }
         #player { width: 100%; height: 100%; }
         
-        /* QUẢNG CÁO TRÊN MÀN HÌNH CHỜ VIDEO */
+        /* QUẢNG CÁO MÀN HÌNH CHỜ */
         #video-promo-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; z-index: 5; flex-direction: column; text-align: center; padding: 20px; }
         .ad-container { position: relative; width: 100%; height: 80px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .ad-message { position: absolute; width: 100%; opacity: 0; font-weight: bold; text-align: center; line-height: 1.4; animation: rotateAds 12s infinite; }
         .ad-message:nth-child(1) { animation-delay: 0s; }
         .ad-message:nth-child(2) { animation-delay: 4s; }
         .ad-message:nth-child(3) { animation-delay: 8s; }
-        @keyframes rotateAds {
-            0% { opacity: 0; transform: translateY(15px); }
-            5% { opacity: 1; transform: translateY(0); }
-            30% { opacity: 1; transform: translateY(0); }
-            35% { opacity: 0; transform: translateY(-15px); }
-            100% { opacity: 0; }
-        }
+        @keyframes rotateAds { 0% { opacity: 0; transform: translateY(15px); } 5% { opacity: 1; transform: translateY(0); } 30% { opacity: 1; transform: translateY(0); } 35% { opacity: 0; transform: translateY(-15px); } 100% { opacity: 0; } }
         .highlight { display: block; font-size: 20px; text-transform: uppercase; margin-bottom: 4px; color: var(--gold); }
         .subtext { display: block; font-size: 14px; color: #eee; font-style: italic; }
 
-        /* QUẢNG CÁO CHẠY DƯỚI PHẦN BÀI HÁT (LUÔN HIỆN) */
-        .persistent-ad-bar { background: linear-gradient(90deg, #111, #222, #111); padding: 8px 0; border-top: 1px solid #333; border-bottom: 1px solid var(--primary); overflow: hidden; white-space: nowrap; }
-        .persistent-ad-text { display: inline-block; animation: marquee-bottom 20s linear infinite; color: var(--accent); font-weight: bold; font-size: 14px; }
+        /* THANH QUẢNG CÁO CHẠY */
+        .persistent-ad-bar { background: #111; padding: 8px 0; border-bottom: 1px solid var(--primary); overflow: hidden; white-space: nowrap; flex-shrink: 0; }
+        .persistent-ad-text { display: inline-block; animation: marquee-bottom 20s linear infinite; color: var(--accent); font-weight: bold; font-size: 13px; }
         @keyframes marquee-bottom { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        .custom-controls { display: flex; align-items: center; justify-content: space-around; background: #111; padding: 8px; border-bottom: 1px solid #222; }
+        .custom-controls { display: flex; align-items: center; justify-content: space-around; background: #111; padding: 8px; border-bottom: 1px solid #222; flex-shrink: 0; }
         .control-btn { background: none; border: none; color: white; font-size: 22px; cursor: pointer; }
         #volume-slider { width: 30%; accent-color: var(--primary); }
 
         .content-area { flex: 1; overflow-y: auto; background: #0a0a0a; padding: 10px; -webkit-overflow-scrolling: touch; }
+        
+        /* CẨM NĂNG THU ÂM */
+        .guide-box { background: #1a1a1a; border: 1px solid #333; border-radius: 8px; margin-bottom: 15px; overflow: hidden; }
+        .guide-header { background: #333; padding: 10px; color: var(--gold); font-weight: bold; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .guide-content { padding: 15px; display: none; line-height: 1.6; font-size: 14px; }
+        .guide-content h4 { color: var(--accent); margin: 10px 0 5px 0; border-bottom: 1px solid #333; padding-bottom: 3px; }
+        .script-box { background: #000; padding: 15px; border-radius: 5px; border-left: 4px solid var(--gold); margin-top: 10px; color: #ccc; }
+
         .panel-header { font-size: 11px; font-weight: bold; color: var(--accent); margin: 15px 0 10px 0; text-transform: uppercase; border-left: 3px solid var(--primary); padding-left: 8px; }
         .song-item { display: flex; gap: 10px; padding: 12px 10px; border-bottom: 1px solid #1a1a1a; align-items: center; }
         .song-info { flex: 1; font-size: 14px; color: #eee; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -74,15 +76,13 @@
 <div id="start-overlay">
     <div style="color: var(--gold); font-size: 24px; font-weight: bold;">KARAOKE VIP LÊ ĐỨC QUANG</div>
     <button class="start-btn" onclick="initApp()">BẮT ĐẦU HÁT</button>
-    <div class="promo-container" style="width:100%; overflow:hidden; background:#111; padding:10px 0;">
-        <div style="white-space:nowrap; display:inline-block; animation:marquee-bottom 15s linear infinite; color:var(--gold); font-weight:bold;">HOTLINE: 0909 374 508 - LÊ ĐỨC QUANG - CHUYÊN HẬU KỲ ÂM THANH MIX NHẠC</div>
-    </div>
+    <div style="color:#888; font-size:12px;">Hotline: 0909 374 508</div>
 </div>
 
 <header>
     <div class="logo">LÊ ĐỨC QUANG</div>
     <div class="search-box">
-        <input type="search" id="k_query_field" placeholder="Tìm tên bài hát..." readonly onfocus="setTimeout(() => { this.removeAttribute('readonly'); }, 60);" onblur="this.setAttribute('readonly', 'readonly');" autocomplete="new-password" data-lpignore="true">
+        <input type="search" id="k_query_field" placeholder="Tìm tên bài hát..." readonly onfocus="setTimeout(() => { this.removeAttribute('readonly'); }, 60);" onblur="this.setAttribute('readonly', 'readonly');">
         <button onclick="searchMusic()"><i class="fas fa-search"></i></button>
     </div>
 </header>
@@ -98,9 +98,9 @@
     <div id="video-promo-screen">
         <div style="color: var(--primary); font-size: 12px; margin-bottom: 15px; letter-spacing: 2px;">ĐANG CHỜ BÀI HÁT...</div>
         <div class="ad-container">
-            <div class="ad-message"><span class="highlight">Hậu Kỳ Âm Thanh</span><span class="subtext">Biến giọng mộc thành siêu phẩm mượt mà</span></div>
-            <div class="ad-message"><span class="highlight">Chỉ 4 Phút Giọng Mộc</span><span class="subtext">Mix nhạc theo yêu cầu chuẩn phòng thu</span></div>
-            <div class="ad-message"><span class="highlight">0909 374 508</span><span class="subtext">Lê Đức Quang - Mix & Master Chuyên Nghiệp</span></div>
+            <div class="ad-message"><span class="highlight">Hậu Kỳ Âm Thanh</span><span class="subtext">Biến giọng mộc thành siêu phẩm chuẩn Studio</span></div>
+            <div class="ad-message"><span class="highlight">Mix Nhạc Chuyên Nghiệp</span><span class="subtext">Chỉ 4 phút giọng mộc - Mix mượt mà theo bài chọn</span></div>
+            <div class="ad-message"><span class="highlight">Hotline: 0909 374 508</span><span class="subtext">Lê Đức Quang - Chuyên Hậu Kỳ & Mix Master</span></div>
         </div>
     </div>
     <div id="player"></div>
@@ -112,28 +112,52 @@
     <input type="range" id="volume-slider" min="0" max="100" value="100" oninput="changeVolume(this.value)">
 </div>
 
-<!-- THANH QUẢNG CÁO LUÔN HIỆN DƯỚI PHẦN ĐANG HÁT -->
 <div class="persistent-ad-bar">
-    <div class="persistent-ad-text">
-        ★★★ DỊCH VỤ MIX NHẠC CHUYÊN NGHIỆP: CHỈ CẦN 4 PHÚT GIỌNG MỘC + TÊN BÀI HÁT = BẢN MIX SIÊU MƯỢT ★ HOTLINE/ZALO: 0909 374 508 (LÊ ĐỨC QUANG) ★★★
-    </div>
+    <div class="persistent-ad-text">★★★ DỊCH VỤ MIX NHẠC TỪ GIỌNG MỘC: 4 PHÚT GIỌNG MỘC = 1 BẢN MIX CHUẨN CA SĨ ★ HOTLINE/ZALO: 0909 374 508 (LÊ ĐỨC QUANG) ★★★</div>
 </div>
 
 <div class="content-area">
-    <div id="playing-now" style="padding: 12px; background: #111; color: var(--gold); font-size: 14px; font-weight: bold; margin-bottom: 10px; border-left: 5px solid var(--gold);">
-        <i class="fas fa-microphone-alt"></i> Sẵn sàng phục vụ...
+    <!-- CẨM NANG THU ÂM -->
+    <div class="guide-box">
+        <div class="guide-header" onclick="toggleGuide()">
+            <span><i class="fas fa-microphone-alt"></i> CẨM NANG THU ÂM CHUẨN (3 PHÚT)</span>
+            <i id="guide-arrow" class="fas fa-chevron-down"></i>
+        </div>
+        <div id="guide-content" class="guide-content">
+            <h4>1. Cài đặt Trình Ghi Âm (Rất quan trọng)</h4>
+            • <b>iPhone:</b> Vào Cài đặt > Ghi âm > Chất lượng âm thanh > Chọn "Nguyên bản (Lossless)".<br>
+            • <b>Android:</b> Mở ứng dụng Ghi âm > Cài đặt > Định dạng file chọn <b>WAV</b>, Tốc độ 44.1kHz. Tắt "Khử tiếng ồn".
+            
+            <h4>2. Thu âm không cần tai nghe</h4>
+            • Đặt máy phát nhạc xa micro (ít nhất 2 mét). Mở âm lượng thật nhỏ vừa đủ nghe nhịp.<br>
+            • Cầm điện thoại thu âm cách miệng 10-15cm, hơi lệch sang một bên để tránh tiếng thở.
+            
+            <h4>3. Văn bản mẫu đọc 3 phút (Hãy đọc ngay dưới đây)</h4>
+            <div class="script-box">
+                <b>PHẦN 1: TÂM SỰ (1.5 phút)</b><br>
+                "Chào bạn, tôi đang thu âm giọng mộc để gửi cho anh Lê Đức Quang Mix nhạc. Âm nhạc là nơi tôi gửi gắm tâm tư sau giờ làm việc. Tôi hiểu rằng giọng mộc là dữ liệu quý nhất, khi qua tay người làm hậu kỳ chuyên nghiệp như anh Quang, nó sẽ trở nên mượt mà và bay bổng nhất..."<br><br>
+                <b>PHẦN 2: ĐỌC THƠ (1 phút)</b><br>
+                "Có một mùa hoa cải, nở vàng bên bến sông. Có một người con gái, đợi chờ trong hy vọng. Mỗi nốt nhạc vang lên là một lần trái tim được thổn thức. Hát không phải là ca sĩ, hát để kể câu chuyện đời mình..."<br><br>
+                <b>PHẦN 3: KẾT THÚC (0.5 phút)</b><br>
+                "Hy vọng bản thu này sẽ giúp anh Quang tạo nên siêu phẩm. Tôi là [Tên bạn], gửi bài thu cho Lê Đức Quang."
+            </div>
+        </div>
     </div>
+
+    <div id="playing-now" style="padding: 12px; background: #111; color: var(--gold); font-size: 14px; font-weight: bold; margin-bottom: 10px; border-left: 5px solid var(--gold);">
+        <i class="fas fa-music"></i> Sẵn sàng phục vụ...
+    </div>
+    
     <div id="search-results"></div>
-    <div class="panel-header" style="color: var(--gold);">BÀI HÁT GẦN ĐÂY</div>
+    <div class="panel-header">BÀI HÁT GẦN ĐÂY</div>
     <div id="history-list"></div>
     <div style="height: 50px;"></div>
 </div>
 
 <script>
-    const APP_VERSION = "014"; 
+    const APP_VERSION = "015"; 
     const API_KEYS = ["AIzaSyBywuEsM7gJE2dqPY5NNzIKteySXXv1Dx4", "AIzaSyAZzzzyIgZoum8RscTz-KUqrEEzzQCghKg", "AIzaSyDAJ7_JVXgEggQYZTBzne5W27Kt5QDaw8k"];
-    let currentKeyIndex = 0;
-    let player, internalQueue = [];
+    let currentKeyIndex = 0, player, internalQueue = [];
     let playbackHistory = JSON.parse(localStorage.getItem('karaoke_history')) || [];
 
     (function() {
@@ -146,8 +170,26 @@
 
     function initApp() {
         const doc = document.documentElement;
-        if (doc.requestFullscreen) doc.requestFullscreen();
+        if (doc.requestFullscreen) {
+            doc.requestFullscreen().then(() => {
+                if (screen.orientation && screen.orientation.unlock) {
+                    screen.orientation.unlock(); // Sửa lỗi "đeo xoay" màn hình
+                }
+            }).catch(e => console.log(e));
+        }
         document.getElementById('start-overlay').style.display = 'none';
+    }
+
+    function toggleGuide() {
+        const content = document.getElementById('guide-content');
+        const arrow = document.getElementById('guide-arrow');
+        if (content.style.display === "block") {
+            content.style.display = "none";
+            arrow.className = "fas fa-chevron-down";
+        } else {
+            content.style.display = "block";
+            arrow.className = "fas fa-chevron-up";
+        }
     }
 
     var tag = document.createElement('script');
@@ -169,33 +211,26 @@
         });
     }
 
-    function quickSearch(tag) {
-        document.getElementById('k_query_field').value = tag;
-        searchMusic();
-    }
+    function quickSearch(tag) { document.getElementById('k_query_field').value = tag; searchMusic(); }
 
     async function searchMusic() {
-        const input = document.getElementById('k_query_field');
-        const query = input.value;
+        const query = document.getElementById('k_query_field').value;
         if(!query) return;
-        input.blur();
-
+        document.getElementById('k_query_field').blur();
         const resultsDiv = document.getElementById('search-results');
         resultsDiv.innerHTML = '<p style="padding:10px; color:var(--accent);">Đang tìm bài...</p>';
 
         for (let i = 0; i < API_KEYS.length; i++) {
-            const activeKey = API_KEYS[currentKeyIndex];
-            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=${encodeURIComponent(query + ' karaoke')}&type=video&videoEmbeddable=true&key=${activeKey}`;
+            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=${encodeURIComponent(query + ' karaoke')}&type=video&videoEmbeddable=true&key=${API_KEYS[currentKeyIndex]}`;
             try {
                 const res = await fetch(url);
                 const data = await res.json();
-                if(data.items && data.items.length > 0) {
+                if(data.items) {
                     resultsDiv.innerHTML = data.items.map(item => {
                         const title = item.snippet.title.replace(/['"]/g, "");
-                        const thumb = item.snippet.thumbnails.default.url;
                         const id = item.id.videoId;
-                        return `
-                        <div class="song-item">
+                        const thumb = item.snippet.thumbnails.default.url;
+                        return `<div class="song-item">
                             <img src="${thumb}">
                             <div class="song-info" onclick="playNow('${id}', '${title}', '${thumb}')">${title}</div>
                             <i class="fas fa-bolt icon-btn" style="color:var(--accent);" onclick="addToNext('${id}', '${title}', '${thumb}')"></i>
@@ -206,7 +241,6 @@
             } catch(e) {}
             currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
         }
-        resultsDiv.innerHTML = '<p style="color:red; padding:10px;">Lỗi. Thử lại.</p>';
     }
 
     function playNow(id, title, thumb) {
@@ -223,35 +257,17 @@
     }
 
     function updateHistoryUI() {
-        const historyDiv = document.getElementById('history-list');
-        if (playbackHistory.length === 0) return;
-        historyDiv.innerHTML = playbackHistory.map(s => `
+        document.getElementById('history-list').innerHTML = playbackHistory.map(s => `
             <div class="song-item">
                 <img src="${s.thumb}">
                 <div class="song-info" onclick="playNow('${s.id}', '${s.title}', '${s.thumb}')">${s.title}</div>
-            </div>
-        `).join('');
+            </div>`).join('');
     }
 
-    function addToNext(id, title, thumb) {
-        internalQueue.unshift({ id, title, thumb });
-        alert("Đã ưu tiên bài tiếp theo: " + title);
-    }
-
-    function playNextInQueue() {
-        if (internalQueue.length > 0) {
-            const next = internalQueue.shift();
-            playNow(next.id, next.title, next.thumb);
-        }
-    }
-
-    function togglePlay() {
-        if (!player) return;
-        player.getPlayerState() === 1 ? player.pauseVideo() : player.playVideo();
-    }
-
+    function addToNext(id, title, thumb) { internalQueue.unshift({ id, title, thumb }); alert("Đã ưu tiên: " + title); }
+    function playNextInQueue() { if (internalQueue.length > 0) { const next = internalQueue.shift(); playNow(next.id, next.title, next.thumb); } }
+    function togglePlay() { if (player) player.getPlayerState() === 1 ? player.pauseVideo() : player.playVideo(); }
     function changeVolume(val) { if (player) player.setVolume(val); }
-
     document.getElementById('k_query_field').addEventListener('keypress', (e) => { if(e.key === 'Enter') searchMusic(); });
 </script>
 </body>
