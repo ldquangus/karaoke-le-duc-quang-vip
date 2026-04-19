@@ -13,70 +13,50 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; margin: 0; height: 100vh; width: 100vw; overflow: hidden; display: flex; flex-direction: column; }
         
-        /* CẤU HÌNH VIDEO NỀN YOUTUBE */
-        .video-background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden; opacity: 0.6; }
-        .video-background iframe { width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        /* VIDEO NỀN QUẢNG CÁO */
+        .video-background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden; background: #000; }
+        .video-background iframe { width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.6; }
 
         #start-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
-        .start-btn { background: var(--primary); color: white; border: none; padding: 15px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px var(--primary); animation: pulse 1.5s infinite; margin: 10px 0; }
+        .start-btn { background: var(--primary); color: white; border: none; padding: 15px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px var(--primary); animation: pulse 1.5s infinite; margin: 10px 0; position: relative; z-index: 10; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        .guide-trigger-btn { background: none; border: 2px solid var(--gold); color: var(--gold); padding: 10px 20px; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .guide-trigger-btn { background: none; border: 2px solid var(--gold); color: var(--gold); padding: 10px 20px; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 10px; position: relative; z-index: 10; }
 
-        header { background: #111; padding: 10px 15px 5px 15px; display: flex; align-items: center; border-bottom: 1px solid #222; flex-shrink: 0; }
+        header { background: #111; padding: 10px 15px 5px 15px; display: flex; align-items: center; border-bottom: 1px solid #222; flex-shrink: 0; z-index: 20; }
         .logo { font-weight: bold; font-size: 12px; color: var(--primary); text-transform: uppercase; margin-right: 8px; }
         .search-box { flex: 1; display: flex; background: #222; border-radius: 20px; padding: 2px 10px; border: 1px solid #333; }
         .search-box input { flex: 1; background: none; border: none; color: #fff; padding: 8px; outline: none; font-size: 14px; width: 100%; }
 
-        .filter-bar { display: flex; gap: 8px; padding: 8px 15px; background: #111; border-bottom: 2px solid var(--primary); overflow-x: auto; flex-shrink: 0; scrollbar-width: none; }
-        .filter-bar::-webkit-scrollbar { display: none; }
+        .filter-bar { display: flex; gap: 8px; padding: 8px 15px; background: #111; border-bottom: 2px solid var(--primary); overflow-x: auto; flex-shrink: 0; scrollbar-width: none; z-index: 20; }
         .filter-btn { background: #333; color: #fff; border: none; padding: 6px 15px; border-radius: 15px; font-size: 12px; font-weight: bold; white-space: nowrap; cursor: pointer; }
         .filter-btn.active { background: var(--primary); }
 
         #video-wrapper { width: 100%; height: 38vh; background: #000; position: relative; flex-shrink: 0; border-bottom: 2px solid var(--primary); overflow: hidden; }
         #player { width: 100%; height: 100%; }
         
-        #video-promo-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 5; flex-direction: column; text-align: center; padding: 10px; }
+        #video-promo-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 5; flex-direction: column; text-align: center; padding: 10px; }
         .ad-container { position: relative; width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .ad-message { position: absolute; width: 100%; opacity: 0; font-weight: bold; text-align: center; line-height: 1.4; animation: rotateAds 12s infinite; }
-        .ad-message:nth-child(1) { animation-delay: 0s; }
-        .ad-message:nth-child(2) { animation-delay: 4s; }
-        .ad-message:nth-child(3) { animation-delay: 8s; }
+        .ad-message { position: absolute; width: 100%; opacity: 0; font-weight: bold; text-align: center; line-height: 1.4; animation: rotateAds 12s infinite; text-shadow: 2px 2px 4px #000; }
         @keyframes rotateAds { 0% { opacity: 0; transform: translateY(15px); } 5% { opacity: 1; transform: translateY(0); } 30% { opacity: 1; transform: translateY(0); } 35% { opacity: 0; transform: translateY(-15px); } 100% { opacity: 0; } }
         .highlight { display: block; font-size: 18px; text-transform: uppercase; color: var(--gold); }
         .subtext { display: block; font-size: 12px; color: #eee; font-style: italic; }
 
-        .persistent-ad-bar { background: #111; padding: 8px 0; border-bottom: 1px solid var(--primary); overflow: hidden; white-space: nowrap; flex-shrink: 0; }
+        .persistent-ad-bar { background: #111; padding: 8px 0; border-bottom: 1px solid var(--primary); overflow: hidden; white-space: nowrap; flex-shrink: 0; z-index: 20; }
         .persistent-ad-text { display: inline-block; animation: marquee-bottom 20s linear infinite; color: var(--accent); font-weight: bold; font-size: 13px; }
         @keyframes marquee-bottom { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
-        .custom-controls { display: flex; align-items: center; justify-content: space-around; background: #111; padding: 8px; border-bottom: 1px solid #222; flex-shrink: 0; }
+        .custom-controls { display: flex; align-items: center; justify-content: space-around; background: #111; padding: 8px; border-bottom: 1px solid #222; flex-shrink: 0; z-index: 20; }
         .control-btn { background: none; border: none; color: white; font-size: 22px; cursor: pointer; }
         #volume-slider { width: 30%; accent-color: var(--primary); }
 
-        .content-area { flex: 1; overflow-y: auto; background: #0a0a0a; padding: 10px; -webkit-overflow-scrolling: touch; }
+        .content-area { flex: 1; overflow-y: auto; background: #0a0a0a; padding: 10px; z-index: 15; }
 
-        /* MODAL POPUP */
-        #guide-modal, #score-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 200000; display: none; flex-direction: column; padding: 20px; overflow-y: auto; align-items: center; justify-content: center; }
-        .guide-close, .score-close { align-self: flex-end; font-size: 30px; color: var(--primary); cursor: pointer; position: absolute; top: 20px; right: 20px; }
-        .guide-body { width: 100%; }
-        .guide-body h3 { color: var(--gold); border-bottom: 2px solid var(--gold); padding-bottom: 5px; }
-        .guide-body h4 { color: var(--accent); margin: 15px 0 5px 0; }
-        .script-text { background: #111; padding: 15px; border-radius: 8px; border-left: 5px solid var(--gold); color: #ddd; line-height: 1.6; margin-top: 10px; font-size: 15px; }
+        #guide-modal, #score-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 200000; display: none; flex-direction: column; padding: 20px; align-items: center; justify-content: center; }
+        .score-number { font-size: 80px; font-weight: bold; color: var(--gold); text-shadow: 0 0 20px var(--gold); }
 
-        /* SCORE UI */
-        .score-box { text-align: center; animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        @keyframes zoomIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .score-number { font-size: 80px; font-weight: bold; margin: 10px 0; text-shadow: 0 0 20px var(--gold); }
-        .score-msg { font-size: 20px; font-weight: bold; margin-bottom: 20px; padding: 0 20px; line-height: 1.4; }
-        .score-gold { color: var(--gold); }
-        .score-bad { color: #ff4444; }
-
-        .panel-header { font-size: 11px; font-weight: bold; color: var(--accent); margin: 15px 0 10px 0; text-transform: uppercase; border-left: 3px solid var(--primary); padding-left: 8px; }
-        .song-item { display: flex; gap: 10px; padding: 12px 10px; border-bottom: 1px solid #1a1a1a; align-items: center; }
-        .song-info { flex: 1; font-size: 14px; color: #eee; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .song-item img { width: 80px; height: 45px; border-radius: 4px; object-fit: cover; }
-        .icon-btn { font-size: 22px; cursor: pointer; margin-left: 10px; }
+        .song-item { display: flex; gap: 10px; padding: 12px 10px; border-bottom: 1px solid #1a1a1a; align-items: center; background: rgba(255,255,255,0.02); margin-bottom: 2px; }
+        .song-info { flex: 1; font-size: 14px; color: #eee; }
 
         @media (orientation: landscape) { 
             header, .filter-bar, .custom-controls, .content-area, .persistent-ad-bar { display: none !important; } 
@@ -88,20 +68,17 @@
 
 <div id="start-overlay">
     <div class="video-background">
-        <iframe src="https://www.youtube.com/embed/FjV_Sj-zV8s?autoplay=1&mute=1&loop=1&playlist=FjV_Sj-zV8s&controls=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <iframe src="https://www.youtube.com/embed/FjV_Sj-zV8s?autoplay=1&mute=1&loop=1&playlist=FjV_Sj-zV8s&controls=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media"></iframe>
     </div>
-    <div style="color: var(--gold); font-size: 22px; font-weight: bold; margin-bottom: 10px;">KARAOKE VIP LÊ ĐỨC QUANG</div>
+    <div style="color: var(--gold); font-size: 22px; font-weight: bold; margin-bottom: 10px; position: relative; z-index: 10; text-shadow: 2px 2px 5px #000;">KARAOKE VIP LÊ ĐỨC QUANG</div>
     <button class="start-btn" onclick="initApp()">BẮT ĐẦU HÁT</button>
     <button class="guide-trigger-btn" onclick="openGuide()"><i class="fas fa-microphone-alt"></i> BÍ QUYẾT THU ÂM CHUẨN</button>
-    <div style="margin-top: 20px; color: #aaa; font-size: 12px; line-height: 1.5;">
-        HOTLINE: 0909 374 508 - LÊ ĐỨC QUANG<br>CHUYÊN HẬU KỲ ÂM THANH MIX NHẠC
-    </div>
 </div>
 
 <header>
     <div class="logo">LÊ ĐỨC QUANG</div>
     <div class="search-box">
-        <input type="search" id="k_query_field" placeholder="Tìm tên bài hát..." readonly onfocus="setTimeout(() => { this.removeAttribute('readonly'); }, 60);" onblur="this.setAttribute('readonly', 'readonly');">
+        <input type="search" id="k_query_field" placeholder="Tìm tên bài hát..." onkeypress="if(event.key === 'Enter') searchMusic()">
         <button onclick="searchMusic()"><i class="fas fa-search"></i></button>
     </div>
 </header>
@@ -116,15 +93,14 @@
 <div id="video-wrapper">
     <div id="video-promo-screen">
         <div class="video-background">
-            <iframe src="https://www.youtube.com/embed/FjV_Sj-zV8s?autoplay=1&mute=1&loop=1&playlist=FjV_Sj-zV8s&controls=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+            <iframe src="https://www.youtube.com/embed/FjV_Sj-zV8s?autoplay=1&mute=1&loop=1&playlist=FjV_Sj-zV8s&controls=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media"></iframe>
         </div>
-        <div style="color: var(--primary); font-size: 11px; margin-bottom: 10px; text-shadow: 1px 1px 2px #000;">ĐANG CHỜ BÀI HÁT...</div>
+        <div style="color: var(--primary); font-size: 11px; margin-bottom: 10px; font-weight: bold; text-shadow: 1px 1px 3px #000;">ĐANG CHỜ BÀI HÁT...</div>
         <div class="ad-container">
-            <div class="ad-message"><span class="highlight">Hậu Kỳ Âm Thanh</span><span class="subtext">Biến giọng mộc thành siêu phẩm mượt mà</span></div>
-            <div class="ad-message"><span class="highlight">Chỉ 4 Phút Giọng Mộc</span><span class="subtext">Mix nhạc theo yêu cầu chuẩn phòng thu</span></div>
-            <div class="ad-message"><span class="highlight">0909 374 508</span><span class="subtext">Lê Đức Quang - Mix & Master Chuyên Nghiệp</span></div>
+            <div class="ad-message" style="animation-delay: 0s;"><span class="highlight">Hậu Kỳ Âm Thanh</span><span class="subtext">Biến giọng mộc thành siêu phẩm mượt mà</span></div>
+            <div class="ad-message" style="animation-delay: 4s;"><span class="highlight">Chỉ 4 Phút Giọng Mộc</span><span class="subtext">Mix nhạc theo yêu cầu chuẩn phòng thu</span></div>
+            <div class="ad-message" style="animation-delay: 8s;"><span class="highlight">0909 374 508</span><span class="subtext">Lê Đức Quang - Mix & Master Chuyên Nghiệp</span></div>
         </div>
-        <button class="guide-trigger-btn" style="transform: scale(0.8);" onclick="openGuide()">XEM HƯỚNG DẪN THU ÂM</button>
     </div>
     <div id="player"></div>
 </div>
@@ -136,7 +112,7 @@
 </div>
 
 <div class="persistent-ad-bar">
-    <div class="persistent-ad-text">★★★ DỊCH VỤ MIX NHẠC CHUYÊN NGHIỆP: CHỈ CẦN 4 PHÚT GIỌNG MỘC + TÊN BÀI HÁT = BẢN MIX SIÊU MƯỢT ★ HOTLINE: 0909 374 508 ★★★</div>
+    <div class="persistent-ad-text">★★★ DỊCH VỤ MIX NHẠC CHUYÊN NGHIỆP: HOTLINE 0909 374 508 - LÊ ĐỨC QUANG ★★★</div>
 </div>
 
 <div class="content-area">
@@ -144,52 +120,12 @@
         <i class="fas fa-microphone-alt"></i> Sẵn sàng phục vụ...
     </div>
     <div id="search-results"></div>
-    <div class="panel-header">BÀI HÁT GẦN ĐÂY</div>
-    <div id="history-list"></div>
-    <div style="height: 50px;"></div>
-</div>
-
-<!-- GUIDE MODAL -->
-<div id="guide-modal">
-    <div class="guide-close" onclick="closeGuide()"><i class="fas fa-times-circle"></i></div>
-    <div class="guide-body">
-        <h3>CẨM NANG THU GIỌNG MỘC</h3>
-        <h4>1. Cài đặt điện thoại</h4>
-        <p>• <b>iPhone:</b> Cài đặt > Ghi âm > Chất lượng > Chọn "Nguyên bản (Lossless)".</p>
-        <p>• <b>Android:</b> Mở ứng dụng Ghi âm > Cài đặt > Chọn định dạng <b>WAV (44.1kHz)</b>. Tắt "Khử tiếng ồn".</p>
-        <h4>2. Cách cầm máy thu</h4>
-        <p>• Cầm điện thoại cách miệng từ <b>10cm - 15cm</b>. Hát hoặc đọc trực tiếp vào mic máy.</p>
-        <h4>3. Bài văn mẫu thu âm (Hãy đọc thong thả)</h4>
-        <div class="script-text">
-            <b>PHẦN 1: TÂM SỰ (Dữ liệu chính)</b><br>
-            "Chào bạn, tôi đang thực hiện bản thu âm giọng mộc này để gửi cho anh Lê Đức Quang thực hiện hậu kỳ âm thanh chuyên nghiệp..."<br><br>
-            <b>PHẦN 2: LUYỆN ÂM KHÓ (Dữ liệu kỹ thuật)</b><br>
-            "Quý khách hãy đọc thật rõ: Rộn ràng rừng rậm, ríu rít chim ca..."<br><br>
-            <b>PHẦN 3: ĐỌC THƠ & KẾT THÚC</b><br>
-            "Có một mùa hoa cải, nở vàng bên bến sông... Tôi là [Đọc tên bạn], gửi bài thu cho Lê Đức Quang 0909 374 508."
-        </div>
-    </div>
-</div>
-
-<!-- SCORE MODAL -->
-<div id="score-modal">
-    <div class="score-close" onclick="closeScore()"><i class="fas fa-times-circle"></i></div>
-    <div class="score-box" id="score-box">
-        <div style="font-size: 14px; letter-spacing: 3px; color: #aaa;">KẾT QUẢ GIỌNG HÁT</div>
-        <div id="score-num" class="score-number score-gold">0</div>
-        <div id="score-text" class="score-msg"></div>
-        <button class="start-btn" onclick="closeScore()" style="animation: none; padding: 10px 30px;">HÁT BÀI TIẾP THEO</button>
-    </div>
 </div>
 
 <script>
-    const APP_VERSION = "021"; 
+    const APP_VERSION = "022"; 
     const API_KEYS = ["AIzaSyBywuEsM7gJE2dqPY5NNzIKteySXXv1Dx4", "AIzaSyAZzzzyIgZoum8RscTz-KUqrEEzzQCghKg", "AIzaSyDAJ7_JVXgEggQYZTBzne5W27Kt5QDaw8k"];
     let currentKeyIndex = 0, player, internalQueue = [];
-    let playbackHistory = JSON.parse(localStorage.getItem('karaoke_history')) || [];
-
-    const praiseMsgs = ["Hát hay chấn động!", "Đỉnh của chóp!", "Giọng hát vàng mười!"];
-    const roastMsgs = ["Hay quá, lần sau đừng hát nữa...", "Hơi sai tông một xíu.", "Cố gắng lên!"];
 
     (function() {
         if (localStorage.getItem('app_version') !== APP_VERSION) {
@@ -201,21 +137,8 @@
 
     function initApp() {
         document.getElementById('start-overlay').style.display = 'none';
-        const doc = document.documentElement;
-        if (doc.requestFullscreen) doc.requestFullscreen();
+        if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
     }
-
-    function openGuide() { document.getElementById('guide-modal').style.display = 'flex'; }
-    function closeGuide() { document.getElementById('guide-modal').style.display = 'none'; }
-    function openScore() {
-        const isPraise = Math.random() > 0.5;
-        const score = isPraise ? Math.floor(Math.random() * 13) + 88 : Math.floor(Math.random() * 26) + 50;
-        const msg = isPraise ? praiseMsgs[Math.floor(Math.random()*praiseMsgs.length)] : roastMsgs[Math.floor(Math.random()*roastMsgs.length)];
-        document.getElementById('score-num').innerText = score;
-        document.getElementById('score-text').innerText = msg;
-        document.getElementById('score-modal').style.display = 'flex';
-    }
-    function closeScore() { document.getElementById('score-modal').style.display = 'none'; }
 
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
@@ -227,9 +150,7 @@
             height: '100%', width: '100%',
             playerVars: { 'autoplay': 1, 'controls': 1, 'playsinline': 1 },
             events: { 
-                'onReady': () => updateHistoryUI(),
                 'onStateChange': (e) => {
-                    if (e.data === YT.PlayerState.ENDED) { openScore(); playNextInQueue(); }
                     document.getElementById('play-icon').className = (e.data === 1) ? "fas fa-pause" : "fas fa-play";
                 }
             }
@@ -240,29 +161,29 @@
         const query = document.getElementById('k_query_field').value;
         if(!query) return;
         const resultsDiv = document.getElementById('search-results');
-        resultsDiv.innerHTML = '<p style="padding:10px; color:var(--accent);">Đang tìm bài...</p>';
+        resultsDiv.innerHTML = '<p style="padding:10px; color:var(--accent);">Đang tìm...</p>';
         const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=${encodeURIComponent(query + ' karaoke')}&type=video&key=${API_KEYS[currentKeyIndex]}`;
         try {
             const res = await fetch(url);
             const data = await res.json();
             resultsDiv.innerHTML = data.items.map(item => `
                 <div class="song-item">
-                    <img src="${item.snippet.thumbnails.default.url}">
-                    <div class="song-info" onclick="playNow('${item.id.videoId}', '${item.snippet.title.replace(/'/g, "")}', '${item.snippet.thumbnails.default.url}')">${item.snippet.title}</div>
+                    <img src="${item.snippet.thumbnails.default.url}" width="80">
+                    <div class="song-info" onclick="playNow('${item.id.videoId}', '${item.snippet.title.replace(/'/g, "")}')">${item.snippet.title}</div>
                 </div>`).join('');
-        } catch(e) { currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length; }
+        } catch(e) { currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length; searchMusic(); }
     }
 
-    function playNow(id, title, thumb) {
+    function playNow(id, title) {
         document.getElementById('video-promo-screen').style.display = 'none';
         if (player) player.loadVideoById(id);
         document.getElementById('playing-now').innerHTML = `<i class="fas fa-microphone-alt"></i> Đang hát: ${title}`;
     }
 
-    function updateHistoryUI() {}
     function togglePlay() { if (player) player.getPlayerState() === 1 ? player.pauseVideo() : player.playVideo(); }
     function changeVolume(val) { if (player) player.setVolume(val); }
     function quickSearch(tag) { document.getElementById('k_query_field').value = tag; searchMusic(); }
+    function openGuide() { alert("Hãy thực hiện theo các bước trong cẩm nang!"); }
 </script>
 </body>
 </html>
