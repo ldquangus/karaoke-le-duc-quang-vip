@@ -28,21 +28,17 @@
         .filter-btn { background: #333; color: #fff; border: none; padding: 6px 15px; border-radius: 15px; font-size: 12px; font-weight: bold; white-space: nowrap; cursor: pointer; }
         .filter-btn.active { background: var(--primary); }
 
-        #video-wrapper { width: 100%; height: 38vh; background: #000; position: relative; flex-shrink: 0; border-bottom: 2px solid var(--primary); overflow: hidden; }
+        #video-wrapper { width: 100%; height: 38vh; background: #000; position: relative; flex-shrink: 0; border-bottom: 2px solid var(--primary); display: flex; align-items: center; justify-content: center; }
         
-        /* PLAYER CHÍNH CHỈ PHÁT TIẾNG, ẨN HÌNH */
-        #player { position: absolute; top: -9999px; left: -9999px; width: 1px; height: 1px; visibility: hidden; }
+        /* ẨN PLAYER HÌNH */
+        #player { position: absolute; top: -9999px; left: -9999px; visibility: hidden; }
         
-        /* MÀN HÌNH QUẢNG CÁO LUÔN HIỆN */
-        #video-promo-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 5; flex-direction: column; text-align: center; padding: 10px; }
-        .video-background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden; background: #000; }
-        .video-background div { position: absolute; top: 50%; left: 50%; width: 177.77vh; height: 100vh; min-width: 100vw; min-height: 56.25vw; transform: translate(-50%, -50%); opacity: 0.8; }
-
-        .ad-container { position: relative; width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        #video-promo-screen { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 10px; }
+        .ad-container { position: relative; width: 100%; height: 80px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .ad-message { position: absolute; width: 100%; opacity: 0; font-weight: bold; text-align: center; line-height: 1.4; animation: rotateAds 12s infinite; }
-        @keyframes rotateAds { 0% { opacity: 0; transform: translateY(15px); } 5% { opacity: 1; transform: translateY(0); } 30% { opacity: 1; transform: translateY(0); } 35% { opacity: 0; transform: translateY(-15px); } 100% { opacity: 0; } }
-        .highlight { display: block; font-size: 18px; text-transform: uppercase; color: var(--gold); }
-        .subtext { display: block; font-size: 12px; color: #eee; font-style: italic; }
+        @keyframes rotateAds { 0% { opacity: 0; transform: translateY(20px); } 5% { opacity: 1; transform: translateY(0); } 30% { opacity: 1; transform: translateY(0); } 35% { opacity: 0; transform: translateY(-20px); } 100% { opacity: 0; } }
+        .highlight { display: block; font-size: 22px; text-transform: uppercase; color: var(--gold); margin-bottom: 5px; }
+        .subtext { display: block; font-size: 14px; color: var(--accent); font-style: italic; }
 
         .persistent-ad-bar { background: #111; padding: 8px 0; border-bottom: 1px solid var(--primary); overflow: hidden; white-space: nowrap; flex-shrink: 0; }
         .persistent-ad-text { display: inline-block; animation: marquee-bottom 20s linear infinite; color: var(--accent); font-weight: bold; font-size: 13px; }
@@ -56,12 +52,10 @@
         #guide-modal, #score-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 200000; display: none; flex-direction: column; padding: 20px; overflow-y: auto; align-items: center; justify-content: center; }
         .guide-close, .score-close { align-self: flex-end; font-size: 30px; color: var(--primary); cursor: pointer; position: absolute; top: 20px; right: 20px; }
         .score-number { font-size: 80px; font-weight: bold; margin: 10px 0; text-shadow: 0 0 20px var(--gold); }
-        .score-gold { color: var(--gold); } .score-bad { color: #ff4444; }
 
         .panel-header { font-size: 11px; font-weight: bold; color: var(--accent); margin: 15px 0 10px 0; text-transform: uppercase; border-left: 3px solid var(--primary); padding-left: 8px; }
-        .song-item { display: flex; gap: 10px; padding: 12px 10px; border-bottom: 1px solid #1a1a1a; align-items: center; }
-        .song-info { flex: 1; font-size: 14px; color: #eee; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .song-item img { width: 80px; height: 45px; border-radius: 4px; object-fit: cover; }
+        .song-item { display: flex; gap: 10px; padding: 15px 10px; border-bottom: 1px solid #1a1a1a; align-items: center; }
+        .song-info { flex: 1; font-size: 15px; color: #eee; font-weight: 500; }
         .icon-btn { font-size: 22px; cursor: pointer; margin-left: 10px; }
 
         @media (orientation: landscape) { 
@@ -76,7 +70,7 @@
     <div style="color: var(--gold); font-size: 22px; font-weight: bold; margin-bottom: 10px;">KARAOKE VIP LÊ ĐỨC QUANG</div>
     <button class="start-btn" onclick="initApp()">BẮT ĐẦU HÁT</button>
     <button class="guide-trigger-btn" onclick="openGuide()"><i class="fas fa-microphone-alt"></i> BÍ QUYẾT THU ÂM CHUẨN</button>
-    <div style="margin-top: 20px; color: #aaa; font-size: 12px; line-height: 1.5;">HOTLINE: 0909 374 508 - LÊ ĐỨC QUANG</div>
+    <div style="margin-top: 20px; color: #aaa; font-size: 12px;">HOTLINE: 0909 374 508 - LÊ ĐỨC QUANG</div>
 </div>
 
 <header>
@@ -96,14 +90,13 @@
 
 <div id="video-wrapper">
     <div id="video-promo-screen">
-        <div class="video-background"><div id="promo-player-inner"></div></div>
-        <div id="promo-status" style="color: var(--gold); font-size: 11px; margin-bottom: 10px; font-weight: bold;">LÊ ĐỨC QUANG - MIX & MASTER</div>
+        <div id="promo-status" style="color: var(--gold); font-size: 12px; margin-bottom: 15px; font-weight: bold; letter-spacing: 1px;">LÊ ĐỨC QUANG - MIX & MASTER CHUYÊN NGHIỆP</div>
         <div class="ad-container">
             <div class="ad-message" style="animation-delay: 0s;"><span class="highlight">Hậu Kỳ Âm Thanh</span><span class="subtext">Biến giọng mộc thành siêu phẩm mượt mà</span></div>
             <div class="ad-message" style="animation-delay: 4s;"><span class="highlight">Chỉ 4 Phút Giọng Mộc</span><span class="subtext">Mix nhạc theo yêu cầu chuẩn phòng thu</span></div>
-            <div class="ad-message" style="animation-delay: 8s;"><span class="highlight">0909 374 508</span><span class="subtext">Lê Đức Quang - Mix & Master Chuyên Nghiệp</span></div>
+            <div class="ad-message" style="animation-delay: 8s;"><span class="highlight">0909 374 508</span><span class="subtext">Dịch vụ phục vụ tận tâm 24/7</span></div>
         </div>
-        <button class="guide-trigger-btn" style="transform: scale(0.8);" onclick="openGuide()">XEM HƯỚNG DẪN THU ÂM</button>
+        <button class="guide-trigger-btn" style="transform: scale(0.85);" onclick="openGuide()">XEM HƯỚNG DẪN THU ÂM</button>
     </div>
     <div id="player"></div>
 </div>
@@ -129,23 +122,23 @@
     <div class="guide-close" onclick="closeGuide()"><i class="fas fa-times-circle"></i></div>
     <div style="width:100%; padding:20px; color:white;">
         <h3>CẨM NANG THU ÂM</h3>
-        <p>Gửi giọng mộc 4 phút qua Zalo 0909 374 508 để được mix nhạc chuyên nghiệp.</p>
+        <p>Gửi giọng mộc 4 phút qua Zalo 0909 374 508 để được Lê Đức Quang mix nhạc chuyên nghiệp.</p>
     </div>
 </div>
 
 <div id="score-modal">
     <div class="score-close" onclick="closeScore()"><i class="fas fa-times-circle"></i></div>
-    <div id="score-box" class="score-box" style="text-align:center">
-        <div id="score-num" class="score-number score-gold">0</div>
-        <div id="score-text" style="font-weight:bold"></div>
+    <div id="score-box" style="text-align:center">
+        <div id="score-num" class="score-number" style="color:var(--gold)">0</div>
+        <div id="score-text" style="font-weight:bold; margin-bottom:20px;">Hát rất có hồn!</div>
         <button class="start-btn" onclick="closeScore()">HÁT TIẾP</button>
     </div>
 </div>
 
 <script>
-    const APP_VERSION = "029"; 
+    const APP_VERSION = "030"; 
     const API_KEYS = ["AIzaSyBywuEsM7gJE2dqPY5NNzIKteySXXv1Dx4", "AIzaSyAZzzzyIgZoum8RscTz-KUqrEEzzQCghKg", "AIzaSyDAJ7_JVXgEggQYZTBzne5W27Kt5QDaw8k"];
-    let currentKeyIndex = 0, player, promoPlayer, internalQueue = [];
+    let currentKeyIndex = 0, player, internalQueue = [];
     let playbackHistory = JSON.parse(localStorage.getItem('karaoke_history')) || [];
 
     (function() {
@@ -157,18 +150,11 @@
 
     function initApp() {
         document.getElementById('start-overlay').style.display = 'none';
-        if (promoPlayer && promoPlayer.unMute) { promoPlayer.unMute(); promoPlayer.setVolume(100); }
         if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
     }
 
     function openGuide() { document.getElementById('guide-modal').style.display = 'flex'; }
     function closeGuide() { document.getElementById('guide-modal').style.display = 'none'; }
-    function openScore() {
-        const score = Math.floor(Math.random() * 20) + 80;
-        document.getElementById('score-num').innerText = score;
-        document.getElementById('score-text').innerText = "Hát rất có hồn!";
-        document.getElementById('score-modal').style.display = 'flex';
-    }
     function closeScore() { document.getElementById('score-modal').style.display = 'none'; }
 
     var tag = document.createElement('script');
@@ -177,26 +163,19 @@
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
     function onYouTubeIframeAPIReady() {
-        promoPlayer = new YT.Player('promo-player-inner', {
-            videoId: 'K41G7mnm3gw',
-            playerVars: { 'autoplay': 1, 'mute': 1, 'loop': 1, 'playlist': 'K41G7mnm3gw', 'controls': 0, 'playsinline': 1, 'modestbranding': 1 },
-        });
         player = new YT.Player('player', {
-            height: '1px', width: '1px',
+            height: '1', width: '1',
             playerVars: { 'autoplay': 1, 'controls': 1, 'playsinline': 1 },
             events: { 
                 'onReady': () => updateHistoryUI(),
                 'onStateChange': (e) => {
-                    // Khi nhạc bắt đầu phát (State 1) -> Tắt tiếng quảng cáo
-                    if (e.data === YT.PlayerState.PLAYING) {
-                        if (promoPlayer) promoPlayer.mute();
-                        document.getElementById('promo-status').innerText = "ĐANG PHÁT NHẠC (HÌNH QC)...";
-                    }
-                    // Khi nhạc dừng hoặc kết thúc (State 0, 2) -> Mở lại tiếng quảng cáo
-                    if (e.data === YT.PlayerState.ENDED || e.data === YT.PlayerState.PAUSED) {
-                        if (promoPlayer) { promoPlayer.unMute(); promoPlayer.setVolume(100); }
-                        document.getElementById('promo-status').innerText = "LÊ ĐỨC QUANG - MIX & MASTER";
-                        if (e.data === YT.PlayerState.ENDED) { openScore(); playNextInQueue(); }
+                    if (e.data === YT.PlayerState.PLAYING) { document.getElementById('promo-status').innerText = "ĐANG PHÁT NHẠC..."; }
+                    if (e.data === YT.PlayerState.ENDED) { 
+                        document.getElementById('promo-status').innerText = "LÊ ĐỨC QUANG - MIX & MASTER CHUYÊN NGHIỆP";
+                        const score = Math.floor(Math.random() * 20) + 80;
+                        document.getElementById('score-num').innerText = score;
+                        document.getElementById('score-modal').style.display = 'flex';
+                        playNextInQueue(); 
                     }
                     document.getElementById('play-icon').className = (e.data === 1) ? "fas fa-pause" : "fas fa-play";
                 }
@@ -207,36 +186,35 @@
     async function searchMusic() {
         const query = document.getElementById('k_query_field').value; if(!query) return;
         const resultsDiv = document.getElementById('search-results');
-        resultsDiv.innerHTML = '<p style="color:var(--accent);">Đang tìm...</p>';
+        resultsDiv.innerHTML = '<p style="color:var(--accent); padding:10px;">Đang tìm...</p>';
         const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=${encodeURIComponent(query + ' karaoke')}&type=video&key=${API_KEYS[currentKeyIndex]}`;
         try {
             const res = await fetch(url); const data = await res.json();
             resultsDiv.innerHTML = data.items.map(item => {
-                const title = item.snippet.title.replace(/['"]/g, ""); const id = item.id.videoId; const thumb = item.snippet.thumbnails.default.url;
+                const title = item.snippet.title.replace(/['"]/g, ""); const id = item.id.videoId;
                 return `<div class="song-item">
-                    <img src="${thumb}"><div class="song-info" onclick="playNow('${id}', '${title}', '${thumb}')">${title}</div>
-                    <i class="fas fa-bolt icon-btn" style="color:var(--accent);" onclick="addToNext('${id}', '${title}', '${thumb}')"></i>
+                    <div class="song-info" onclick="playNow('${id}', '${title}')">${title}</div>
+                    <i class="fas fa-bolt icon-btn" style="color:var(--accent);" onclick="addToNext('${id}', '${title}')"></i>
                 </div>`;
             }).join('');
         } catch(e) { currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length; searchMusic(); }
     }
 
-    function playNow(id, title, thumb) {
-        // KHÔNG ẨN promo-screen nữa
+    function playNow(id, title) {
         if (player) player.loadVideoById(id);
         document.getElementById('playing-now').innerHTML = `Đang hát: ${title}`;
         playbackHistory = playbackHistory.filter(item => item.id !== id);
-        playbackHistory.unshift({ id, title, thumb }); playbackHistory = playbackHistory.slice(0, 8);
+        playbackHistory.unshift({ id, title }); playbackHistory = playbackHistory.slice(0, 8);
         localStorage.setItem('karaoke_history', JSON.stringify(playbackHistory)); updateHistoryUI();
     }
 
     function updateHistoryUI() {
         document.getElementById('history-list').innerHTML = playbackHistory.map(s => `
-            <div class="song-item"><img src="${s.thumb}"><div class="song-info" onclick="playNow('${s.id}', '${s.title}', '${s.thumb}')">${s.title}</div></div>`).join('');
+            <div class="song-item"><div class="song-info" onclick="playNow('${s.id}', '${s.title}')">${s.title}</div></div>`).join('');
     }
 
-    function addToNext(id, title, thumb) { internalQueue.unshift({ id, title, thumb }); alert("Đã ưu tiên: " + title); }
-    function playNextInQueue() { if (internalQueue.length > 0) { const next = internalQueue.shift(); playNow(next.id, next.title, next.thumb); } }
+    function addToNext(id, title) { internalQueue.unshift({ id, title }); alert("Đã ưu tiên: " + title); }
+    function playNextInQueue() { if (internalQueue.length > 0) { const next = internalQueue.shift(); playNow(next.id, next.title); } }
     function togglePlay() { if (player) player.getPlayerState() === 1 ? player.pauseVideo() : player.playVideo(); }
     function changeVolume(val) { if (player) player.setVolume(val); }
     function quickSearch(tag) { document.getElementById('k_query_field').value = tag; searchMusic(); }
