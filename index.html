@@ -13,14 +13,15 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; margin: 0; height: 100vh; width: 100vw; overflow: hidden; display: flex; flex-direction: column; }
         
-        /* VIDEO NỀN */
-        .bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; opacity: 0.5; }
+        /* CẤU HÌNH VIDEO NỀN YOUTUBE */
+        .video-background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden; opacity: 0.6; }
+        .video-background iframe { width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 
-        #start-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; overflow: hidden; }
-        .start-btn { background: var(--primary); color: white; border: none; padding: 15px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px var(--primary); animation: pulse 1.5s infinite; margin: 10px 0; z-index: 10; }
+        #start-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+        .start-btn { background: var(--primary); color: white; border: none; padding: 15px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px var(--primary); animation: pulse 1.5s infinite; margin: 10px 0; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        .guide-trigger-btn { background: none; border: 2px solid var(--gold); color: var(--gold); padding: 10px 20px; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 10px; z-index: 10; }
+        .guide-trigger-btn { background: none; border: 2px solid var(--gold); color: var(--gold); padding: 10px 20px; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 10px; }
 
         header { background: #111; padding: 10px 15px 5px 15px; display: flex; align-items: center; border-bottom: 1px solid #222; flex-shrink: 0; }
         .logo { font-weight: bold; font-size: 12px; color: var(--primary); text-transform: uppercase; margin-right: 8px; }
@@ -35,7 +36,7 @@
         #video-wrapper { width: 100%; height: 38vh; background: #000; position: relative; flex-shrink: 0; border-bottom: 2px solid var(--primary); overflow: hidden; }
         #player { width: 100%; height: 100%; }
         
-        #video-promo-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 5; flex-direction: column; text-align: center; padding: 10px; }
+        #video-promo-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 5; flex-direction: column; text-align: center; padding: 10px; }
         .ad-container { position: relative; width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .ad-message { position: absolute; width: 100%; opacity: 0; font-weight: bold; text-align: center; line-height: 1.4; animation: rotateAds 12s infinite; }
         .ad-message:nth-child(1) { animation-delay: 0s; }
@@ -86,11 +87,13 @@
 <body>
 
 <div id="start-overlay">
-    <video class="bg-video" autoplay loop muted playsinline src="https://files.oaiusercontent.com/file-93H576L2Xf6jW4pB6p7V4?se=2025-02-17T06%3A37%3A46Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D0217.mp4&sig=vCAnvP6X/Bf79XWb6p7V4aB/1C2P/C6p7V4aB/1C2P%3D"></video>
-    <div style="color: var(--gold); font-size: 22px; font-weight: bold; margin-bottom: 10px; z-index:10;">KARAOKE VIP LÊ ĐỨC QUANG</div>
+    <div class="video-background">
+        <iframe src="https://www.youtube.com/embed/FjV_Sj-zV8s?autoplay=1&mute=1&loop=1&playlist=FjV_Sj-zV8s&controls=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+    </div>
+    <div style="color: var(--gold); font-size: 22px; font-weight: bold; margin-bottom: 10px;">KARAOKE VIP LÊ ĐỨC QUANG</div>
     <button class="start-btn" onclick="initApp()">BẮT ĐẦU HÁT</button>
     <button class="guide-trigger-btn" onclick="openGuide()"><i class="fas fa-microphone-alt"></i> BÍ QUYẾT THU ÂM CHUẨN</button>
-    <div style="margin-top: 20px; color: #aaa; font-size: 12px; line-height: 1.5; z-index:10;">
+    <div style="margin-top: 20px; color: #aaa; font-size: 12px; line-height: 1.5;">
         HOTLINE: 0909 374 508 - LÊ ĐỨC QUANG<br>CHUYÊN HẬU KỲ ÂM THANH MIX NHẠC
     </div>
 </div>
@@ -112,8 +115,10 @@
 
 <div id="video-wrapper">
     <div id="video-promo-screen">
-        <video class="bg-video" autoplay loop muted playsinline src="https://files.oaiusercontent.com/file-93H576L2Xf6jW4pB6p7V4?se=2025-02-17T06%3A37%3A46Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D0217.mp4&sig=vCAnvP6X/Bf79XWb6p7V4aB/1C2P/C6p7V4aB/1C2P%3D"></video>
-        <div style="color: var(--primary); font-size: 11px; margin-bottom: 10px;">ĐANG CHỜ BÀI HÁT...</div>
+        <div class="video-background">
+            <iframe src="https://www.youtube.com/embed/FjV_Sj-zV8s?autoplay=1&mute=1&loop=1&playlist=FjV_Sj-zV8s&controls=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        </div>
+        <div style="color: var(--primary); font-size: 11px; margin-bottom: 10px; text-shadow: 1px 1px 2px #000;">ĐANG CHỜ BÀI HÁT...</div>
         <div class="ad-container">
             <div class="ad-message"><span class="highlight">Hậu Kỳ Âm Thanh</span><span class="subtext">Biến giọng mộc thành siêu phẩm mượt mà</span></div>
             <div class="ad-message"><span class="highlight">Chỉ 4 Phút Giọng Mộc</span><span class="subtext">Mix nhạc theo yêu cầu chuẩn phòng thu</span></div>
@@ -157,11 +162,11 @@
         <h4>3. Bài văn mẫu thu âm (Hãy đọc thong thả)</h4>
         <div class="script-text">
             <b>PHẦN 1: TÂM SỰ (Dữ liệu chính)</b><br>
-            "Chào bạn, tôi đang thực hiện bản thu âm giọng mộc này để gửi cho anh Lê Đức Quang thực hiện hậu kỳ âm thanh chuyên nghiệp. Âm nhạc đối với tôi là một thế giới riêng, nơi tôi có thể gửi gắm mọi tâm tư, tình cảm và giải tỏa áp lực sau giờ làm việc. Tôi hiểu rằng mỗi giọng hát đều có một linh hồn riêng biệt, và chính giọng mộc này là dữ liệu quý nhất để người làm nhạc hiểu được chất riêng của mình. Tôi hoàn toàn tin tưởng rằng, dưới bàn tay nhào nặn khéo léo của anh Quang, những nốt nhạc thô ráp ban đầu sẽ được gọt giũa tỉ mỉ..."<br><br>
+            "Chào bạn, tôi đang thực hiện bản thu âm giọng mộc này để gửi cho anh Lê Đức Quang thực hiện hậu kỳ âm thanh chuyên nghiệp..."<br><br>
             <b>PHẦN 2: LUYỆN ÂM KHÓ (Dữ liệu kỹ thuật)</b><br>
-            "Quý khách hãy đọc thật rõ: Rộn ràng rừng rậm, ríu rít chim ca. Tre già măng mọc, trong trẻo trưa hè. Sáng sớm sương xuống, xôn xao xóm nhỏ. Lúa nếp là lúa nếp làng, lúa lên lớp lớp lòng nàng lâng lâng..."<br><br>
+            "Quý khách hãy đọc thật rõ: Rộn ràng rừng rậm, ríu rít chim ca..."<br><br>
             <b>PHẦN 3: ĐỌC THƠ & KẾT THÚC</b><br>
-            "Có một mùa hoa cải, nở vàng bên bến sông. Có một người con gái, đợi chờ trong hy vọng... Tôi là [Đọc tên bạn], gửi bài thu cho Lê Đức Quang 0909 374 508."
+            "Có một mùa hoa cải, nở vàng bên bến sông... Tôi là [Đọc tên bạn], gửi bài thu cho Lê Đức Quang 0909 374 508."
         </div>
     </div>
 </div>
@@ -178,25 +183,13 @@
 </div>
 
 <script>
-    const APP_VERSION = "020"; 
+    const APP_VERSION = "021"; 
     const API_KEYS = ["AIzaSyBywuEsM7gJE2dqPY5NNzIKteySXXv1Dx4", "AIzaSyAZzzzyIgZoum8RscTz-KUqrEEzzQCghKg", "AIzaSyDAJ7_JVXgEggQYZTBzne5W27Kt5QDaw8k"];
     let currentKeyIndex = 0, player, internalQueue = [];
     let playbackHistory = JSON.parse(localStorage.getItem('karaoke_history')) || [];
 
-    const praiseMsgs = [
-        "Hát hay chấn động, nghe xong Quang muốn xỉu ngang!",
-        "Hay muốn rớt hàm! Giọng này không đi thi hơi bị phí tài năng!",
-        "Đỉnh của chóp! Giọng này qua tay Quang là lên Top 1 Trending ngay!",
-        "Quá đỉnh! Giọng mượt thế này khỏi cần Mix cũng hay (nhưng Mix thì hay hơn)!",
-        "Giọng hát vàng mười! Nghe xong cái loa cũng muốn nhảy theo luôn!"
-    ];
-    const roastMsgs = [
-        "Hát hay quá, lần sau đừng hát nữa nha... để người khác còn hát với!",
-        "Giọng hát lạ quá, nghe xong cái loa nhà Quang muốn xin nghỉ hưu luôn.",
-        "Hát thế này thì hàng xóm sang nhà chơi... nhưng mà cầm theo cây chổi!",
-        "Hơi sai tông một xíu, nhưng được cái nhiệt tình là chính. Cố lên!",
-        "Hát kiểu này thì chỉ có mang qua Quang 'đập đi xây lại' mới cứu nổi thôi!"
-    ];
+    const praiseMsgs = ["Hát hay chấn động!", "Đỉnh của chóp!", "Giọng hát vàng mười!"];
+    const roastMsgs = ["Hay quá, lần sau đừng hát nữa...", "Hơi sai tông một xíu.", "Cố gắng lên!"];
 
     (function() {
         if (localStorage.getItem('app_version') !== APP_VERSION) {
@@ -209,11 +202,7 @@
     function initApp() {
         document.getElementById('start-overlay').style.display = 'none';
         const doc = document.documentElement;
-        if (doc.requestFullscreen) {
-            doc.requestFullscreen().then(() => {
-                if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
-            }).catch(e => console.log("Fullscreen blocked"));
-        }
+        if (doc.requestFullscreen) doc.requestFullscreen();
     }
 
     function openGuide() { document.getElementById('guide-modal').style.display = 'flex'; }
@@ -221,20 +210,10 @@
     function openScore() {
         const isPraise = Math.random() > 0.5;
         const score = isPraise ? Math.floor(Math.random() * 13) + 88 : Math.floor(Math.random() * 26) + 50;
-        const msg = isPraise ? praiseMsgs[Math.floor(Math.random()*5)] : roastMsgs[Math.floor(Math.random()*5)];
-        
-        const scoreEl = document.getElementById('score-num');
-        const textEl = document.getElementById('score-text');
-        
-        scoreEl.className = isPraise ? "score-number score-gold" : "score-number score-bad";
-        textEl.innerText = msg;
+        const msg = isPraise ? praiseMsgs[Math.floor(Math.random()*praiseMsgs.length)] : roastMsgs[Math.floor(Math.random()*roastMsgs.length)];
+        document.getElementById('score-num').innerText = score;
+        document.getElementById('score-text').innerText = msg;
         document.getElementById('score-modal').style.display = 'flex';
-        
-        let count = 0;
-        let timer = setInterval(() => {
-            if(count >= score) { clearInterval(timer); scoreEl.innerText = score; }
-            else { count++; scoreEl.innerText = count; }
-        }, 20);
     }
     function closeScore() { document.getElementById('score-modal').style.display = 'none'; }
 
@@ -246,7 +225,7 @@
     function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
             height: '100%', width: '100%',
-            playerVars: { 'autoplay': 1, 'controls': 1, 'playsinline': 1, 'modestbranding': 1, 'rel': 0 },
+            playerVars: { 'autoplay': 1, 'controls': 1, 'playsinline': 1 },
             events: { 
                 'onReady': () => updateHistoryUI(),
                 'onStateChange': (e) => {
@@ -257,64 +236,33 @@
         });
     }
 
-    function quickSearch(tag) { document.getElementById('k_query_field').value = tag; searchMusic(); }
-
     async function searchMusic() {
         const query = document.getElementById('k_query_field').value;
         if(!query) return;
-        document.getElementById('k_query_field').blur();
         const resultsDiv = document.getElementById('search-results');
         resultsDiv.innerHTML = '<p style="padding:10px; color:var(--accent);">Đang tìm bài...</p>';
-
-        for (let i = 0; i < API_KEYS.length; i++) {
-            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=${encodeURIComponent(query + ' karaoke')}&type=video&videoEmbeddable=true&key=${API_KEYS[currentKeyIndex]}`;
-            try {
-                const res = await fetch(url);
-                const data = await res.json();
-                if(data.items) {
-                    resultsDiv.innerHTML = data.items.map(item => {
-                        const title = item.snippet.title.replace(/['"]/g, "");
-                        const id = item.id.videoId;
-                        const thumb = item.snippet.thumbnails.default.url;
-                        return `<div class="song-item">
-                            <img src="${thumb}">
-                            <div class="song-info" onclick="playNow('${id}', '${title}', '${thumb}')">${title}</div>
-                            <i class="fas fa-bolt icon-btn" style="color:var(--accent);" onclick="addToNext('${id}', '${title}', '${thumb}')"></i>
-                        </div>`;
-                    }).join('');
-                    return;
-                }
-            } catch(e) {}
-            currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
-        }
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=${encodeURIComponent(query + ' karaoke')}&type=video&key=${API_KEYS[currentKeyIndex]}`;
+        try {
+            const res = await fetch(url);
+            const data = await res.json();
+            resultsDiv.innerHTML = data.items.map(item => `
+                <div class="song-item">
+                    <img src="${item.snippet.thumbnails.default.url}">
+                    <div class="song-info" onclick="playNow('${item.id.videoId}', '${item.snippet.title.replace(/'/g, "")}', '${item.snippet.thumbnails.default.url}')">${item.snippet.title}</div>
+                </div>`).join('');
+        } catch(e) { currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length; }
     }
 
     function playNow(id, title, thumb) {
         document.getElementById('video-promo-screen').style.display = 'none';
-        if (player && player.loadVideoById) {
-            player.loadVideoById(id);
-            document.getElementById('playing-now').innerHTML = `<i class="fas fa-microphone-alt"></i> Đang hát: ${title}`;
-            playbackHistory = playbackHistory.filter(item => item.id !== id);
-            playbackHistory.unshift({ id, title, thumb });
-            playbackHistory = playbackHistory.slice(0, 8);
-            localStorage.setItem('karaoke_history', JSON.stringify(playbackHistory));
-            updateHistoryUI();
-        }
+        if (player) player.loadVideoById(id);
+        document.getElementById('playing-now').innerHTML = `<i class="fas fa-microphone-alt"></i> Đang hát: ${title}`;
     }
 
-    function updateHistoryUI() {
-        document.getElementById('history-list').innerHTML = playbackHistory.map(s => `
-            <div class="song-item">
-                <img src="${s.thumb}">
-                <div class="song-info" onclick="playNow('${s.id}', '${s.title}', '${s.thumb}')">${s.title}</div>
-            </div>`).join('');
-    }
-
-    function addToNext(id, title, thumb) { internalQueue.unshift({ id, title, thumb }); alert("Đã ưu tiên: " + title); }
-    function playNextInQueue() { if (internalQueue.length > 0) { const next = internalQueue.shift(); playNow(next.id, next.title, next.thumb); } }
+    function updateHistoryUI() {}
     function togglePlay() { if (player) player.getPlayerState() === 1 ? player.pauseVideo() : player.playVideo(); }
     function changeVolume(val) { if (player) player.setVolume(val); }
-    document.getElementById('k_query_field').addEventListener('keypress', (e) => { if(e.key === 'Enter') searchMusic(); });
+    function quickSearch(tag) { document.getElementById('k_query_field').value = tag; searchMusic(); }
 </script>
 </body>
 </html>
