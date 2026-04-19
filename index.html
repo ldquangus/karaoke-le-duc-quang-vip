@@ -13,14 +13,24 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; margin: 0; height: 100vh; width: 100vw; overflow: hidden; display: flex; flex-direction: column; }
         
-        /* MÀN HÌNH BẮT ĐẦU (NỀN ĐEN) */
+        /* MÀN HÌNH BẮT ĐẦU */
         #start-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
         .start-btn { background: var(--primary); color: white; border: none; padding: 15px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px var(--primary); animation: pulse 1.5s infinite; margin: 10px 0; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        /* VIDEO NỀN TRONG PHẦN CHỜ HÁT */
+        /* VIDEO NỀN CĂN GIỮA CHUẨN */
         .video-background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden; background: #000; }
-        .video-background div { width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.7; }
+        .video-background div { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            width: 177.77vh; /* Tỉ lệ 16:9 so với chiều cao */
+            height: 100vh; 
+            min-width: 100vw; 
+            min-height: 56.25vw; 
+            transform: translate(-50%, -50%); 
+            opacity: 0.7; 
+        }
 
         header { background: #111; padding: 10px 15px 5px 15px; display: flex; align-items: center; border-bottom: 1px solid #222; flex-shrink: 0; }
         .logo { font-weight: bold; font-size: 12px; color: var(--primary); text-transform: uppercase; margin-right: 8px; }
@@ -30,7 +40,7 @@
         #video-wrapper { width: 100%; height: 38vh; background: #000; position: relative; flex-shrink: 0; border-bottom: 2px solid var(--primary); overflow: hidden; }
         #main-player { width: 100%; height: 100%; }
         
-        #video-promo-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 5; flex-direction: column; text-align: center; padding: 10px; }
+        #video-promo-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 5; flex-direction: column; text-align: center; padding: 10px; }
         .ad-container { position: relative; width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .ad-message { position: absolute; width: 100%; opacity: 0; font-weight: bold; text-align: center; line-height: 1.4; animation: rotateAds 12s infinite; text-shadow: 2px 2px 4px #000; }
         @keyframes rotateAds { 0% { opacity: 0; transform: translateY(15px); } 5% { opacity: 1; transform: translateY(0); } 30% { opacity: 1; transform: translateY(0); } 35% { opacity: 0; transform: translateY(-15px); } 100% { opacity: 0; } }
@@ -43,7 +53,7 @@
 
         .content-area { flex: 1; overflow-y: auto; background: #0a0a0a; padding: 10px; }
         .song-item { display: flex; gap: 10px; padding: 12px 10px; border-bottom: 1px solid #1a1a1a; align-items: center; background: rgba(255,255,255,0.02); margin-bottom: 2px; }
-        .song-info { flex: 1; font-size: 14px; color: #eee; }
+        .song-info { flex: 1; font-size: 14px; color: #eee; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
         @media (orientation: landscape) { 
             header, .custom-controls, .content-area { display: none !important; } 
@@ -90,7 +100,7 @@
 </div>
 
 <script>
-    const APP_VERSION = "025"; 
+    const APP_VERSION = "026"; 
     const API_KEYS = ["AIzaSyBywuEsM7gJE2dqPY5NNzIKteySXXv1Dx4", "AIzaSyAZzzzyIgZoum8RscTz-KUqrEEzzQCghKg", "AIzaSyDAJ7_JVXgEggQYZTBzne5W27Kt5QDaw8k"];
     let currentKeyIndex = 0, mainPlayer, promoPlayerInner;
 
@@ -104,7 +114,6 @@
 
     function initApp() {
         document.getElementById('start-overlay').style.display = 'none';
-        // Mở tiếng promo player khi người dùng bấm bắt đầu
         if (promoPlayerInner && promoPlayerInner.unMute) {
             promoPlayerInner.unMute();
             promoPlayerInner.setVolume(100);
@@ -118,13 +127,11 @@
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
     function onYouTubeIframeAPIReady() {
-        // Chỉ khởi tạo Player quảng cáo trong màn hình chờ bài hát
         promoPlayerInner = new YT.Player('promo-player-inner', {
             videoId: 'K41G7mnm3gw',
-            playerVars: { 'autoplay': 1, 'mute': 1, 'loop': 1, 'playlist': 'K41G7mnm3gw', 'controls': 0, 'playsinline': 1 },
+            playerVars: { 'autoplay': 1, 'mute': 1, 'loop': 1, 'playlist': 'K41G7mnm3gw', 'controls': 0, 'playsinline': 1, 'modestbranding': 1 },
         });
 
-        // Player chính để hát
         mainPlayer = new YT.Player('main-player', {
             height: '100%', width: '100%',
             playerVars: { 'autoplay': 1, 'controls': 1, 'playsinline': 1 },
