@@ -13,11 +13,14 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; margin: 0; height: 100vh; width: 100vw; overflow: hidden; display: flex; flex-direction: column; }
         
-        #start-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
-        .start-btn { background: var(--primary); color: white; border: none; padding: 15px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px var(--primary); animation: pulse 1.5s infinite; margin: 10px 0; }
+        /* VIDEO NỀN */
+        .bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; opacity: 0.5; }
+
+        #start-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; overflow: hidden; }
+        .start-btn { background: var(--primary); color: white; border: none; padding: 15px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px var(--primary); animation: pulse 1.5s infinite; margin: 10px 0; z-index: 10; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
-        .guide-trigger-btn { background: none; border: 2px solid var(--gold); color: var(--gold); padding: 10px 20px; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .guide-trigger-btn { background: none; border: 2px solid var(--gold); color: var(--gold); padding: 10px 20px; border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 10px; z-index: 10; }
 
         header { background: #111; padding: 10px 15px 5px 15px; display: flex; align-items: center; border-bottom: 1px solid #222; flex-shrink: 0; }
         .logo { font-weight: bold; font-size: 12px; color: var(--primary); text-transform: uppercase; margin-right: 8px; }
@@ -29,10 +32,10 @@
         .filter-btn { background: #333; color: #fff; border: none; padding: 6px 15px; border-radius: 15px; font-size: 12px; font-weight: bold; white-space: nowrap; cursor: pointer; }
         .filter-btn.active { background: var(--primary); }
 
-        #video-wrapper { width: 100%; height: 38vh; background: #000; position: relative; flex-shrink: 0; border-bottom: 2px solid var(--primary); }
+        #video-wrapper { width: 100%; height: 38vh; background: #000; position: relative; flex-shrink: 0; border-bottom: 2px solid var(--primary); overflow: hidden; }
         #player { width: 100%; height: 100%; }
         
-        #video-promo-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; align-items: center; justify-content: center; z-index: 5; flex-direction: column; text-align: center; padding: 10px; }
+        #video-promo-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 5; flex-direction: column; text-align: center; padding: 10px; }
         .ad-container { position: relative; width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .ad-message { position: absolute; width: 100%; opacity: 0; font-weight: bold; text-align: center; line-height: 1.4; animation: rotateAds 12s infinite; }
         .ad-message:nth-child(1) { animation-delay: 0s; }
@@ -83,10 +86,11 @@
 <body>
 
 <div id="start-overlay">
-    <div style="color: var(--gold); font-size: 22px; font-weight: bold; margin-bottom: 10px;">KARAOKE VIP LÊ ĐỨC QUANG</div>
+    <video class="bg-video" autoplay loop muted playsinline src="https://files.oaiusercontent.com/file-93H576L2Xf6jW4pB6p7V4?se=2025-02-17T06%3A37%3A46Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D0217.mp4&sig=vCAnvP6X/Bf79XWb6p7V4aB/1C2P/C6p7V4aB/1C2P%3D"></video>
+    <div style="color: var(--gold); font-size: 22px; font-weight: bold; margin-bottom: 10px; z-index:10;">KARAOKE VIP LÊ ĐỨC QUANG</div>
     <button class="start-btn" onclick="initApp()">BẮT ĐẦU HÁT</button>
     <button class="guide-trigger-btn" onclick="openGuide()"><i class="fas fa-microphone-alt"></i> BÍ QUYẾT THU ÂM CHUẨN</button>
-    <div style="margin-top: 20px; color: #aaa; font-size: 12px; line-height: 1.5;">
+    <div style="margin-top: 20px; color: #aaa; font-size: 12px; line-height: 1.5; z-index:10;">
         HOTLINE: 0909 374 508 - LÊ ĐỨC QUANG<br>CHUYÊN HẬU KỲ ÂM THANH MIX NHẠC
     </div>
 </div>
@@ -108,6 +112,7 @@
 
 <div id="video-wrapper">
     <div id="video-promo-screen">
+        <video class="bg-video" autoplay loop muted playsinline src="https://files.oaiusercontent.com/file-93H576L2Xf6jW4pB6p7V4?se=2025-02-17T06%3A37%3A46Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3D0217.mp4&sig=vCAnvP6X/Bf79XWb6p7V4aB/1C2P/C6p7V4aB/1C2P%3D"></video>
         <div style="color: var(--primary); font-size: 11px; margin-bottom: 10px;">ĐANG CHỜ BÀI HÁT...</div>
         <div class="ad-container">
             <div class="ad-message"><span class="highlight">Hậu Kỳ Âm Thanh</span><span class="subtext">Biến giọng mộc thành siêu phẩm mượt mà</span></div>
@@ -173,7 +178,7 @@
 </div>
 
 <script>
-    const APP_VERSION = "019"; 
+    const APP_VERSION = "020"; 
     const API_KEYS = ["AIzaSyBywuEsM7gJE2dqPY5NNzIKteySXXv1Dx4", "AIzaSyAZzzzyIgZoum8RscTz-KUqrEEzzQCghKg", "AIzaSyDAJ7_JVXgEggQYZTBzne5W27Kt5QDaw8k"];
     let currentKeyIndex = 0, player, internalQueue = [];
     let playbackHistory = JSON.parse(localStorage.getItem('karaoke_history')) || [];
