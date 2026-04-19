@@ -15,7 +15,7 @@
         
         /* VIDEO NỀN QUẢNG CÁO */
         .video-background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden; background: #000; }
-        .video-background iframe { width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.6; }
+        .video-background iframe { width: 100vw; height: 56.25vw; min-height: 100vh; min-width: 177.77vh; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.7; }
 
         #start-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
         .start-btn { background: var(--primary); color: white; border: none; padding: 15px 40px; border-radius: 30px; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px var(--primary); animation: pulse 1.5s infinite; margin: 10px 0; position: relative; z-index: 10; }
@@ -68,7 +68,7 @@
 
 <div id="start-overlay">
     <div class="video-background">
-        <iframe src="https://www.youtube.com/embed/FjV_Sj-zV8s?autoplay=1&mute=1&loop=1&playlist=FjV_Sj-zV8s&controls=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+        <iframe src="https://www.youtube.com/embed/K41G7mnm3gw?autoplay=1&mute=1&loop=1&playlist=K41G7mnm3gw&controls=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media"></iframe>
     </div>
     <div style="color: var(--gold); font-size: 22px; font-weight: bold; margin-bottom: 10px; position: relative; z-index: 10; text-shadow: 2px 2px 5px #000;">KARAOKE VIP LÊ ĐỨC QUANG</div>
     <button class="start-btn" onclick="initApp()">BẮT ĐẦU HÁT</button>
@@ -93,7 +93,7 @@
 <div id="video-wrapper">
     <div id="video-promo-screen">
         <div class="video-background">
-            <iframe src="https://www.youtube.com/embed/FjV_Sj-zV8s?autoplay=1&mute=1&loop=1&playlist=FjV_Sj-zV8s&controls=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media"></iframe>
+            <iframe src="https://www.youtube.com/embed/K41G7mnm3gw?autoplay=1&mute=1&loop=1&playlist=K41G7mnm3gw&controls=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media"></iframe>
         </div>
         <div style="color: var(--primary); font-size: 11px; margin-bottom: 10px; font-weight: bold; text-shadow: 1px 1px 3px #000;">ĐANG CHỜ BÀI HÁT...</div>
         <div class="ad-container">
@@ -123,9 +123,9 @@
 </div>
 
 <script>
-    const APP_VERSION = "022"; 
+    const APP_VERSION = "023"; 
     const API_KEYS = ["AIzaSyBywuEsM7gJE2dqPY5NNzIKteySXXv1Dx4", "AIzaSyAZzzzyIgZoum8RscTz-KUqrEEzzQCghKg", "AIzaSyDAJ7_JVXgEggQYZTBzne5W27Kt5QDaw8k"];
-    let currentKeyIndex = 0, player, internalQueue = [];
+    let currentKeyIndex = 0, player;
 
     (function() {
         if (localStorage.getItem('app_version') !== APP_VERSION) {
@@ -183,7 +183,7 @@
     function togglePlay() { if (player) player.getPlayerState() === 1 ? player.pauseVideo() : player.playVideo(); }
     function changeVolume(val) { if (player) player.setVolume(val); }
     function quickSearch(tag) { document.getElementById('k_query_field').value = tag; searchMusic(); }
-    function openGuide() { alert("Hãy thực hiện theo các bước trong cẩm nang!"); }
+    function openGuide() { alert("Hãy thực hiện theo các bước trong cẩm nang thu âm!"); }
 </script>
 </body>
 </html>
