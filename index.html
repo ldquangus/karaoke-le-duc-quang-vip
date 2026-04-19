@@ -29,23 +29,14 @@
         .filter-btn.active { background: var(--primary); }
 
         #video-wrapper { width: 100%; height: 38vh; background: #000; position: relative; flex-shrink: 0; border-bottom: 2px solid var(--primary); overflow: hidden; }
-        #player { width: 100%; height: 100%; }
         
+        /* PLAYER CHÍNH CHỈ PHÁT TIẾNG, ẨN HÌNH */
+        #player { position: absolute; top: -9999px; left: -9999px; width: 1px; height: 1px; visibility: hidden; }
+        
+        /* MÀN HÌNH QUẢNG CÁO LUÔN HIỆN */
         #video-promo-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 5; flex-direction: column; text-align: center; padding: 10px; }
-        
-        /* FIX TRIỆT ĐỂ LỆCH HÌNH */
         .video-background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden; background: #000; }
-        .video-background iframe, .video-background div { 
-            position: absolute; 
-            top: 50%; 
-            left: 50%; 
-            width: 100vw; 
-            height: 100vh;
-            min-width: 177.77vh; /* Đảm bảo tỉ lệ 16:9 luôn phủ kín */
-            min-height: 56.25vw;
-            transform: translate(-50%, -50%) !important; 
-            opacity: 0.7; 
-        }
+        .video-background div { position: absolute; top: 50%; left: 50%; width: 177.77vh; height: 100vh; min-width: 100vw; min-height: 56.25vw; transform: translate(-50%, -50%); opacity: 0.8; }
 
         .ad-container { position: relative; width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .ad-message { position: absolute; width: 100%; opacity: 0; font-weight: bold; text-align: center; line-height: 1.4; animation: rotateAds 12s infinite; }
@@ -106,7 +97,7 @@
 <div id="video-wrapper">
     <div id="video-promo-screen">
         <div class="video-background"><div id="promo-player-inner"></div></div>
-        <div style="color: var(--primary); font-size: 11px; margin-bottom: 10px; font-weight: bold;">ĐANG CHỜ BÀI HÁT...</div>
+        <div id="promo-status" style="color: var(--gold); font-size: 11px; margin-bottom: 10px; font-weight: bold;">LÊ ĐỨC QUANG - MIX & MASTER</div>
         <div class="ad-container">
             <div class="ad-message" style="animation-delay: 0s;"><span class="highlight">Hậu Kỳ Âm Thanh</span><span class="subtext">Biến giọng mộc thành siêu phẩm mượt mà</span></div>
             <div class="ad-message" style="animation-delay: 4s;"><span class="highlight">Chỉ 4 Phút Giọng Mộc</span><span class="subtext">Mix nhạc theo yêu cầu chuẩn phòng thu</span></div>
@@ -152,7 +143,7 @@
 </div>
 
 <script>
-    const APP_VERSION = "028"; 
+    const APP_VERSION = "029"; 
     const API_KEYS = ["AIzaSyBywuEsM7gJE2dqPY5NNzIKteySXXv1Dx4", "AIzaSyAZzzzyIgZoum8RscTz-KUqrEEzzQCghKg", "AIzaSyDAJ7_JVXgEggQYZTBzne5W27Kt5QDaw8k"];
     let currentKeyIndex = 0, player, promoPlayer, internalQueue = [];
     let playbackHistory = JSON.parse(localStorage.getItem('karaoke_history')) || [];
@@ -188,15 +179,25 @@
     function onYouTubeIframeAPIReady() {
         promoPlayer = new YT.Player('promo-player-inner', {
             videoId: 'K41G7mnm3gw',
-            playerVars: { 'autoplay': 1, 'mute': 1, 'loop': 1, 'playlist': 'K41G7mnm3gw', 'controls': 0, 'playsinline': 1 },
+            playerVars: { 'autoplay': 1, 'mute': 1, 'loop': 1, 'playlist': 'K41G7mnm3gw', 'controls': 0, 'playsinline': 1, 'modestbranding': 1 },
         });
         player = new YT.Player('player', {
-            height: '100%', width: '100%',
+            height: '1px', width: '1px',
             playerVars: { 'autoplay': 1, 'controls': 1, 'playsinline': 1 },
             events: { 
                 'onReady': () => updateHistoryUI(),
                 'onStateChange': (e) => {
-                    if (e.data === YT.PlayerState.ENDED) { openScore(); playNextInQueue(); }
+                    // Khi nhạc bắt đầu phát (State 1) -> Tắt tiếng quảng cáo
+                    if (e.data === YT.PlayerState.PLAYING) {
+                        if (promoPlayer) promoPlayer.mute();
+                        document.getElementById('promo-status').innerText = "ĐANG PHÁT NHẠC (HÌNH QC)...";
+                    }
+                    // Khi nhạc dừng hoặc kết thúc (State 0, 2) -> Mở lại tiếng quảng cáo
+                    if (e.data === YT.PlayerState.ENDED || e.data === YT.PlayerState.PAUSED) {
+                        if (promoPlayer) { promoPlayer.unMute(); promoPlayer.setVolume(100); }
+                        document.getElementById('promo-status').innerText = "LÊ ĐỨC QUANG - MIX & MASTER";
+                        if (e.data === YT.PlayerState.ENDED) { openScore(); playNextInQueue(); }
+                    }
                     document.getElementById('play-icon').className = (e.data === 1) ? "fas fa-pause" : "fas fa-play";
                 }
             }
@@ -221,8 +222,7 @@
     }
 
     function playNow(id, title, thumb) {
-        document.getElementById('video-promo-screen').style.display = 'none';
-        if (promoPlayer && promoPlayer.pauseVideo) promoPlayer.pauseVideo();
+        // KHÔNG ẨN promo-screen nữa
         if (player) player.loadVideoById(id);
         document.getElementById('playing-now').innerHTML = `Đang hát: ${title}`;
         playbackHistory = playbackHistory.filter(item => item.id !== id);
