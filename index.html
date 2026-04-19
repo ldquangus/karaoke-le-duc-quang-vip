@@ -33,9 +33,19 @@
         
         #video-promo-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 5; flex-direction: column; text-align: center; padding: 10px; }
         
-        /* FIX LỆCH HÌNH VIDEO QC */
-        .video-background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden; }
-        .video-background div { position: absolute; top: 50%; left: 50%; width: 177.77vh; height: 100vh; min-width: 100vw; min-height: 56.25vw; transform: translate(-50%, -50%); opacity: 0.7; }
+        /* FIX TRIỆT ĐỂ LỆCH HÌNH */
+        .video-background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden; background: #000; }
+        .video-background iframe, .video-background div { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            width: 100vw; 
+            height: 100vh;
+            min-width: 177.77vh; /* Đảm bảo tỉ lệ 16:9 luôn phủ kín */
+            min-height: 56.25vw;
+            transform: translate(-50%, -50%) !important; 
+            opacity: 0.7; 
+        }
 
         .ad-container { position: relative; width: 100%; height: 60px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .ad-message { position: absolute; width: 100%; opacity: 0; font-weight: bold; text-align: center; line-height: 1.4; animation: rotateAds 12s infinite; }
@@ -126,7 +136,7 @@
 
 <div id="guide-modal">
     <div class="guide-close" onclick="closeGuide()"><i class="fas fa-times-circle"></i></div>
-    <div style="width:100%">
+    <div style="width:100%; padding:20px; color:white;">
         <h3>CẨM NANG THU ÂM</h3>
         <p>Gửi giọng mộc 4 phút qua Zalo 0909 374 508 để được mix nhạc chuyên nghiệp.</p>
     </div>
@@ -142,7 +152,7 @@
 </div>
 
 <script>
-    const APP_VERSION = "027"; 
+    const APP_VERSION = "028"; 
     const API_KEYS = ["AIzaSyBywuEsM7gJE2dqPY5NNzIKteySXXv1Dx4", "AIzaSyAZzzzyIgZoum8RscTz-KUqrEEzzQCghKg", "AIzaSyDAJ7_JVXgEggQYZTBzne5W27Kt5QDaw8k"];
     let currentKeyIndex = 0, player, promoPlayer, internalQueue = [];
     let playbackHistory = JSON.parse(localStorage.getItem('karaoke_history')) || [];
@@ -163,10 +173,9 @@
     function openGuide() { document.getElementById('guide-modal').style.display = 'flex'; }
     function closeGuide() { document.getElementById('guide-modal').style.display = 'none'; }
     function openScore() {
-        const isPraise = Math.random() > 0.5;
-        const score = isPraise ? Math.floor(Math.random() * 13) + 88 : Math.floor(Math.random() * 26) + 50;
+        const score = Math.floor(Math.random() * 20) + 80;
         document.getElementById('score-num').innerText = score;
-        document.getElementById('score-text').innerText = isPraise ? "Quá tuyệt vời!" : "Cố gắng lên nhé!";
+        document.getElementById('score-text').innerText = "Hát rất có hồn!";
         document.getElementById('score-modal').style.display = 'flex';
     }
     function closeScore() { document.getElementById('score-modal').style.display = 'none'; }
